@@ -1,0 +1,16 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="OverOut">
+    <head>
+        <meta charset="utf-8" />
+        <title>Over/Out</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="@Url.Content("~/Content/style.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/qunit-1.14.0.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div id="maincontainer">@RenderBody()</div>
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

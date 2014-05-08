@@ -1,0 +1,54 @@
+﻿html {
+    background-color: #fff;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+body {
+    background-color: #fff;
+    font-size: .85em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+#maincontainer {
+    width: 100%;
+    height: 100%;
+}
+
+#modalcontainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 15000;
+}
+
+#modalbg {
+    
+    background-color: Black;
+    position: absolute;
+    z-index: 15010;
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    color: white;
+}
+
+#modalcontent {
+
+    position: relative;
+    z-index: 15015;
+    width: 400px;
+    height: 250px;
+    background-color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    top: 150px;
+    padding: 20px;
+}

@@ -1,5 +1,15 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@section scripts
+{
+    @Scripts.Render("~/Scripts/angular.min.js")
+    @Scripts.Render("~/Scripts/Angular-Services/Services.js")
+    @Scripts.Render("~/Scripts/Angular-App/OverOutApp.js")
+    @Scripts.Render("~/Scripts/Angular-Controllers/LoginCtrl.js")
 }
 
-<h2>Login</h2>
+<div id="LoginContainer">
+    <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
+    <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
+        <div style="font-size: 20px">Welcome to over/out please login</div>
+        <div>Welcome to over/out please login</div>
+    </div>
+</div>

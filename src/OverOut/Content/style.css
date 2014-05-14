@@ -17,6 +17,20 @@ body {
     height: 100%;
 }
 
+#LoginContainer {
+
+    width:900px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.FloatLeft {
+
+    float: left;
+}
+
 #modalcontainer {
     position: fixed;
     top: 0;

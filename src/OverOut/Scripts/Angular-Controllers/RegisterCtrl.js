@@ -28,9 +28,9 @@
             "Username": "d_ladji@hotmail.com"
         };
 
-        $scope.Register = function(parameters) {
+        $scope.Register = function() {
 
-            services.Register($scope.jsonObject).then(function (data) {
+            services.Register(angular.toJson($scope.jsonObject)).then(function (data) {
 
                 console.log(data);
             });

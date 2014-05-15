@@ -1,15 +1,32 @@
 ﻿@section scripts
 {
-    @Scripts.Render("~/Scripts/angular.min.js")
-    @Scripts.Render("~/Scripts/Angular-Services/Services.js")
-    @Scripts.Render("~/Scripts/Angular-App/OverOutApp.js")
     @Scripts.Render("~/Scripts/Angular-Controllers/LoginCtrl.js")
 }
 
-<div id="LoginContainer">
+<div id="LoginContainer" ng-controller="LoginCtrl">
     <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
     <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
-        <div style="font-size: 20px">Welcome to over/out please login</div>
-        <div>Welcome to over/out please login</div>
+        <div style="font-size: 20px">Welcome to over/out please log in</div>
+        <div class="space"></div>
+        <div>
+            <div style="color: #841d23" ng-show="showLoginFailedMessage">The email address or password is incorrect. Please try again.</div>
+            <div style="color: #841d23" ng-show="showUsernameErrorMessage">please enter your username</div>
+            <br/>
+            <label>Username:</label>
+            <input type="text" ng-model="loginModel.username"/>
+            <br/>
+            <br ng-if="showPasswordErrorMessage"/>
+            <div style="color: #841d23" ng-show="showPasswordErrorMessage">please enter your password</div>
+            <br/>
+            <label>Password:</label>&nbsp;
+            <input type="text" ng-model="loginModel.password"/>
+        </div>
+        <br/>
+        <div style="float: right; margin-right: 90px">
+            <button class="btn btn-primary"  ng-click="login()">log in</button>
+        </div>
+        <div style="height:100px"></div>
+        <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="forgotPassword()">Forgotten your password</div>
+        <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="register()">Don't have an over/out account? please REGISTER</div>
     </div>
 </div>

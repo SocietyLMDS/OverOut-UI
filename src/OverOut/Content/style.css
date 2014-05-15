@@ -31,6 +31,11 @@ body {
     float: left;
 }
 
+.space {
+
+    height: 40px;
+}
+
 #modalcontainer {
     position: fixed;
     top: 0;

@@ -257,6 +257,7 @@
     <Content Include="Images\overout.png" />
     <Content Include="Scripts\Angular-App\OverOutApp.js" />
     <Content Include="Scripts\Angular-Controllers\LoginCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\Main.js" />
     <Content Include="Scripts\Angular-Controllers\RegisterCtrl.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.min.js" />

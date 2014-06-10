@@ -30,7 +30,7 @@
 
         $scope.Register = function() {
 
-            services.Register(angular.toJson($scope.jsonObject)).then(function (data) {
+            apiServices.Register(angular.toJson($scope.jsonObject)).then(function (data) {
 
                 console.log(data);
             });

@@ -32,25 +32,22 @@
 
             $scope.showUsernameErrorMessage = false;
             $scope.showPasswordErrorMessage = false;
-            var encodedstring = 'basic ' + btoa($scope.loginModel.username + ':' + $scope.loginModel.password);
 
-            services.Login(encodedstring).then(function (data) {
+            services.Login($scope.loginModel.username, $scope.loginModel.password).then(function (data) {
 
-                if (data == 401) {
+                if (data === 401 || data === 500 ) {
 
                     $scope.showLoginFailedMessage = true;
                     
                 } else {
 
-                    $scope.userDetails.id = data.Id;
-                    $scope.userDetails.companyId = data.companyId;
-                    $scope.userDetails.companyName = data.CompnayName;
-                    $scope.userDetails.UserType = data.UserType;
-                    $scope.userDetails.firstname = data.Firstname;
-                    $scope.userDetails.lastname = data.Lastname;
-                    $scope.userDetails.emailAddress = data.emailAddress;
-                    $scope.userDetails.userBasicAuth = encodedstring;
-                    $scope.userDetails.userAuthorised = true;
+                    //$scope.userDetails.id = data.id;
+                    //$scope.userDetails.companyId = data.companyId;
+                    //$scope.userDetails.companyName = data.companyName;
+                    //$scope.userDetails.userType = data.userType;
+                    //$scope.userDetails.firstname = data.firstname;
+                    //$scope.userDetails.lastname = data.lastname;
+                    //$scope.userDetails.emailAddress = data.emailAddress;
                 }
             });
         };
@@ -61,6 +58,7 @@
         };
 
         $scope.register = function () {
-            console.log("Register");
+            
+            location.href = '/Register/index';
         };
     }])

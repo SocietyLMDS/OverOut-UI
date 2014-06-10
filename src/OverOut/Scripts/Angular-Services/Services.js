@@ -1,8 +1,9 @@
 ﻿angular.module('ServiceModule', [])
     .service('services', ['$http', function ($http) {
         return {
-            Login: function (auth) {
-                return $http.get('http://localhost:57903/api/security/login', { headers: { 'Authorization': auth } }).then(function (data) {
+            Login: function (username, password) {
+                return $http.post('/login/index', { username: username, password: password }).then(function (data) {
+                    window.location.href = data.data;
                     return data.data;
                 }, function (data) {
                     return data.status;

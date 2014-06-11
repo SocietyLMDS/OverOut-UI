@@ -3,7 +3,7 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/LoginCtrl.js")
 }
 
-<div id="LoginContainer" ng-controller="LoginCtrl">
+<div class="container" ng-controller="LoginCtrl">
     <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
     <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
         <div style="font-size: 20px">Welcome to over/out please log in</div>
@@ -12,13 +12,13 @@
             <div style="color: #841d23" ng-show="showLoginFailedMessage">The email address or password is incorrect. Please try again.</div>
             <div style="color: #841d23" ng-show="showUsernameErrorMessage">please enter your username</div>
             <br/>
-            <label>Username:</label>
+            <label>Username</label>
             <input type="text" ng-model="loginModel.username"/>
             <br/>
             <br ng-if="showPasswordErrorMessage"/>
             <div style="color: #841d23" ng-show="showPasswordErrorMessage">please enter your password</div>
             <br/>
-            <label>Password:</label>&nbsp;
+            <label>Password</label>&nbsp;
             <input type="password" ng-model="loginModel.password"/>
         </div>
         <br/>

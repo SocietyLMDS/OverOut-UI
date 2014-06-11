@@ -3,6 +3,26 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/RegisterCtrl.js")
 }
 
-<div id="ResgisterContainer" ng-controller="RegisterCtrl">
-    <button ng-click="Register()">Register</button>
+<div class="container" ng-controller="RegisterCtrl">
+    <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
+    <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
+       <div style="font-size: 20px">Welcome to over/out please register</div>
+        <div class="space"></div>
+        <div>
+            <div style="color: #841d23" ng-show="companyNameIsEmpty">please enter your company name</div>
+            <label>Company Name</label>
+            <input type="text" ng-model="registerModel.name"/><span>*</span>
+            <br/>
+            <br/>
+            <div style="color: #841d23" ng-show="emailIsEmpty">{{emailErrorText}}</div>
+            <label>Email</label>
+            <input type="text" ng-model="registerModel.emailAddress"/><span>*</span>
+            <br/>
+            <div style="float: right; margin-right: 20px; margin-top: 20px;">
+                <button class="btn btn-primary"  ng-click="register()">egister</button>
+            </div>
+            <div style="height:100px"></div>
+            <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="login()">Login</div>
+        </div>
+    </div>
 </div>

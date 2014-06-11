@@ -12,7 +12,7 @@ using System.Web.Security;
 
 namespace OverOut.Auth
 {
-    public static class DigestAuthenticationUtils
+    public static class DigestAuthentication
     {
         public static string Nonce { get; set; }
         public static string QoP { get; set; }
@@ -21,6 +21,14 @@ namespace OverOut.Auth
         public static string CNonce { get; set; }
         public static string Username { get; set; }
         public static string Hash1 { get; set; }
+
+        public static async Task Initiate(string username, string password)
+        {
+            Username = username;
+            await SetupValues();
+            GenerateCNonce();
+            SetupHash1(username, password);
+        }
 
         public static async Task SetupValues()
         {

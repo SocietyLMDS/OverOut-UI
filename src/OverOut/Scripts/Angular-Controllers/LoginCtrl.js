@@ -35,19 +35,20 @@
 
             services.Login($scope.loginModel.username, $scope.loginModel.password).then(function (data) {
 
-                if (data === 401 || data === 500 ) {
+                if (data === 401 || data === 500) {
 
                     $scope.showLoginFailedMessage = true;
-                    
-                } else {
 
-                    //$scope.userDetails.id = data.id;
-                    //$scope.userDetails.companyId = data.companyId;
-                    //$scope.userDetails.companyName = data.companyName;
-                    //$scope.userDetails.userType = data.userType;
-                    //$scope.userDetails.firstname = data.firstname;
-                    //$scope.userDetails.lastname = data.lastname;
-                    //$scope.userDetails.emailAddress = data.emailAddress;
+                } else {
+                    
+                    $scope.userDetails.id = data.Id;
+                    $scope.userDetails.companyId = data.CompanyId;
+                    $scope.userDetails.companyName = data.CompanyName;
+                    $scope.userDetails.userType = data.UserType;
+                    $scope.userDetails.firstname = data.Firstname;
+                    $scope.userDetails.lastname = data.Lastname;
+                    $scope.userDetails.emailAddress = data.EmailAddress;
+                    window.location.href = data.RedirectTo;
                 }
             });
         };

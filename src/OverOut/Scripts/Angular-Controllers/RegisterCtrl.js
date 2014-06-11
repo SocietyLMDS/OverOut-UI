@@ -1,40 +1,64 @@
 ﻿angular.module('OverOut')
     .controller('RegisterCtrl', ['$scope', 'services', function ($scope, services) {
 
-        $scope.jsonObject = {
-            "Name": "Ladji's Vaktbolag",
-            "OrganisationNumber": "777090909309",
-            "VisitationAddress": {
-                "Street": "Klockarvägen 15",
-                "Postcode": "15161 Huddinge"
-            },
-            "PostalAddress": {
-                "Street": "Klockarvägen 15",
-                "Postcode": "15161 Huddinge"
-            },
-            "EmailAddress": "d_ladji@hotmail.com",
-            "PhoneNumber": "0768515490",
-            "MobileNumber": "0782398989",
-            "FaxNumber": "465767676",
-            "WebsiteLink": "www.ladji.com",
-            "FTaxLink": "www.FTaxLink.com",
-            "AuthorisationLink": "www.AuthorisationLink.com",
-            "DiplomaLink": "www.DiplomaLink.com",
-            "CertificationLink": "www.CertificationLink.com",
-            "ManagerFirstname": "Ladji",
-            "ManagerLastname": "Diakite",
-            "ManagerPersonalNumber": "7708090894",
-            "Password": "kuMoS7",
-            "Username": "d_ladji@hotmail.com"
-        };
+        $scope.registerModel = { name: '', emailAddress: '' };
+        $scope.companyNameIsEmpty = false;
+        $scope.emailIsEmpty = false;
+        $scope.emailErrorText = "";
 
-        $scope.Register = function() {
+        $scope.register = function() {
 
-            apiServices.Register(angular.toJson($scope.jsonObject)).then(function (data) {
+            if ($scope.registerModel.name === "" && $scope.registerModel.emailAddress === "" ) {
+                
+                $scope.companyNameIsEmpty = true;
+                $scope.emailIsEmpty = true;
+                $scope.emailErrorText = "please enter your email address";
+                return;
+                
+            }else if ($scope.registerModel.name === "") {
+                
+                $scope.companyNameIsEmpty = true;
+                $scope.emailIsEmpty = false;
+                return;
+
+            }else if ($scope.registerModel.emailAddress == "") {
+                
+                $scope.companyNameIsEmpty = false;
+                $scope.emailIsEmpty = true;
+                $scope.emailErrorText = "please enter your email address";
+                return;
+                
+            } else if ($scope.validateEmail($scope.registerModel.emailAddress) !== true) {
+                
+                $scope.companyNameIsEmpty = false;
+                $scope.emailIsEmpty = true;
+                $scope.emailErrorText = "You've entered and invalid email address";
+                return;
+            }
+
+            services.Register(angular.toJson($scope.registerModel)).then(function (data) {
 
                 console.log(data);
             });
         };
 
+        $scope.login = function() {
+
+            window.location.href = '/login/index';
+        };
+        
+        $scope.validateEmail = function (email) {
+
+            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+            if (email.match(mailformat)) {
+
+                return true;
+            }
+            else {
+
+                return false;
+            }
+        };
     }])
 

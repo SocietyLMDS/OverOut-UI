@@ -1,64 +1,37 @@
-﻿angular.module('OverOut')
-    .controller('RegisterCtrl', ['$scope', 'services', function ($scope, services) {
+﻿angular.module("OverOut")
+    .controller("RegisterCtrl", ["$scope", "services", function ($scope, services) {
 
-        $scope.registerModel = { name: '', emailAddress: '' };
-        $scope.companyNameIsEmpty = false;
-        $scope.emailIsEmpty = false;
-        $scope.emailErrorText = "";
+        $scope.registerModel = { name: "", emailAddress: "" };
+        $scope.ShowRegistrationInputs = true;
 
-        $scope.register = function() {
+        $scope.register = function () {
 
-            if ($scope.registerModel.name === "" && $scope.registerModel.emailAddress === "" ) {
-                
-                $scope.companyNameIsEmpty = true;
-                $scope.emailIsEmpty = true;
-                $scope.emailErrorText = "please enter your email address";
-                return;
-                
-            }else if ($scope.registerModel.name === "") {
-                
-                $scope.companyNameIsEmpty = true;
-                $scope.emailIsEmpty = false;
-                return;
+            services.register(angular.toJson($scope.registerModel)).then(function (data) {
+               
+                var response = data.substring(1, data.length - 1);
 
-            }else if ($scope.registerModel.emailAddress == "") {
-                
-                $scope.companyNameIsEmpty = false;
-                $scope.emailIsEmpty = true;
-                $scope.emailErrorText = "please enter your email address";
-                return;
-                
-            } else if ($scope.validateEmail($scope.registerModel.emailAddress) !== true) {
-                
-                $scope.companyNameIsEmpty = false;
-                $scope.emailIsEmpty = true;
-                $scope.emailErrorText = "You've entered and invalid email address";
-                return;
-            }
+                if (response === "Succeeded") {
 
-            services.Register(angular.toJson($scope.registerModel)).then(function (data) {
+                    $scope.showRegistrationComplete = true;
+                    $scope.ShowRegistrationInputs = false;
 
-                console.log(data);
+                } else if (response === "UnSucceeded") {
+
+                    $scope.showRegistrationError = true;
+                    $scope.RegistrationErrorText = "Your Registration was not succeeded, please try again";
+
+                } else {
+
+                    $scope.showRegistrationError = true;
+                    $scope.RegistrationErrorText = data.substring(1, data.length-1);
+                }
+
             });
         };
 
-        $scope.login = function() {
+        $scope.login = function () {
 
-            window.location.href = '/login/index';
+            window.location.href = "/login/index";
         };
-        
-        $scope.validateEmail = function (email) {
-
-            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-            if (email.match(mailformat)) {
-
-                return true;
-            }
-            else {
-
-                return false;
-            }
-        };
-    }])
+}])
 

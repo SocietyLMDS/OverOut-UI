@@ -184,6 +184,7 @@
     <Compile Include="Auth\DigestAuthentication.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\ForgotPasswordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\CompanyEntity.cs" />
     <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +264,7 @@
     <Content Include="Global.asax" />
     <Content Include="Images\overout.png" />
     <Content Include="Scripts\Angular-App\OverOutApp.js" />
+    <Content Include="Scripts\Angular-Controllers\ForgotPasswordCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\LoginCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\Main.js" />
     <Content Include="Scripts\Angular-Controllers\RegisterCtrl.js" />
@@ -275,7 +278,9 @@
     <Content Include="Scripts\QUnit\qunit-1.14.0.js" />
     <Content Include="Scripts\QUnit\sinon-1.9.1.js" />
     <Content Include="Scripts\Tests\BookShelfCtrlSpec.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -316,6 +321,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Company\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ForgotPassword\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

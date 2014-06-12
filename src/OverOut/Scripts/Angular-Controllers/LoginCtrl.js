@@ -1,7 +1,7 @@
-﻿angular.module('OverOut')
-    .controller('LoginCtrl', ['$scope', 'services', function ($scope, services) {
+﻿angular.module("OverOut")
+    .controller("LoginCtrl", ["$scope", "services", function ($scope, services) {
 
-        $scope.loginModel = { username: '', password: '' };
+        $scope.loginModel = { username: "", password: "" };
         $scope.showUsernameErrorMessage = false;
         $scope.showPasswordErrorMessage = false;
         $scope.showLoginFailedMessage = false;
@@ -33,7 +33,7 @@
             $scope.showUsernameErrorMessage = false;
             $scope.showPasswordErrorMessage = false;
 
-            services.Login($scope.loginModel.username, $scope.loginModel.password).then(function (data) {
+            services.login($scope.loginModel.username, $scope.loginModel.password).then(function (data) {
 
                 if (data === 401 || data === 500) {
 
@@ -55,11 +55,11 @@
 
         $scope.forgotPassword = function () {
 
-            console.log("Forgot");
+            window.location.href = "/ForgotPassword/index";
         };
 
         $scope.register = function () {
             
-            location.href = '/Register/index';
+            window.location.href = "/Register/index";
         };
     }])

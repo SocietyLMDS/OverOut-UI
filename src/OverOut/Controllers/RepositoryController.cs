@@ -30,5 +30,15 @@ namespace OverOut.Controllers
             return Content(dataBody);
         }
 
+        [System.Web.Mvc.HttpPost]
+        public async Task<ContentResult> ForgotPassword([FromBody] EmailModel email )
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
+            var data = await client.PostAsJsonAsync("/api/security/ForgotPassword", email);
+            data.EnsureSuccessStatusCode();
+            var dataBody = await data.Content.ReadAsStringAsync();
+            return Content(dataBody);
+        } 
     }
 }

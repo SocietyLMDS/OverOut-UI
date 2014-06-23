@@ -2,7 +2,7 @@
 
 namespace OverOut.Models
 {
-    public class CompanyEntity
+    public class CompanyModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -21,7 +21,5 @@ namespace OverOut.Models
         public string ManagerFirstname { get; set; }
         public string ManagerLastname { get; set; }
         public string ManagerPersonalNumber { get; set; }
-        public string Password { get; set; }
-        public string Username { get; set; }
     }
 }

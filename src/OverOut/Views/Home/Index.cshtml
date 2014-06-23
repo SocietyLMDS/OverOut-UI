@@ -1,5 +1,13 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@section scripts
+{
+    @Scripts.Render("~/Scripts/Angular-Controllers/HomeCtrl.js")
 }
 
-<h2>Home</h2>
+<div class="container" ng-controller="HomeCtrl" ng-init="GetUser()">
+    <div ng-show="showCompanySection">
+        
+    </div>
+    <div ng-show="showEmployeeSection">
+        
+    </div>
+</div>

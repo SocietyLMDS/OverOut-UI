@@ -12,6 +12,7 @@ using System.Web.Security;
 using Newtonsoft.Json;
 using OverOut.Auth;
 using OverOut.Models;
+using OverOut.Utils;
 
 namespace OverOut.Controllers
 {
@@ -20,25 +21,70 @@ namespace OverOut.Controllers
         //
         // GET: /Repository/
         [System.Web.Mvc.HttpPost]
-        public async Task<ContentResult> Register([FromBody] CompanyEntity company)
+        public async Task<ContentResult> Register([FromBody] CompanyModel company)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
-            var data = await client.PostAsJsonAsync("/api/company/addcompany", company);
-            data.EnsureSuccessStatusCode();
-            var dataBody = await data.Content.ReadAsStringAsync();
+            var dataBody = await CallWebApi.Post("/api/company/addcompany", company);
             return Content(dataBody);
         }
 
         [System.Web.Mvc.HttpPost]
-        public async Task<ContentResult> ForgotPassword([FromBody] EmailModel email )
+        public async Task<ContentResult> ForgotPassword([FromBody] EmailModel email)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
-            var data = await client.PostAsJsonAsync("/api/security/ForgotPassword", email);
-            data.EnsureSuccessStatusCode();
-            var dataBody = await data.Content.ReadAsStringAsync();
+            var dataBody = await CallWebApi.Post("/api/security/ForgotPassword", email);
             return Content(dataBody);
-        } 
+        }
+
+        public async Task<ContentResult> GetUser()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var section = new Section { UserType = currentUser.UserType };
+            return Content(JsonConvert.SerializeObject(section));
+        }
+
+        public async Task<ContentResult> GetCurrentCompany()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/company/getcompanybyid", "/?id=" + currentUser.Id);
+            var company = JsonConvert.DeserializeObject<CompanyModel>(dataBody);
+            return Content(JsonConvert.SerializeObject(company));
+        }
+
+        public async Task<ContentResult> GetCompanyEmployees()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/employee/getallemployee", "/?id=" + currentUser.Id);
+            var employee = JsonConvert.DeserializeObject(dataBody);
+            return Content(JsonConvert.SerializeObject(employee));
+        }
+
+        public async Task<ContentResult> GetCompanyCustomers()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/customer/getallcustomer", "/?id=" + currentUser.Id);
+            var customers = JsonConvert.DeserializeObject(dataBody);
+            return Content(JsonConvert.SerializeObject(customers));
+        }
+
+        public async Task<ContentResult> GetCompanyReports()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/report/getallreports", "/?id=" + currentUser.Id);
+            var reports = JsonConvert.DeserializeObject(dataBody);
+            return Content(JsonConvert.SerializeObject(reports));
+        }
+
+        public async Task<ContentResult> GetCompanySchedules()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/schedule/getallschedules", "/?id=" + currentUser.Id);
+            var schedules = JsonConvert.DeserializeObject(dataBody);
+            return Content(JsonConvert.SerializeObject(schedules));
+        }
     }
 }

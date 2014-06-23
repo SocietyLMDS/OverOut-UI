@@ -11,6 +11,7 @@ using System.Web.Security;
 using OverOut.Auth;
 using Newtonsoft.Json;
 using OverOut.Models;
+using OverOut.Utils;
 
 namespace OverOut.Controllers
 {
@@ -30,19 +31,11 @@ namespace OverOut.Controllers
             if (ModelState.IsValid)
             {
                 await DigestAuthentication.Initiate(username, password);
-                var hash2 = DigestAuthentication.GetHash2("GET", "/api/security/login");
-                var response = DigestAuthentication.GetResponse(hash2);
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Digest", "username=\"" +DigestAuthentication.Username + "\", realm=\"" + DigestAuthentication.Realm + "\" ,nonce=\"" + DigestAuthentication.Nonce + "\",uri=\"/api/security/login\", cnonce=\"" + DigestAuthentication.CNonce + "\", nc=" + DigestAuthentication.NonceCount + ", response=\"" + response + "\", qop=\"" + DigestAuthentication.QoP+"\"");
-                var data = await client.GetAsync("api/security/login");
-                data.EnsureSuccessStatusCode();
-                var dataBody = await data.Content.ReadAsStringAsync();
+                var dataBody = await CallWebApi.Get("GET", "api/security/login", "");
                 var currentUser = JsonConvert.DeserializeObject<CurrentUser>(dataBody);
-                currentUser.RedirectTo = "/Home";
                 FormsAuthentication.SetAuthCookie(username, false);
-                return Content(JsonConvert.SerializeObject(currentUser));
+                DigestAuthentication.UsersLoggedIn(currentUser);
+                return Content("/Home");
             }
 
             return Content("LoginFailed");

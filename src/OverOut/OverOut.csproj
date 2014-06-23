@@ -194,10 +194,13 @@
     </Compile>
     <Compile Include="Models\accountModels.cs" />
     <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\CompanyEntity.cs" />
+    <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\EmailModel.cs" />
+    <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\Section.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CallWebApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -265,6 +268,7 @@
     <Content Include="Images\overout.png" />
     <Content Include="Scripts\Angular-App\OverOutApp.js" />
     <Content Include="Scripts\Angular-Controllers\ForgotPasswordCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\HomeCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\LoginCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\Main.js" />
     <Content Include="Scripts\Angular-Controllers\RegisterCtrl.js" />
@@ -277,7 +281,6 @@
     <Content Include="Scripts\jquery-1.11.0.min.js" />
     <Content Include="Scripts\QUnit\qunit-1.14.0.js" />
     <Content Include="Scripts\QUnit\sinon-1.9.1.js" />
-    <Content Include="Scripts\Tests\BookShelfCtrlSpec.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -295,6 +298,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\Tests\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

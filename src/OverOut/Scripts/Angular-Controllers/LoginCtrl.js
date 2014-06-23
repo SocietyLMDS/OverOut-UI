@@ -40,15 +40,8 @@
                     $scope.showLoginFailedMessage = true;
 
                 } else {
-                    
-                    $scope.userDetails.id = data.Id;
-                    $scope.userDetails.companyId = data.CompanyId;
-                    $scope.userDetails.companyName = data.CompanyName;
-                    $scope.userDetails.userType = data.UserType;
-                    $scope.userDetails.firstname = data.Firstname;
-                    $scope.userDetails.lastname = data.Lastname;
-                    $scope.userDetails.emailAddress = data.EmailAddress;
-                    window.location.href = data.RedirectTo;
+
+                    window.location.href = data;
                 }
             });
         };

@@ -3,28 +3,33 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/ForgotPasswordCtrl.js")
 }
 
-<div>
-    <div class="container" ng-controller="ForgotPasswordCtrl">
-    <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
+
+<div class="container" ng-controller="ForgotPasswordCtrl">
+    <div class="FloatLeft">
+        <img src="../../Images/overout.png" width="400" height="574" alt="overout" />
+    </div>
     <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
-       <div style="font-size: 20px">Forgot your password? Please enter you email address</div>
+        <div style="font-size: 20px">Forgot your password? Please enter you email address</div>
         <div class="space"></div>
         <div ng-show="ShowForgotPasswordInputs">
             <div style="color: #841d23" ng-show="showForgotPasswordError">{{forgotPasswordErrorText}}</div>
-            <br/>
+            <br />
             <label>Email Address</label>
-            <input type="text" ng-model="forgotPasswordModel.emailAddress"/><span>*</span>
+            <input type="text" ng-model="forgotPasswordModel.emailAddress" /><span>*</span>
             <div style="float: right; margin-right: 20px; margin-top: 20px;">
-                <button class="btn btn-primary"  ng-click="forgotPassword()">Reset Password</button>
+                <button class="btn btn-primary" ng-click="forgotPassword()">Reset Password</button>
             </div>
-            <div style="height:100px"></div>
+            <div style="height: 100px"></div>
             <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="login()">Back to Login</div>
         </div>
         <div style="font-size: 15px" ng-show="showForgotPasswordComplete">
-            You have reset your password successfully. Please go to your email address<br/> ({{forgotPasswordModel.emailAddress}}) <br/> to find your login details
-            <div style="height:100px"></div>
+            You have reset your password successfully. Please go to your email address<br />
+            ({{forgotPasswordModel.emailAddress}})
+                <br />
+            to find your login details
+            <div style="height: 100px"></div>
             <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="login()">Back to login</div>
         </div>
     </div>
 </div>
-</div>
+

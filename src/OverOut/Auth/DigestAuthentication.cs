@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -9,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
+using OverOut.Models;
 
 namespace OverOut.Auth
 {
@@ -20,20 +23,30 @@ namespace OverOut.Auth
         public static int NonceCount { get; set; }
         public static string CNonce { get; set; }
         public static string Username { get; set; }
+        public static string Password { get; set; }
         public static string Hash1 { get; set; }
+        public static ConcurrentDictionary<string, CurrentUser> Users = new ConcurrentDictionary<string, CurrentUser>();
 
         public static async Task Initiate(string username, string password)
         {
             Username = username;
+            Password = password;
             await SetupValues();
             GenerateCNonce();
             SetupHash1(username, password);
         }
 
+        public static void UsersLoggedIn(CurrentUser user)
+        {
+            user.Username = Username;
+            user.Password = Password;
+            Users.AddOrUpdate(user.Username, user, (oldkey, oldvalue) => user);
+        }
+
         public static async Task SetupValues()
         {
             var client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:57903/");
+            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await client.GetAsync("api/security/login");
             var headers = response.Headers.WwwAuthenticate.SingleOrDefault(s => s.Parameter.Contains("nonce")).Parameter;

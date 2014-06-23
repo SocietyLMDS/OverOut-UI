@@ -84,6 +84,6 @@ D:\Kumo2\Git\OverOut-UI\src\OverOut\bin\ko\System.Spatial.resources.dll
 D:\Kumo2\Git\OverOut-UI\src\OverOut\bin\ru\System.Spatial.resources.dll
 D:\Kumo2\Git\OverOut-UI\src\OverOut\bin\zh-Hans\System.Spatial.resources.dll
 D:\Kumo2\Git\OverOut-UI\src\OverOut\bin\zh-Hant\System.Spatial.resources.dll
+D:\Kumo2\Git\OverOut-UI\src\OverOut\obj\Debug\OverOut.csprojResolveAssemblyReference.cache
 D:\Kumo2\Git\OverOut-UI\src\OverOut\obj\Debug\OverOut.dll
 D:\Kumo2\Git\OverOut-UI\src\OverOut\obj\Debug\OverOut.pdb
-D:\Kumo2\Git\OverOut-UI\src\OverOut\obj\Debug\OverOut.csprojResolveAssemblyReference.cache

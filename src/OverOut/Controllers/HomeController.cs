@@ -16,6 +16,17 @@ namespace OverOut.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            try
+            {
+                var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+                var currentUser = DigestAuthentication.Users[username];
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Login");
+            }
+
             return View();
         }
 

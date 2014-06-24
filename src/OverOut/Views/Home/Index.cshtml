@@ -3,11 +3,73 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/HomeCtrl.js")
 }
 
-<div class="container" ng-controller="HomeCtrl" ng-init="GetUser()">
-    <div ng-show="showCompanySection">
-        
+<div class="homecontainer" ng-controller="HomeCtrl" ng-init="initiate()">
+    <div>
+        <div style="float: left;">
+            <img src="../../Images/logo.png" alt="Logo" width="148" height="114" />
+        </div>
+        <div style="float: right">
+            <div style="float: left; background-color: #a36064; height: 30px; padding: 5px;">
+                <div style="color: white;">
+                    {{LoggedInAs}}                                                                        
+                </div>
+            </div>
+            <div style="float: left; background-color: #8a5659; width: 20px; height: 30px;">
+                <div ng-click="userLoggedInInfo()" style="margin-left: 4px; margin-top: 4px; cursor: pointer;">
+                    <img src="../../Images/arrowDown.png" alt="arrow Down" />
+                </div>
+            </div>
+            <div style="height: 32px;"></div>
+            <div ng-show="showUserLoggedIn" style="background-color: white; border: 1px solid #841d23; height: 70px; box-shadow: 2px 2px 1px #888888; padding: 5px;">
+                <div ng-click="logout()" style="cursor: pointer;">Logout</div>
+                <div style="height: 5px;"></div>
+                <div style="border-bottom: 1px solid #841d23;"></div>
+                <div style="height: 5px;"></div>
+                <div ng-click="changePassword()" style="cursor: pointer;">Change password</div>
+            </div>
+        </div>
     </div>
+    <div style="height: 130px;"></div>
+    <div ng-show="showCompanySection">
+        <div style="background-color: #a36064; height: 40px; width: 100%; padding: 5px">
+            <div ng-repeat="menu in menus">
+                <div ng-click="loadSection(menu.menuName)" style="cursor: pointer; float: left; margin-left: 5px; height: 30px; width: 130px; text-align: center; background-color: white; font-weight: bold">
+                    <span style="position: relative; top: 5px;">{{menu.menuName}}</span>
+                </div>
+            </div>
+            <div style="float: right; margin-right: 5px; margin-top: 2px;">
+                <input type="text" ng-model="search.item" placeholder="Search" />
+            </div>
+        </div>
+        <br/>
+        <!--Customers-->
+        <div ng-show="menus[0].show">
+            <div>add</div>
+            <div ng-show="companyCustomers.length == 0">There is currently no companies</div>
+            <div ng-show="companyCustomers.length > 0">customer</div>
+        </div>
+        <!--Employees-->
+        <div ng-show="menus[1].show">
+            <div ng-show="companyEmployess.length == 0">There is currently no employees</div>
+            <div ng-show="companyEmployess.length > 0">employee</div>
+        </div>
+        <!--Schedules-->
+        <div ng-show="menus[2].show">
+            <div ng-show="companySchedules.length == 0">There is currently no schedules</div>
+            <div ng-show="companySchedules.length > 0">schedule</div>
+        </div>
+        <!--Reports-->
+        <div ng-show="menus[3].show">
+            <div ng-show="companyReports.length == 0">There is currently no reports</div>
+            <div ng-show="companyReports.length > 0">schedule</div>
+        </div>
+        <!--Profile-->
+        <div ng-show="menus[4].show">
+            Profile
+        </div>
+    </div>
+    <!-- Employee Section-->
     <div ng-show="showEmployeeSection">
-        
+        Employee
     </div>
 </div>

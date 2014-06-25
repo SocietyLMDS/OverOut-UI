@@ -86,5 +86,14 @@ namespace OverOut.Controllers
             var schedules = JsonConvert.DeserializeObject(dataBody);
             return Content(JsonConvert.SerializeObject(schedules));
         }
+
+        public async Task<ContentResult> AddCustomer([FromBody] CustomerModel customer)
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            customer.CompanyId = Guid.Parse(currentUser.Id);
+            var dataBody = await CallWebApi.Post("POST", "api/customer/addcustomer", customer);
+            return Content(dataBody);
+        } 
     }
 }

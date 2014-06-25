@@ -22,7 +22,7 @@
                     return data.status;
                 });
             },
-            GetUser: function () {
+            getUser: function () {
                 return $http.post("/Repository/GetUser").then(function (data) {
                     return data.data;
                 }, function (data) {
@@ -30,35 +30,42 @@
                 });
             },
             getCurrentCompany: function () {
-                return $http.post("/Repository/GetCurrentCompany").then(function (data) {
+                return $http.get("/Repository/GetCurrentCompany").then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
             },
-            GetCompanyEmployees: function () {
-                return $http.post("/Repository/GetCompanyEmployees").then(function (data) {
+            getCompanyEmployees: function () {
+                return $http.get("/Repository/GetCompanyEmployees").then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
             },
-            GetCompanyCustomers: function () {
-                return $http.post("/Repository/GetCompanyCustomers").then(function (data) {
+            getCompanyCustomers: function () {
+                return $http.get("/Repository/GetCompanyCustomers").then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
             },
-            GetCompanyReports: function () {
-                return $http.post("/Repository/GetCompanyReports").then(function (data) {
+            getCompanyReports: function () {
+                return $http.get("/Repository/GetCompanyReports").then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
             },
-            GetCompanySchedules: function () {
-                return $http.post("/Repository/GetCompanySchedules").then(function (data) {
+            getCompanySchedules: function () {
+                return $http.get("/Repository/GetCompanySchedules").then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            addCustomer: function (customerJson) {
+                return $http.post("/Repository/AddCustomer", customerJson, { header: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;

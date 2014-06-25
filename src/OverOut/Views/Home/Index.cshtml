@@ -41,12 +41,50 @@
                 <input type="text" ng-model="search.item" placeholder="Search" />
             </div>
         </div>
-        <br/>
+        <br />
         <!--Customers-->
         <div ng-show="menus[0].show">
-            <div>add</div>
-            <div ng-show="companyCustomers.length == 0">There is currently no companies</div>
-            <div ng-show="companyCustomers.length > 0">customer</div>
+            <div ng-click="showAddCustomerModal()" style="text-align: center; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer">Add Customer</div>
+            <br />
+            <div ng-show="companyCustomers.length == 0">There is currently no customers</div>
+            <div ng-show="companyCustomers.length > 0">
+                <div ng-repeat="customer in companyCustomers">
+                    <div style="height: 350px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px;">
+                        <div style="float: left;">
+                            <div style="float: left"><img src="../../Images/info.png" alt="info.png" /></div>
+                            <div style="color: #841d23; font-weight: bold; width: 170px; float: left; margin-top: 3px; margin-left: 3px;">Customer info</div>
+                            <div style="height: 40px"></div>
+                            <div>Name: <span style="color: #d2691e">{{customer.name}}</span></div>
+                            <div>Organisation Number: <span style="color: #d2691e">{{customer.organisationNumber}}</span></div>
+                            <div>Visitation Address: <span style="color: #d2691e">{{customer.visitationAddress.street}}</span></div>
+                            <div>Visitation Postcode: <span style="color: #d2691e">{{customer.visitationAddress.postcode}}</span></div>
+                            <div>Postal Address: <span style="color: #d2691e">{{customer.postalAddress.street}}</span></div>
+                            <div>Postal Postcode: <span style="color: #d2691e">{{customer.postalAddress.postcode}}</span></div>
+                            <div>Email Address: <span style="color: #d2691e">{{customer.emailAddress}}</span></div>
+                            <div>Phone Number: <span style="color: #d2691e">{{customer.phoneNumber}}</span></div>
+                            <div>Mobile Number: <span style="color: #d2691e">{{customer.mobileNumber}}</span></div>
+                            <div>Fax Number: <span style="color: #d2691e">{{customer.faxNumber}}</span></div>
+                            <div>Managers Firstname: <span style="color: #d2691e">{{customer.managerFirstname}}</span></div>
+                            <div>Managers Lastname: <span style="color: #d2691e">{{customer.managerLastname}}</span></div>
+                            <div style="height: 20px;"></div>
+                            <div ng-click="showEditCustomer(customer)" style="cursor: pointer; float: right; color: #841d23; font-weight: bold; ">
+                                <img src="../../Images/edit.png" alt="edit"/>
+                                <span style="margin-right: 5px;">Edit</span>
+                            </div>
+                             <div ng-click="deleteCustomer(customer)" style="cursor: pointer; float: right; color: #841d23; font-weight: bold; margin-right: 30px; ">
+                                <img src="../../Images/delete.png" alt="edit"/>
+                                <span style="margin-right: 5px;">Delete</span>
+                            </div>
+                        </div>
+                         <div style="float: left; margin-left: 130px;">
+                             <div ng-click="addObject()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Add Object</div>
+                             <div style="height: 40px;"></div>
+                             <div ng-show="customer.objects.length == 0">There is currently no objects</div>
+                             <div ng-show="customer.objects.length > 0">Objects</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!--Employees-->
         <div ng-show="menus[1].show">
@@ -71,5 +109,83 @@
     <!-- Employee Section-->
     <div ng-show="showEmployeeSection">
         Employee
+    </div>
+    <!--Modals-->
+    <div ng-show="showCustomerModal" id="modalcontainer">
+        <div id="modalbg" ng-click="hideCustomerModal()"></div>
+        <!--Customer Modal Content-->
+        <div ng-show="showCustomerModalContent" id="customermodalcontent">
+            <div>
+                <div style="float: left;">
+                    <img src="../../Images/customer.png" alt="customer" /></div>
+                <div style="float: left; font-weight: bold; color: #841d23; margin-top: 5px; margin-left: 5px;">{{customerAddOrEditMessage}}</div>
+                <div ng-click="hideCustomerModal()" style="cursor: pointer; background-color: #a36064; height: 30px; width: 30px; float: right">
+                    <div style="color: white; font-weight: bold; font-size: 20px; margin-top: 2px; margin-left: 8px;">X</div>
+                </div>
+            </div>
+            <div style="height: 40px;"></div>
+            <div style="color: #d2691e" ng-show="showcustomerAddingError">{{customerAddingErrorMessage}}</div>
+            <div style="height: 10px;"></div>
+            <div style="background-color: #f3eeee; height: 330px; padding: 10px;">
+                <div style="float: left">
+                    <div style="color: #841d23;">Name</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.name" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Organisation Number</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.organisationNumber" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Visitation Address</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.visitationAddress.street" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Visitation Postcode</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.visitationAddress.postcode" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Postal Address</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.postalAddress.street" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Postal Postcode</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.postalAddress.postcode" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Email Address</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.emailAddress" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Phone Number</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.phoneNumber" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Mobile Number</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.mobileNumber" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Fax Number</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.faxNumber" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Manager Firstname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.managerFirstname" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Manager Lastname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerDetails.managerLastname" />
+                </div>
+            </div>
+            <div style="height: 20px;"></div>
+            <div style="float: right">
+                <div ng-click="hideCustomerModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
+                <div ng-click="addCustomer()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+            </div>
+        </div>
     </div>
 </div>

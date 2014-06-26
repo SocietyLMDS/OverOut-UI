@@ -94,6 +94,24 @@ namespace OverOut.Controllers
             customer.CompanyId = Guid.Parse(currentUser.Id);
             var dataBody = await CallWebApi.Post("POST", "api/customer/addcustomer", customer);
             return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> ModifyCustomer([FromBody] CustomerModel customer)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/customer/modifycustomer", customer);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> DeleteCustomer([FromBody] CustomerModel customer)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/customer/deletecustomer", "/?id=" + customer.Id + "&companyId=" + customer.CompanyId);
+            return Content(dataBody);
+        } 
+
+        public async Task<ContentResult> AddCustomerToObject([FromBody] CustomerObjectModel customerObject)
+        {
+            var dataBoby = await CallWebApi.Post("POST", "api/customerobject/addcustomerobject", customerObject);
+            return Content(dataBoby);
         } 
     }
 }

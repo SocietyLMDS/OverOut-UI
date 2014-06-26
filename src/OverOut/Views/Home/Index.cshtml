@@ -71,19 +71,25 @@
                                 <img src="../../Images/edit.png" alt="edit"/>
                                 <span style="margin-right: 5px;">Edit</span>
                             </div>
-                             <div ng-click="deleteCustomer(customer)" style="cursor: pointer; float: right; color: #841d23; font-weight: bold; margin-right: 30px; ">
+                            <div ng-click="deleteCustomer(customer)" style="cursor: pointer; float: right; color: #841d23; font-weight: bold; margin-right: 30px; ">
                                 <img src="../../Images/delete.png" alt="edit"/>
                                 <span style="margin-right: 5px;">Delete</span>
                             </div>
                         </div>
-                         <div style="float: left; margin-left: 130px;">
-                             <div ng-click="addObject()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Add Object</div>
-                             <div style="height: 40px;"></div>
-                             <div ng-show="customer.objects.length == 0">There is currently no objects</div>
-                             <div ng-show="customer.objects.length > 0">Objects</div>
+                        <div style="float: left; margin-left: 130px;">
+                            <div ng-click="showAddObjectModal(customer)" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Add Object</div>
+                            <div style="height: 40px;"></div>
+                            <div ng-show="customer.objects.length == 0">There is currently no objects</div>
+                            <div ng-show="customer.objects.length > 0">
+                                <div ng-repeat="objects in customer.objects">
+                                    <div>Object Name: {{objects.name}}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div style="height: 30px;"></div>
                 </div>
+                
             </div>
         </div>
         <!--Employees-->
@@ -173,7 +179,7 @@
                 </div>
                 <div style="height: 50px;"></div>
                 <div style="float: left">
-                    <div style="color: #841d23;">Manager Firstname</div>
+                    <div style="color: #841d23;">Manager Surname</div>
                     <input type="text" style="width: 255px;" ng-model="customerDetails.managerFirstname" />
                 </div>
                 <div style="float: left; margin-left: 25px;">
@@ -184,7 +190,72 @@
             <div style="height: 20px;"></div>
             <div style="float: right">
                 <div ng-click="hideCustomerModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
-                <div ng-click="addCustomer()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+                <div ng-click="saveCustomer()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+            </div>
+        </div>
+        <div ng-show="showCustomerObjectModalContent" id="customerobjectmodelcontent">
+             <div>
+                <div style="float: left;">
+                    <img src="../../Images/customer.png" alt="customer" /></div>
+                <div style="float: left; font-weight: bold; color: #841d23; margin-top: 5px; margin-left: 5px;">{{customerObjectAddOrEditMessage}}</div>
+                <div ng-click="hideCustomerModal()" style="cursor: pointer; background-color: #a36064; height: 30px; width: 30px; float: right">
+                    <div style="color: white; font-weight: bold; font-size: 20px; margin-top: 2px; margin-left: 8px;">X</div>
+                </div>
+            </div>
+            <div style="height: 40px;"></div>
+            <div style="color: #d2691e" ng-show="showcustomerObjectAddingError">{{customerObjectAddingErrorMessage}}</div>
+            <div style="height: 10px;"></div>
+            <div style="background-color: #f3eeee; height: 280px; padding: 10px;">
+                <div style="float: left">
+                    <div style="color: #841d23;">Name</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.name" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Hourly Rate</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.hourlyRate" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Address</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.visitationAddress.street" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Postcode</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.visitationAddress.postcode" />
+                </div>
+                <div style="height: 50px;"></div>
+                 <div style="float: left">
+                    <div style="color: #841d23;">Guard Surname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.responsibleGuardFirstname" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Guard Lastname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.responsibleGuardLastname" />
+                </div>
+                <div style="height: 50px;"></div>
+                 <div style="float: left">
+                    <div style="color: #841d23;">Manager Surname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.responsibleManagerFistname" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">Manager Lastname</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.responsibleManagerLastname" />
+                </div>
+                <div style="height: 50px;"></div>
+                 <div style="float: left">
+                    <div style="color: #841d23;">License Type</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.licenseType" />
+                </div>
+                <div style="float: left; margin-left: 25px;">
+                    <div style="color: #841d23;">License</div>
+                    <input type="text" style="width: 255px;" ng-model="customerObjectDetails.license" />
+                </div>
+                <div style="height: 50px;"></div>
+            </div>
+            <div style="height: 20px;"></div>
+            <div style="float: right">
+                <div ng-click="hideCustomerModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
+                <div ng-click="saveObject()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
             </div>
         </div>
     </div>

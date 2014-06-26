@@ -50,5 +50,33 @@ namespace OverOut.Utils
             var dataBody = await data.Content.ReadAsStringAsync();
             return dataBody;
         }
+
+        public static async Task<string> Put(string method, string uri, dynamic parameters)
+        {
+            var hash2 = DigestAuthentication.GetHash2(method, uri);
+            var response = DigestAuthentication.GetResponse(hash2);
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Digest", "username=\"" + DigestAuthentication.Username + "\", realm=\"" + DigestAuthentication.Realm + "\" ,nonce=\"" + DigestAuthentication.Nonce + "\", uri=\"" + uri + "\", cnonce=\"" + DigestAuthentication.CNonce + "\", nc=" + DigestAuthentication.NonceCount + ", response=\"" + response + "\", qop=\"" + DigestAuthentication.QoP + "\"");
+            var data = await HttpClientExtensions.PutAsJsonAsync(client, uri, parameters);
+            data.EnsureSuccessStatusCode();
+            var dataBody = await data.Content.ReadAsStringAsync();
+            return dataBody;
+        }
+
+        public static async Task<string> Delete(string method, string uri, string parameters)
+        {
+            var hash2 = DigestAuthentication.GetHash2(method, uri);
+            var response = DigestAuthentication.GetResponse(hash2);
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUri"]);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Digest", "username=\"" + DigestAuthentication.Username + "\", realm=\"" + DigestAuthentication.Realm + "\" ,nonce=\"" + DigestAuthentication.Nonce + "\", uri=\"" + uri + "\", cnonce=\"" + DigestAuthentication.CNonce + "\", nc=" + DigestAuthentication.NonceCount + ", response=\"" + response + "\", qop=\"" + DigestAuthentication.QoP + "\"");
+            var data = await client.DeleteAsync(uri + parameters);
+            data.EnsureSuccessStatusCode();
+            var dataBody = await data.Content.ReadAsStringAsync();
+            return dataBody;
+        }
     }
 }

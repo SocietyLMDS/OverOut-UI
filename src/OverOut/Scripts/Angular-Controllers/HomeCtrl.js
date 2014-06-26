@@ -3,22 +3,32 @@
 
         $scope.currentUser = null;
         $scope.showUserLoggedIn = false;
+        $scope.currentCustomer = null;
+        
+        //add edit customer
         $scope.showcustomerAddingError = false;
-        $scope.customerAddingErrorMessage = "Error adding a new customer";
+        $scope.customerAddingErrorMessage = "";
         $scope.customerAddOrEditMessage = "";
 
-        $scope.menus = [{ menuName: "Customers", show:false},
+        //add edit customer object
+        $scope.showCustomerObjectModalContent = false;
+        $scope.showcustomerObjectAddingError = false;
+        $scope.customerObjectAddingErrorMessage = "";
+        $scope.customerObjectAddOrEditMessage = "";
+
+        $scope.menus = [{ menuName: "Customers", show: false },
                         { menuName: "Employees", show: false },
                         { menuName: "Schedules", show: false },
                         { menuName: "Reports", show: false },
                         { menuName: "Profile", show: false }];
         $scope.search = { item: "" };
+        
         $scope.customerDetails = {
-            id:"",
+            id: "",
             companyId: "",
             name: "",
             organisationNumber: "",
-            visitationAddress: {street : "", postcode:""},
+            visitationAddress: { street: "", postcode: "" },
             postalAddress: { street: "", postcode: "" },
             emailAddress: "",
             phoneNumber: "",
@@ -26,6 +36,21 @@
             faxNumber: "",
             managerFirstname: "",
             managerLastname: "",
+        };
+
+        $scope.customerObjectDetails = {
+            id: "",
+            customerId: "",
+            companyId: "",
+            name: "",
+            visitationAddress: { street: "", postcode: "" },
+            responsibleGuardFirstname: "",
+            responsibleGuardLastname: "",
+            responsibleManagerFistname: "",
+            responsibleManagerLastname: "",
+            licenseType: "",
+            license: "",
+            hourlyRate: "",
         };
 
         $scope.initiate = function () {
@@ -62,8 +87,8 @@
                 default:
             }
         };
-        
-        $scope.hideAndShowSection = function(menu) {
+
+        $scope.hideAndShowSection = function (menu) {
             for (var i = 0; i < $scope.menus.length; i++) {
                 var currentMenu = $scope.menus[i].menuName;
                 if (currentMenu.indexOf(menu) != -1) {
@@ -73,7 +98,7 @@
                 }
             }
         };
-        
+
         $scope.getCurrentCompany = function () {
             services.getCurrentCompany().then(function (data) {
                 $scope.currentCompany = data;
@@ -107,7 +132,7 @@
             });
         };
 
-        $scope.profile = function() {
+        $scope.profile = function () {
             console.log($scope.currentCompany, "profile");
         };
 
@@ -140,28 +165,35 @@
         };
 
         $scope.hideCustomerModal = function () {
-            
+
             $scope.showCustomerModal = false;
             $scope.showCustomerModalContent = false;
             $scope.showcustomerAddingError = false;
             $scope.customerAddingErrorMessage = "";
-            
-            for (var key in $scope.customerDetails) {
-                if ($scope.customerDetails.hasOwnProperty(key)) {
+            $scope.showCustomerObjectModalContent = false;
+            $scope.showcustomerObjectAddingError = false;
+            $scope.customerObjectAddingErrorMessage = "";
+            $scope.clearInputTexts($scope.customerDetails);
+            $scope.clearInputTexts($scope.customerObjectDetails);
+        };
+
+        $scope.clearInputTexts = function(object) {
+            for (var key in object) {
+                if (object.hasOwnProperty(key)) {
                     if (key == "visitationAddress" || key == "postalAddress") {
-                        $scope.customerDetails[key] = {street : "", postcode:"" };
+                        object[key] = { street: "", postcode: "" };
                     } else {
-                        $scope.customerDetails[key] = "";
+                        object[key] = "";
                     }
                 }
             }
         };
 
-        $scope.saveCustomer = function() {
+        $scope.saveCustomer = function () {
             if ($scope.customerAddOrEditMessage === "Add Customer") {
                 $scope.addCustomer();
             } else {
-                $scope.editCustomer();
+                $scope.modifyCustomer();
             }
         };
 
@@ -169,10 +201,8 @@
             services.addCustomer(angular.toJson($scope.customerDetails)).then(function (data) {
                 var response = data.substring(1, data.length - 1);
                 if (response === "Succeeded") {
-                    $scope.showcustomerAddingError = false;
-                    $scope.customerAddingErrorMessage = "";
-                    $scope.getCompanyCustomers();
                     $scope.hideCustomerModal();
+                    setTimeout($scope.getCompanyCustomers, 500);
                 } else if (response == "UnSucceeded") {
                     $scope.showcustomerAddingError = true;
                     $scope.customerAddingErrorMessage = "There was a problem when adding the customer, please try again";
@@ -183,11 +213,23 @@
             });
         };
 
-        $scope.editCustomer = function() {
-
+        $scope.modifyCustomer = function () {
+            services.modifyCustomer(angular.toJson($scope.customerDetails)).then(function (data) {
+                var response = data.substring(1, data.length - 1);
+                if (response === "Succeeded") {
+                    $scope.hideCustomerModal();
+                    setTimeout($scope.getCompanyCustomers, 500);
+                } else if (response === "UnSucceeded") {
+                    $scope.showcustomerAddingError = true;
+                    $scope.customerAddingErrorMessage = "There was a problem when adding the customer, please try again";
+                } else {
+                    $scope.showcustomerAddingError = true;
+                    $scope.customerAddingErrorMessage = response;
+                }
+            });
         };
 
-        $scope.showEditCustomer = function(customer) {
+        $scope.showEditCustomer = function (customer) {
             $scope.customerDetails = {
                 id: customer.id,
                 companyId: customer.companyId,
@@ -207,11 +249,56 @@
             $scope.showCustomerModalContent = true;
         };
 
-        $scope.deleteCustomer = function(customer) {
-            console.log(customer);
+        $scope.deleteCustomer = function (customer) {
+            var cofirmResponse = confirm("Are you sure you want to delete customer (" + customer.name + ")");
+            if (cofirmResponse) {
+                console.log(angular.toJson(customer));
+                services.deleteCustomer(angular.toJson(customer)).then(function (data) {
+                    var response = data.substring(1, data.length - 1);
+                    if (response === "Succeeded") {
+                        setTimeout($scope.getCompanyCustomers, 500);
+                    } else if (response === "UnSucceeded") {
+                        $scope.showcustomerAddingError = true;
+                        $scope.customerAddingErrorMessage = "There was a problem when deleting the customer, please try again";
+                    }
+                });
+            }
         };
 
-        $scope.addObject = function() {
+        $scope.showAddObjectModal = function (customer) {
+            $scope.currentCustomer = customer;
+            $scope.showCustomerModal = true;
+            $scope.showCustomerObjectModalContent = true;
+            $scope.customerObjectAddOrEditMessage = "Add object to customer (" + customer.name + ")";
+        };
+
+        $scope.saveObject = function() {
+            if ($scope.customerObjectAddOrEditMessage.indexOf("Add") != -1) {
+                $scope.addObjectToCustomer();
+            } else {
+                $scope.modifyCustomerObject();
+            }
+        };
+
+        $scope.addObjectToCustomer = function() {
+            $scope.customerObjectDetails.companyId = $scope.currentCustomer.companyId;
+            $scope.customerObjectDetails.customerId = $scope.currentCustomer.id;
+            services.addObjectToCustomer(angular.toJson($scope.customerObjectDetails)).then(function (data) {
+                var responce = data.substring(1, data.length - 1);
+                if (responce === "Succeeded") {
+                    $scope.hideCustomerModal();
+                    setTimeout($scope.getCompanyCustomers, 500);
+                }else if (responce === "UnSucceeded") {
+                    $scope.showcustomerObjectAddingError = true;
+                    $scope.customerObjectAddingErrorMessage = "There was a problem when adding object to the customer, please try again";
+                } else {
+                    $scope.showcustomerObjectAddingError = true;
+                    $scope.customerObjectAddingErrorMessage = responce;
+                }
+            });
+        };
+
+        $scope.modifyCustomerObject = function() {
 
         };
     }])

@@ -65,11 +65,33 @@
                 });
             },
             addCustomer: function (customerJson) {
-                return $http.post("/Repository/AddCustomer", customerJson, { header: { "Content-Type": "application/json" } }).then(function (data) {
+                return $http.post("/Repository/AddCustomer", customerJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
-            }
+            },
+            modifyCustomer: function (customerJson) {
+                return $http.post("/Repository/ModifyCustomer", customerJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            deleteCustomer: function (customerJson) {
+                return $http.post("/Repository/DeleteCustomer", customerJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            addObjectToCustomer: function (objectJson) {
+                return $http.post("/Repository/AddCustomerToObject", objectJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            
         };
     }])

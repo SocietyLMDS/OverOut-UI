@@ -106,12 +106,42 @@ namespace OverOut.Controllers
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/customer/deletecustomer", "/?id=" + customer.Id + "&companyId=" + customer.CompanyId);
             return Content(dataBody);
-        } 
+        }
 
-        public async Task<ContentResult> AddCustomerToObject([FromBody] CustomerObjectModel customerObject)
+        public async Task<ContentResult> AddObjectToCustomer([FromBody] CustomerObjectModel customerObject)
         {
             var dataBoby = await CallWebApi.Post("POST", "api/customerobject/addcustomerobject", customerObject);
             return Content(dataBoby);
+        }
+ 
+        public async Task<ContentResult> ModifyCustomerObject([FromBody] CustomerObjectModel customerObject)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/customerobject/modifycustomerObject", customerObject);
+            return Content(dataBody);
+        } 
+
+        public async Task<ContentResult> DeleteCustomerObject([FromBody] CustomerObjectModel customerObject)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/customerobject/deletecustomerobject", "/?id=" + customerObject.Id + "&companyId=" + customerObject.CompanyId + "&customerId=" + customerObject.CustomerId);
+            return Content(dataBody);
+        } 
+
+        public async Task<ContentResult> AddNeedToCustomerObject([FromBody] NeedModel need)
+        {
+            var dataBody = await CallWebApi.Post("POST", "api/customerobjectneed/addneedtocustomerobject", need);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> ModifyCustomerObjectNeed([FromBody] NeedModel need)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/customerobjectneed/modifyneedoncustomerobject", need);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> DeleteCustomerObjectNeed([FromBody] NeedModel need)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/customerobjectneed/deleteneedfromcustomerobject", "/?id=" + need.Id + "&companyId=" + need.CompanyId + "&customerId=" + need.CustomerId + "&customerObjectId=" + need.CustomerObjectId);
+            return Content(dataBody);
         } 
     }
 }

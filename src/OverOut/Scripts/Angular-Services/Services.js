@@ -86,12 +86,46 @@
                 });
             },
             addObjectToCustomer: function (objectJson) {
-                return $http.post("/Repository/AddCustomerToObject", objectJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                return $http.post("/Repository/AddObjectToCustomer", objectJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
             },
-            
-        };
+            modifyCustomerObject: function (objectJson) {
+                return $http.post("/Repository/ModifyCustomerObject", objectJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            deleteCustomerObject: function (objectJson) {
+                return $http.post("/Repository/DeleteCustomerObject", objectJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            addNeedToCustomerObject: function (needJson) {
+                return $http.post("/Repository/AddNeedToCustomerObject", needJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            modifyCustomerObjectNeed: function (needJson) {
+                return $http.post("/Repository/ModifyCustomerObjectNeed", needJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            deleteCustomerObjectNeed: function (needJson) {
+                return $http.post("/Repository/DeleteCustomerObjectNeed", needJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            }
+          };
     }])

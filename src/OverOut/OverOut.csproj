@@ -269,11 +269,16 @@
     <Content Include="Global.asax" />
     <Content Include="Images\overout.png" />
     <Content Include="Scripts\Angular-App\OverOutApp.js" />
+    <Content Include="Scripts\Angular-Controllers\CustomersCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\EmployeesCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\ForgotPasswordCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\HomeCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\LoginCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\Main.js" />
+    <Content Include="Scripts\Angular-Controllers\ProfileCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\RegisterCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\ReportsCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\SchedulesCtrl.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\Angular-Services\Services.js" />
@@ -330,6 +335,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ForgotPassword\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_Customers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_Employees.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_Schedules.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_Reports.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_Profile.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

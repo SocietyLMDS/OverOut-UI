@@ -39,7 +39,7 @@ body {
     height: 40px;
 }
 
-#modalcontainer {
+.modalcontainer {
     position: fixed;
     top: 0;
     left: 0;
@@ -48,7 +48,7 @@ body {
     z-index: 15000;
 }
 
-#modalbg {
+.modalbg {
     
     background-color: Black;
     position: absolute;
@@ -88,10 +88,22 @@ body {
 }
 
 #customerobjectneedmodalcontent {
-     position: relative;
+    position: relative;
     z-index: 15015;
     width: 598px;
     height: 300px;
+    background-color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    top: 150px;
+    padding: 20px;
+}
+
+#employeemodalcontent {
+    position: relative;
+    z-index: 15015;
+    width: 598px;
+    height: 500px;
     background-color: #ffffff;
     margin-left: auto;
     margin-right: auto;

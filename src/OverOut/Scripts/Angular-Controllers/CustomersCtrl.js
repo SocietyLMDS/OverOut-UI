@@ -61,9 +61,9 @@
             endTime: ""
         };
 
-        $scope.initiate = function () {
+        $scope.$on("customers", function() {
             $scope.getCompanyCustomers();
-        };
+        });
         
         $scope.getCompanyCustomers = function () {
             services.getCompanyCustomers().then(function (data) {
@@ -169,7 +169,6 @@
         $scope.deleteCustomer = function (customer) {
             var cofirmResponse = confirm("Are you sure you want to delete customer (" + customer.name + ")");
             if (cofirmResponse) {
-                console.log(angular.toJson(customer));
                 services.deleteCustomer(angular.toJson(customer)).then(function (data) {
                     var response = data.substring(1, data.length - 1);
                     if (response === "Succeeded") {

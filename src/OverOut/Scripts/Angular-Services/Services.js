@@ -126,6 +126,27 @@
                 }, function (data) {
                     return data.status;
                 });
+            },
+            addEmployee: function(employeeJson) {
+                return $http.post("/Repository/AddEmployee", employeeJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            modifyEmployee: function (employeeJson) {
+                return $http.post("/Repository/ModifyEmployee", employeeJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            deleteEmployee: function (employeeJson) {
+                return $http.post("/Repository/DeleteEmployee", employeeJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
             }
           };
     }])

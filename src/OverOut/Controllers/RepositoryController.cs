@@ -56,7 +56,7 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/employee/getallemployee", "/?id=" + currentUser.Id);
-            var employee = JsonConvert.DeserializeObject(dataBody);
+            var employee = JsonConvert.DeserializeObject<List<EmployeeModel>>(dataBody);
             return Content(JsonConvert.SerializeObject(employee));
         }
 
@@ -142,6 +142,27 @@ namespace OverOut.Controllers
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/customerobjectneed/deleteneedfromcustomerobject", "/?id=" + need.Id + "&companyId=" + need.CompanyId + "&customerId=" + need.CustomerId + "&customerObjectId=" + need.CustomerObjectId);
             return Content(dataBody);
-        } 
+        }
+ 
+        public async Task<ContentResult> AddEmployee([FromBody] EmployeeModel employee)
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            employee.CompanyId = Guid.Parse(currentUser.Id);
+            var dataBody = await CallWebApi.Post("POST", "api/employee/addemployee", employee);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> ModifyEmployee([FromBody] EmployeeModel employee)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/employee/modifyemployee", employee);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> DeleteEmployee([FromBody] EmployeeModel employee)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/employee/deleteemployee", "/?id=" + employee.Id + "&companyId=" + employee.CompanyId);
+            return Content(dataBody);
+        }
     }
 }

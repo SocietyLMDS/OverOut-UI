@@ -1,11 +1,45 @@
-﻿<div ng-controller="EmployeesCtrl" ng-init="initiate()">
+﻿<div ng-controller="EmployeesCtrl">
     <div ng-click="showAddEmployeeModal()" style="text-align: center; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer">Add Employee</div>
-    <br />
-    <div ng-show="companyEmployess.length == 0">
+    
+    <div ng-show="companyEmployees.length == 0">
         There is currently no employees
     </div>
-    <div ng-show="companyEmployess.length > 0">
-        employee
+    <div ng-show="companyEmployees.length > 0">
+        <div ng-repeat="employee in companyEmployees">
+            <div ng-style="$index > 0 && {'margin-left':employeesPositions[$index]}"  style="margin-top: 20px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px; width: 290px; height: 382px; float: left;">
+                <div>
+                    <div style="float: left">
+                        <img src="../../Images/info.png" alt="info.png" />
+                    </div>
+                    <div style="color: #841d23; font-weight: bold; width: 170px; float: left; margin-top: 3px; margin-left: 3px;">Employee info</div>
+                    <div style="height: 40px"></div>
+                    <div><span style="font-weight: bold;">First Name:</span> {{employee.Firstname}}</div>
+                    <div><span style="font-weight: bold;">Last Name:</span> {{employee.Lastname}}</div>
+                    <div><span style="font-weight: bold;">Personal Number:</span> {{employee.PersonalNumber}}</div>
+                    <div><span style="font-weight: bold;">Eployment Number</span> {{employee.EmploymentNumber}}</div>
+                    <div><span style="font-weight: bold;">Address:</span> {{employee.Address.Street}}</div>
+                    <div><span style="font-weight: bold;">Postcode:</span> {{employee.Address.Postcode}}</div>
+                    <div><span style="font-weight: bold;">Nationality:</span> {{employee.Nationality}}</div>
+                    <div><span style="font-weight: bold;">Phone Number:</span> {{employee.PhoneNumber}}</div>
+                    <div><span style="font-weight: bold;">Mobile Number:</span> {{employee.MobileNumber}}</div>
+                    <div><span style="font-weight: bold;">Email Address:</span> {{employee.EmailAddress}}</div>
+                    <div><span style="font-weight: bold;">Bank Account Number:</span> {{employee.BankAccount}}</div>
+                    <div><span style="font-weight: bold;">Hourly Rate</span> {{employee.HourlyRate}}</div>
+                    <div><span style="font-weight: bold;">Job Description</span> {{employee.JobDescription}}</div>
+                    <div style="height: 20px;"></div>
+                    <div ng-click="showEditEmployeeModal(employee)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold;">
+                        <img src="../../Images/edit.png" alt="edit" />
+                        <span style="margin-right: 5px;">Edit</span>
+                    </div>
+                    <div ng-click="deleteEmployee(employee)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold; margin-right: 10px;">
+                        <img src="../../Images/delete.png" alt="edit" />
+                        <span style="margin-right: 5px;">Delete</span>
+                    </div>
+                </div>
+                <br class="clear" />
+            </div>
+        </div>
+        <br class="clear" />
     </div>
     <!-- Modal -->
      <div ng-show="showEmployeeModal" class="modalcontainer">
@@ -24,7 +58,7 @@
             <div style="height: 40px;"></div>
             <div style="color: #d2691e" ng-show="showEmployeeAddingError">{{employeeAddingErrorMessage}}</div>
             <div style="height: 10px;"></div>
-            <div style="background-color: #f3eeee; height: 330px; padding: 10px;">
+            <div style="background-color: #f3eeee; height: 380px; padding: 10px;">
                 <div style="float: left">
                     <div style="color: #841d23;">First Name</div>
                     <input type="text" style="width: 255px;" ng-model="employeeDetials.firstName" />
@@ -35,8 +69,8 @@
                 </div>
                 <div style="height: 50px;"></div>
                 <div style="float: left">
-                    <div style="color: #841d23;">Job Description</div>
-                    <input type="text" style="width: 255px;" ng-model="employeeDetials.jobDescription" />
+                    <div style="color: #841d23;">Personal Number</div>
+                    <input type="text" style="width: 255px;" ng-model="employeeDetials.personalNumber" />
                 </div>
                 <div style="float: left; margin-left: 25px;">
                     <div style="color: #841d23;">Employment Number</div>
@@ -77,6 +111,11 @@
                 <div style="float: left; margin-left: 25px;">
                     <div style="color: #841d23;">Hourly Rate</div>
                     <input type="text" style="width: 255px;" ng-model="employeeDetials.hourlyRate" />
+                </div>
+                <div style="height: 50px;"></div>
+                <div style="float: left">
+                    <div style="color: #841d23;">Job Description</div>
+                    <input type="text" style="width: 255px;" ng-model="employeeDetials.jobDescription" />
                 </div>
             </div>
             <div style="height: 20px;"></div>

@@ -1,5 +1,5 @@
 ﻿angular.module("OverOut")
-    .controller("HomeCtrl", ["$scope", "services", function ($scope, services) {
+    .controller("HomeCtrl", ["$scope", "services", "$timeout", function ($scope, services, $timeout) {
 
         $scope.currentUser = null;
         $scope.showUserLoggedIn = false;
@@ -17,8 +17,8 @@
                 $scope.currentUser = data;
                 if ($scope.currentUser.UserType == "Company") {
                     $scope.showCompanySection = true;
+                    $timeout($scope.getCurrentCompany, 200);
                     $scope.loadSection("Customers");
-                    $scope.getCurrentCompany();
                 } else if ($scope.currentUser.UserType == "Employee") {
                     $scope.showEmployeeSection = true;
                 }
@@ -35,6 +35,25 @@
 
         $scope.loadSection = function (menu) {
             $scope.hideAndShowSection(menu);
+            switch (menu) {
+                case "Customers":
+                    $scope.$broadcast("customers");
+                    break;
+                case "Employees":
+                    $scope.$broadcast("employees");
+                    break;
+                case "Schedules":
+                    $scope.$broadcast("schedules");
+                    break;
+                case "Reports":
+                    $scope.$broadcast("reports");
+                    break;
+                case "Profile":
+                    $scope.$broadcast("profile");
+                    break;
+            default:
+            }
+            
         };
 
         $scope.hideAndShowSection = function (menu) {

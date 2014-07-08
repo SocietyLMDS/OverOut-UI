@@ -2,7 +2,7 @@
     .controller("SchedulesCtrl", ["$scope", "services", function ($scope, services) {
 
         $scope.companySchedules = [];
-        $scope.initiate = function () {
+        $scope.$on("schedules", function(parameters) {
 
-        };
+        });
     }])

@@ -2,7 +2,7 @@
     .controller("ProfileCtrl", ["$scope", "services", function ($scope, services) {
 
 
-        $scope.initiate = function() {
+        $scope.$on("profile", function() {
 
-        };
+        });
     }])

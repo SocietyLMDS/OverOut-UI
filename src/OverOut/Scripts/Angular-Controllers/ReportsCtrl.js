@@ -2,7 +2,7 @@
     .controller("ReportsCtrl", ["$scope", "services", function ($scope, services) {
 
         $scope.companyReports = [];
-        $scope.initiate = function () {
+        $scope.$on("reports", function () {
 
-        };
+        });
     }])

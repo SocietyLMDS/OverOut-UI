@@ -8,7 +8,7 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/ProfileCtrl.js")
 }
 
-<div class="homecontainer" ng-controller="HomeCtrl" ng-init="initiate()">
+<div ng-click="HideUserLoggedIn()" class="homecontainer" ng-controller="HomeCtrl" ng-init="initiate()">
     <div>
         <div style="float: left;">
             <img src="../../Images/logo.png" alt="Logo" width="148" height="114" />
@@ -30,7 +30,7 @@
                 <div style="height: 5px;"></div>
                 <div style="border-bottom: 1px solid #841d23;"></div>
                 <div style="height: 5px;"></div>
-                <div ng-click="changePassword()" style="cursor: pointer;">Change password</div>
+                <div ng-click="showPasswordChangeModal()" style="cursor: pointer;">Change password</div>
             </div>
         </div>
     </div>
@@ -71,5 +71,44 @@
     <!-- Employee Section-->
     <div ng-show="showEmployeeSection">
         Employee
+    </div>
+        <!-- Modal -->
+     <div ng-show="showChangePasswordModal" class="modalcontainer">
+        <div class="modalbg" ng-click="hideChangePasswordModal()"></div>
+        <!--Customer Modal Content-->
+         <div id="changepasswordmodalcontent">
+             <div>
+                 <div style="float: left;">
+                     <img src="../../Images/customer.png" alt="customer" />
+                 </div>
+                 <div style="float: left; font-weight: bold; color: #841d23; margin-top: 5px; margin-left: 5px;">Change Password</div>
+                 <div ng-click="hideChangePasswordModal()" style="cursor: pointer; background-color: #a36064; height: 30px; width: 30px; float: right">
+                     <div style="color: white; font-weight: bold; font-size: 20px; margin-top: 2px; margin-left: 8px;">X</div>
+                 </div>
+             </div>
+            <div style="height: 40px;"></div>
+            <div style="color: #d2691e" ng-show="showPasswordChangeError">{{passwordChangeErrorMessage}}</div>
+            <div style="height: 10px;"></div>
+            <div style="background-color: #f3eeee; height: 380px; padding: 10px;">
+                <div>
+                    <div style="color: #841d23;">Current</div>
+                    <input type="password" style="width: 255px;" ng-model="changePasswordDetails.oldPassword" />
+                </div>
+                <div>
+                    <div style="color: #841d23;">New</div>
+                    <input type="password" style="width: 255px;" ng-model="changePasswordDetails.newPassword" />
+                </div>
+                <div>
+                    <div style="color: #841d23;">Retype New</div>
+                    <input type="password" style="width: 255px;" ng-model="changePasswordDetails.retypeNewPassword" />
+                </div>
+            </div>
+            <div style="height: 20px;"></div>
+            <div style="float: right">
+                <div ng-click="hideChangePasswordModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
+                <div ng-click="savePassword()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+            </div>
+        </div>
+        
     </div>
 </div>

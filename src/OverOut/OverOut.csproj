@@ -196,6 +196,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\CurrentUserPassword.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\CustomerObjectModel.cs" />

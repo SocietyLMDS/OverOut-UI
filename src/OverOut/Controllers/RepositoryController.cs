@@ -34,6 +34,8 @@ namespace OverOut.Controllers
             return Content(dataBody);
         }
 
+
+
         public async Task<ContentResult> GetUser()
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
@@ -164,5 +166,16 @@ namespace OverOut.Controllers
             var dataBody = await CallWebApi.Delete("DELETE", "api/employee/deleteemployee", "/?id=" + employee.Id + "&companyId=" + employee.CompanyId);
             return Content(dataBody);
         }
+
+        public async Task<ContentResult> ChangePassword([FromBody] CurrentUserPassword currentUser)
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var getUser = DigestAuthentication.Users[username];
+            currentUser.UserType = getUser.UserType;
+            currentUser.Username = getUser.Username;
+            var dataBody = await CallWebApi.Post("POST", "api/security/changepassword", currentUser);
+            DigestAuthentication.SetupHash1(username,currentUser.NewPassword);
+            return Content(dataBody);
+        } 
     }
 }

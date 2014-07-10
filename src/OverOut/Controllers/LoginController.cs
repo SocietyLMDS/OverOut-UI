@@ -41,10 +41,14 @@ namespace OverOut.Controllers
             return Content("LoginFailed");
         }
 
-        public ActionResult LogOut()
+        public async Task<ContentResult> LogOut()
         {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            CurrentUser user;
+            var flag = DigestAuthentication.Users.TryRemove(username, out user);
+            var dataBody = await CallWebApi.Get("GET", "api/security/logout", "");
             FormsAuthentication.SignOut();
-            return Content("");
+            return Content("/Home");
         }
     }
 }

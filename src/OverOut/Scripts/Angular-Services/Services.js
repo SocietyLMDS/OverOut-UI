@@ -8,6 +8,20 @@
                     return data.status;
                 });
             },
+            logout: function () {
+                return $http.get("/login/logout").then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            changePassword: function (passwordJson) {
+                return $http.post("/Repository/ChangePassword", passwordJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
             register: function (companyJson) {
                 return $http.post("/Repository/Register", companyJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
@@ -147,6 +161,6 @@
                 }, function (data) {
                     return data.status;
                 });
-            }
+            },
           };
     }])

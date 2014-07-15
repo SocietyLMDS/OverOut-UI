@@ -34,8 +34,6 @@ namespace OverOut.Controllers
             return Content(dataBody);
         }
 
-
-
         public async Task<ContentResult> GetUser()
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
@@ -175,6 +173,12 @@ namespace OverOut.Controllers
             currentUser.Username = getUser.Username;
             var dataBody = await CallWebApi.Post("POST", "api/security/changepassword", currentUser);
             DigestAuthentication.SetupHash1(username,currentUser.NewPassword);
+            return Content(dataBody);
+        }
+ 
+        public async Task<ContentResult> ModifyCompany([FromBody] CompanyModel companyModel)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/company/modifycompany", companyModel);
             return Content(dataBody);
         } 
     }

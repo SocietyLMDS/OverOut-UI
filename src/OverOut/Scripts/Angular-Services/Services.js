@@ -162,5 +162,12 @@
                     return data.status;
                 });
             },
+            modifyCompany: function (companyJson) {
+                return $http.post("/Repository/ModifyCompany", companyJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
           };
     }])

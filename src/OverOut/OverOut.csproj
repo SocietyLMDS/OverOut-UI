@@ -284,6 +284,7 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\Angular-Services\Services.js" />
+    <Content Include="Scripts\Angular-Directives\DirectiveModule.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

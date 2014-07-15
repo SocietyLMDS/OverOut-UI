@@ -1,3 +1,95 @@
 ﻿<div ng-controller="ProfileCtrl">
-    profile
+    <div style="background-color: #c0c0c0; width: 250px; height: 250px; float: left;">
+        <div>
+            <img src="../../Images/companyLogo.png" alt="companyLogo" />
+        </div>
+        <div style="height: 10px;"></div>
+        <form enctype="multipart/form-data" method="post" id="ImageForm">
+            <input type="file" style="visibility: hidden" name="file" id="FileUpLoad" file-loaded  />
+            <div upload-logo style="float: right; cursor: pointer;">
+                <div style="float: left;">
+                    <img src="../../Images/big_camera.png" alt="big_camera" />
+                </div>
+                <div style="float: left; margin-left: 5px;">update company logo</div>
+            </div>
+        </form>
+    </div>
+    <div style="float: left; margin-left: 50px;">
+        <div ng-show="showCompayAddError">
+            <div style="height: 40px;"></div>
+            <div style="color: #d2691e">{{message}}</div>
+            <div style="height: 10px;"></div>
+        </div>
+        <div ng-show="showCompayAddSuccess">
+            <div style="height: 40px;"></div>
+            <div style="color: #008000">{{message}}</div>
+            <div style="height: 10px;"></div>
+        </div>
+        <div style="float: left">
+            <div style="color: #841d23;">Name</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.name" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Organisation Number</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.organisationNumber" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left">
+            <div style="color: #841d23;">Address</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.visitationAddress.street" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Post Code</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.visitationAddress.postcode" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left">
+            <div style="color: #841d23;">Postal Address</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.postalAddress.street" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Postal Post Code</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.postalAddress.postcode" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left;">
+            <div style="color: #841d23;">Email Address</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.emailAddress" />
+        </div>
+        <div style="float: left; margin-left: 25px">
+            <div style="color: #841d23;">Phone Number</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.phoneNumber" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left;">
+            <div style="color: #841d23;">Mobile Number</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.mobileNumber" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Fax Number</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.faxNumber" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left;">
+            <div style="color: #841d23;">Website</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.websiteLink" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Managers Firstname</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.managerFirstname" />
+        </div>
+        <div style="height: 50px;"></div>
+        <div style="float: left;">
+            <div style="color: #841d23;">Managers Lastname</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.managerLastname" />
+        </div>
+        <div style="float: left; margin-left: 25px;">
+            <div style="color: #841d23;">Managers Personal Number</div>
+            <input type="text" style="width: 255px;" ng-model="companyDetails.managerPersonalNumber" />
+        </div>
+        <div style="height: 80px;"></div>
+        <div style="float: right">
+            <div ng-click="saveCompany()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+        </div>
+    </div>
 </div>

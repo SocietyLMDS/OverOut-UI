@@ -21,5 +21,6 @@ namespace OverOut.Models
         public string ManagerFirstname { get; set; }
         public string ManagerLastname { get; set; }
         public string ManagerPersonalNumber { get; set; }
+        public string LogoLink { get; set; }
     }
 }

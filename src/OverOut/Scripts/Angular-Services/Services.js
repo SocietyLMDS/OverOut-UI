@@ -169,5 +169,12 @@
                     return data.status;
                 });
             },
+            uploadLogo : function(fd) {
+                return $http.post("/Repository/UploadLogo", fd, { withCredentials: true, headers: { 'Content-Type': undefined }, transformRequest: angular.identity }).then(function (data) {
+                    return data.data;
+                }, function(data) {
+                    return data.status;
+                });
+            }
           };
     }])

@@ -1,5 +1,5 @@
 ﻿angular.module("OverOut")
-    .controller("ProfileCtrl", ["$scope", "services", "$window", function ($scope, services, $window) {
+    .controller("ProfileCtrl", ["$scope", "services", function ($scope, services) {
 
         $scope.showCompayAddError = false;
         $scope.showCompayAddSuccess = false;

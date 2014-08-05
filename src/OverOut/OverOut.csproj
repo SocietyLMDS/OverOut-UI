@@ -201,6 +201,7 @@
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\CustomerObjectModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\NeedModel.cs" />
     <Compile Include="Models\Section.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

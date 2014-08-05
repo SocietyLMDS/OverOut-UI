@@ -11,15 +11,17 @@
                 });
             }
         };
-  }).directive("fileLoaded", function() {
-      return {
-          restrict: 'A',
-          template: '',
-          scope: true,
-          link: function (scope, elem, attr) {
-              elem.bind("blur", function () {
-                  console.log("ladji");
-              });
-          }
-      };
-  });
+    }).directive("fileLoaded", ["services", function (services) {
+        return {
+            restrict: 'A',
+            template: '',
+            scope: true,
+            link: function (scope, elem, attr) {
+                elem.bind("change", function () {
+                    var fd = new FormData();
+                    fd.append("file", this.files[0]);
+                    services.uploadLogo(fd);
+                });
+            }
+        };
+    }]);

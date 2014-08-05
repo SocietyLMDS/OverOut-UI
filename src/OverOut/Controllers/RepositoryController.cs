@@ -181,5 +181,17 @@ namespace OverOut.Controllers
             var dataBody = await CallWebApi.Put("PUT", "api/company/modifycompany", companyModel);
             return Content(dataBody);
         } 
+
+        public async Task<ContentResult> UploadLogo()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var file = Request.Files["file"];
+            var imageData = new byte[file.ContentLength];
+            var fileName = currentUser.CompanyName.Trim() + currentUser.Id + "." + file.FileName.Split('.')[1];
+            var fileModel = new FileModel { FileName = fileName, Id = currentUser.Id };
+            var dataBody = await CallWebApi.PostUpload("POST", "api/upload/uploadlogo", fileModel);
+            return Content(dataBody);
+        }
     }
 }

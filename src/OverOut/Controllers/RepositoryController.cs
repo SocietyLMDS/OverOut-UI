@@ -187,10 +187,9 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var file = Request.Files["file"];
-            var imageData = new byte[file.ContentLength];
             var fileName = currentUser.CompanyName.Trim() + currentUser.Id + "." + file.FileName.Split('.')[1];
-            var fileModel = new FileModel { FileName = fileName, Id = currentUser.Id };
-            var dataBody = await CallWebApi.PostUpload("POST", "api/upload/uploadlogo", fileModel);
+            var fileModel = new FileModel { FileName = fileName, Id = currentUser.Id, File = file };
+            var dataBody = await CallWebApi.PostImageUpload("POST", "api/upload/uploadlogo", fileModel);
             return Content(dataBody);
         }
     }

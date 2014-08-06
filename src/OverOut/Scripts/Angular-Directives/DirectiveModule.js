@@ -11,7 +11,7 @@
                 });
             }
         };
-    }).directive("fileLoaded", ["services", function (services) {
+    }).directive("fileLoaded", ["services", "$rootScope", function (services, $rootScope) {
         return {
             restrict: 'A',
             template: '',
@@ -20,7 +20,9 @@
                 elem.bind("change", function () {
                     var fd = new FormData();
                     fd.append("file", this.files[0]);
-                    services.uploadLogo(fd);
+                    services.uploadLogo(fd).then(function (data) {
+                        $rootScope.$broadcast('logoUploaded', data);
+                    });
                 });
             }
         };

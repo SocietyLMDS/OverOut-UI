@@ -1,5 +1,5 @@
 ﻿angular.module("OverOut")
-    .controller("ProfileCtrl", ["$scope", "services", function ($scope, services) {
+    .controller("ProfileCtrl", ["$scope", "services", "$rootScope", "$timeout", function ($scope, services, $rootScope, $timeout) {
 
         $scope.showCompayAddError = false;
         $scope.showCompayAddSuccess = false;
@@ -19,7 +19,9 @@
             websiteLink: "",
             managerFirstname: "",
             managerLastname: "",
-            managerPersonalNumber: ""
+            managerPersonalNumber: "",
+            logoLink:""
+            
         };
 
         $scope.$on("profile", function () {
@@ -46,8 +48,11 @@
                 websiteLink: data.WebsiteLink,
                 managerFirstname: data.ManagerFirstname,
                 managerLastname: data.ManagerLastname,
-                managerPersonalNumber: data.ManagerPersonalNumber
+                managerPersonalNumber: data.ManagerPersonalNumber,
+                logoLink: data.LogoLink
             };
+
+            console.log(data);
         };
 
         $scope.saveCompany = function () {
@@ -72,12 +77,9 @@
             $scope.showCompayAddSuccess = false;
             $scope.message = "";
         };
-
-        $scope.setupFile = function(file) {
-            console.log();
-        };
-
-        $scope.updateLogo = function() {
-           
-        };
+        
+        $rootScope.$on('logoUploaded', function (e, data) {
+            $timeout($scope.getCurrentCompany, 1000);
+        });
     }])
+

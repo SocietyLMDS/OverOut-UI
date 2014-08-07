@@ -35,12 +35,13 @@
         };
 
         $scope.SetupCompanyProfile = function (data) {
+            console.log(data);
             $scope.companyDetails = {
                 id: data.Id,
                 name: data.Name,
                 organisationNumber: data.OrganisationNumber,
-                visitationAddress: { street: data.VisitationAddress.Street, postcode: data.VisitationAddress.Postcode },
-                postalAddress: { street: data.PostalAddress.Street, postcode: data.PostalAddress.Postcode },
+                visitationAddress: { street: (data.VisitationAddress === null) ? "" : data.VisitationAddress.Street, postcode: (data.VisitationAddress === null) ? "" : data.VisitationAddress.Postcode },
+                postalAddress: { street: (data.PostalAddress === null) ? "" : data.PostalAddress.Street, postcode: (data.PostalAddress === null) ? "" : data.PostalAddress.Postcode },
                 emailAddress: data.EmailAddress,
                 phoneNumber: data.PhoneNumber,
                 mobileNumber: data.MobileNumber,
@@ -49,10 +50,8 @@
                 managerFirstname: data.ManagerFirstname,
                 managerLastname: data.ManagerLastname,
                 managerPersonalNumber: data.ManagerPersonalNumber,
-                logoLink: data.LogoLink
+                logoLink: data.LogoLink+ '?decache=' + Math.random()
             };
-
-            console.log(data);
         };
 
         $scope.saveCompany = function () {
@@ -79,7 +78,7 @@
         };
         
         $rootScope.$on('logoUploaded', function (e, data) {
-            $timeout($scope.getCurrentCompany, 1000);
+            $scope.getCurrentCompany();
         });
     }])
 

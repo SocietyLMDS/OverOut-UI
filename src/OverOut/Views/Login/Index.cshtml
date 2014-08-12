@@ -5,7 +5,7 @@
 
 <div class="container" ng-controller="LoginCtrl">
     <div class="FloatLeft"><img src="../../Images/overout.png" width="400" height="574" alt="overout"/></div>
-    <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;">
+    <div class="FloatLeft" style="margin-left: 80px; margin-top: 40px;" ng-keyup="$event.keyCode == 13 ? login() : null">
         <div style="font-size: 20px">Welcome to over/out please log in</div>
         <div class="space"></div>
         <div>
@@ -23,7 +23,7 @@
         </div>
         <br/>
         <div style="float: right; margin-right: 90px">
-            <button class="btn btn-primary"  ng-click="login()">log in</button>
+            <button class="btn btn-primary" ng-click="login()">log in</button>
         </div>
         <div style="height:100px"></div>
         <div style="color: #841d23; cursor: pointer; text-decoration: underline" ng-click="forgotPassword()">Forgotten your password</div>

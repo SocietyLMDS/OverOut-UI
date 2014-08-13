@@ -38,7 +38,7 @@
     <div ng-show="showCompanySection">
         <div style="background-color: #a36064; height: 40px; width: 100%; padding: 5px">
             <div ng-repeat="menu in menus">
-                <div ng-click="loadSection(menu.menuName)" style="cursor: pointer; float: left; margin-left: 5px; height: 30px; width: 130px; text-align: center; background-color: white; font-weight: bold">
+                <div ng-click="loadSection(menu.menuName)" ng-style="menu.show ? {'background-color':'#841d23', 'color':'#ffffff'} : {'background-color':'#ffffff', 'color':'#000000'}" style="cursor: pointer; float: left; margin-left: 5px; height: 30px; width: 130px; text-align: center; background-color: white; font-weight: bold">
                     <span style="position: relative; top: 5px;">{{menu.menuName}}</span>
                 </div>
             </div>

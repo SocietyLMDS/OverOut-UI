@@ -35,7 +35,6 @@
         };
 
         $scope.SetupCompanyProfile = function (data) {
-            console.log(data);
             $scope.companyDetails = {
                 id: data.Id,
                 name: data.Name,

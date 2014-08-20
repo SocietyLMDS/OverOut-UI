@@ -1,6 +1,92 @@
 ﻿<div ng-controller="SchedulesCtrl">
-    <div ng-click="CreateSchedule()" style="text-align: center; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 130px; color: white; font-weight: bold; cursor: pointer">Create Schedule</div>
-    <br/>
+    <div ng-click="showCreateModal()" style="text-align: center; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 130px; color: white; font-weight: bold; cursor: pointer">Create Schedule</div>
+    <br />
     <div ng-show="companySchedules.length == 0">There is currently no schedules</div>
     <div ng-show="companySchedules.length > 0">schedule</div>
+
+    <!-- Modal -->
+    <div ng-show="showScheduleModal" class="modalcontainer ng-hide">
+        <div class="modalbg" ng-click="hideScheduleModal()"></div>
+        <!--Customer Modal Content-->
+        <div id="Schedulemodalcontent">
+            <div>
+                <div style="float: left;">
+                    <img src="../../Images/schedule.png" alt="schedule" />
+                </div>
+                <div style="float: left; font-weight: bold; color: #841d23; margin-top: 5px; margin-left: 5px;">{{scheduleAddOrEditMessage}}</div>
+                <div ng-click="hideScheduleModal()" style="cursor: pointer; background-color: #a36064; height: 30px; width: 30px; float: right">
+                    <div style="color: white; font-weight: bold; font-size: 20px; margin-top: 2px; margin-left: 8px;">X</div>
+                </div>
+            </div>
+            <div style="height: 40px;"></div>
+            <div style="color: #d2691e" ng-show="showEmployeeAddingError">{{scheduleAddingErrorMessage}}</div>
+            <div style="height: 10px;"></div>
+            <div style="background-color: #f3eeee; height: 395px; padding: 10px;">
+                @*<div ng-click="showStep('step1')" ng-style="showStep1 ? {'background-color':'#841d23'} : {'background-color':'#a36064'}" style="background-color: #a36064; border: 1px #000000 solid; width: 180px; float: left; height: 30px; font-weight: bold; text-align: center; color:#ffffff; cursor: pointer;"><span style="position: relative; top: 5px;">Step 1 Choose Customer</span></div>
+                 <div ng-click="showStep('step2')" ng-style="showStep2 ? {'background-color':'#841d23'} : {'background-color':'#a36064'}" style="background-color: #a36064; border: 1px #000000 solid; width: 180px; float: left; margin-left: 10px; height: 30px; font-weight: bold; text-align: center; color:#ffffff; cursor: pointer;"><span style="position: relative; top: 5px;">Step 2 Choose Employee</span></div>*@
+                <div>
+                    <div>
+                        <div style="font-weight: bold">Step 1 Select Customer</div>
+                        <div style="height: 5px;"></div>
+                        <select ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
+                            <option value="">Select customer</option>
+                        </select>
+                    </div>
+                    <div style="height: 20px"></div>
+                    <div ng-show="showObjectSelection">
+                        <div style="font-weight: bold">Step 2 Select Object</div>
+                        <div style="height: 5px;"></div>
+                        <select ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
+                            <option value="">Select Object</option>
+                        </select>
+                    </div>
+                    <div style="height: 20px"></div>
+                    <div ng-show="showObjectNeeds">
+                        <div style="font-weight: bold">Step 3 Select Object Need</div>
+                        <div style="height: 5px;"></div>
+                        <select ng-change="currentCustomerObjectNeedSelected()" ng-model="selectedObjectNeed" ng-options="customerObjectNeed as customerObjectNeed.weekDay for customerObjectNeed in customerObjectNeeds">
+                            <option value="">Select Object Need</option>
+                        </select>
+                    </div>
+                    <div style="height: 20px"></div>
+                    <div ng-show="showDateSelection">
+                        <div style="font-weight: bold">Step 3 Select Date</div>
+                        <div style="height: 5px;"></div>
+                        <div>Date</div>
+                    </div>
+                    <div ng-show="showAddEmployee">
+                        <div style="font-weight: bold">Step 4 Add Employee</div>
+                        <div style="height: 5px;"></div>
+                        <div ng-show="showObjectNeeds">
+                            <div>
+                                <div style="float: left">Day:</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.weekDay}}</div>
+                            </div>
+                            <br/>
+                            <div>
+                                <div style="float: left">People Needed:</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.numberOfPersonalNeeded}}</div>
+                            </div>
+                            <br/>
+                            <div>
+                                <div style="float: left">Start Time</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.startTime}}</div>
+                            </div>
+                            <br/>
+                            <div>
+                                <div style="float: left">End Time</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.endTime}}</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div style="height: 20px;"></div>
+            <div style="float: right">
+                <div ng-click="hideScheduleModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
+                <div ng-click="saveEmployee()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+            </div>
+        </div>
+    </div>
 </div>

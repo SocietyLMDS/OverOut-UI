@@ -7,28 +7,30 @@
         $scope.selectedCustomer = null;
         $scope.selectedObject = null;
         $scope.selectedObjectNeed = null;
+        $scope.selectedEmployee = null;
+        $scope.employeeList = [];
 
         $scope.$on("schedules", function () {
             $scope.getCompanySchedules();
         });
 
-        $scope.getCompanySchedules = function() {
-            services.getCompanySchedules().then(function(data) {
+        $scope.getCompanySchedules = function () {
+            services.getCompanySchedules().then(function (data) {
                 $scope.companySchedules = data;
                 $scope.getCompanyCustomers();
             });
         };
 
-        $scope.getCompanyCustomers = function() {
-            services.getCompanyCustomers().then(function(data) {
+        $scope.getCompanyCustomers = function () {
+            services.getCompanyCustomers().then(function (data) {
                 $scope.companyCustomers = data;
                 $scope.getCompanyEmployess();
             });
         };
-        
+
         $scope.getCompanyEmployess = function () {
             services.getCompanyEmployees().then(function (data) {
-                $scope.compayEmployess = data;
+                $scope.companyEmployees = data;
             });
         };
 
@@ -38,7 +40,7 @@
             $scope.scheduleAddOrEditMessage = "Create Schedule";
         };
 
-        $scope.CreateSchedule = function() {
+        $scope.CreateSchedule = function () {
             console.log("schedules");
         };
 
@@ -46,10 +48,8 @@
             console.log("schedules");
         };
 
-        $scope.hideScheduleModal = function() {
+        $scope.hideScheduleModal = function () {
             $scope.showScheduleModal = false;
-            $scope.showStep1 = false;
-            $scope.showStep2 = false;
             $scope.scheduleAddOrEditMessage = "";
             $scope.scheduleAddingErrorMessage = "";
             $scope.showObjectSelection = false;
@@ -60,55 +60,116 @@
             $scope.showDateSelection = false;
             $scope.selectedCustomer = null;
             $scope.showAddEmployee = false;
-        };
-        
-        $scope.saveEmployee = function () {
-            
+            $scope.employeeList = [];
         };
 
-        $scope.currentCustomerSelected = function() {
-            if ($scope.selectedCustomer !== null) {
-                $scope.showObjectSelection = true;
-                $scope.customerObjects = $scope.selectedCustomer.objects;
+        $scope.saveSchedule = function () {
+            console.log($scope.selectedCustomer.id);
+            console.log($scope.selectedObject.id);
+            console.log($scope.selectedObjectNeed.id);
+            console.log($scope.employeeList);
+        };
+
+        var stepLevel = {
+            customerlevel: function (flag) {
                 $scope.showObjectNeeds = false;
                 $scope.showDateSelection = false;
                 $scope.showAddEmployee = false;
-            } else {
-                $scope.showObjectSelection = false;
-                $scope.customerObjects = [];
-                $scope.selectedObject = null;
-                $scope.objectNeeds = [];
-                $scope.showObjectNeeds = false;
+                $scope.employeeList = [];
+                $scope.selectedEmployee = null;
+                $scope.showAddEmployee = false;
+                $scope.showEmployeeAddingError = false;
+                $scope.scheduleAddingErrorMessage = "";
+                $scope.showEmployees = false;
+                $scope.showObjectSelection = flag;
+            },
+            objectLevel : function() {
+                $scope.selectedObjectNeed = null;
+                $scope.showAddEmployee = false;
+                $scope.employeeList = [];
+                $scope.selectedEmployee = null;
+                $scope.showAddEmployee = false;
+                $scope.showEmployeeAddingError = false;
+                $scope.scheduleAddingErrorMessage = "";
+                $scope.showEmployees = false;
                 
+            },
+            showDateAndNeed: function(whichToSetToTrue) {
+                $scope.showObjectNeeds = (whichToSetToTrue === "showObjectNeeds") ? true : false;
+                $scope.showDateSelection = (whichToSetToTrue === "showDateSelection") ? true : false;;
+            },
+            ObjectNeed: function(flag) {
+                $scope.showAddEmployee = flag;
+                $scope.employeeList = [];
+                $scope.selectedEmployee = null;
+                $scope.showEmployees = false;
+            },
+            employee: function(flag, message) {
+                $scope.showEmployeeAddingError = flag;
+                $scope.scheduleAddingErrorMessage = message;
+                $scope.selectedEmployee = null;
             }
         };
 
-        $scope.currentCustomerObjectSelected = function() {
+        $scope.currentCustomerSelected = function () {
+            if ($scope.selectedCustomer !== null) {
+                $scope.customerObjects = $scope.selectedCustomer.objects;
+                stepLevel.customerlevel(true);
+            } else {
+                stepLevel.customerlevel(false);
+            }
+        };
+
+        $scope.currentCustomerObjectSelected = function () {
             if ($scope.selectedObject !== null) {
                 $scope.customerObjectNeeds = $scope.selectedObject.needs;
                 if ($scope.customerObjectNeeds.length > 0) {
-                    $scope.showObjectNeeds = true;
-                    $scope.showDateSelection = false;
+                    stepLevel.showDateAndNeed("showObjectNeeds");
                 } else {
-                    $scope.showObjectNeeds = false;
-                    $scope.showDateSelection = true;
+                    stepLevel.showDateAndNeed("showDateSelection");
                 }
-                $scope.selectedObjectNeed = null;
-                $scope.showAddEmployee = false;
+                stepLevel.objectLevel();
             } else {
-                $scope.objectNeeds = [];
-                $scope.showObjectNeeds = null;
-                $scope.showDateSelection = false;
-                $scope.showAddEmployee = false;
-                $scope.selectedObjectNeed = null;
+                stepLevel.objectLevel();
             }
         };
 
         $scope.currentCustomerObjectNeedSelected = function () {
             if ($scope.selectedObjectNeed != null) {
-                $scope.showAddEmployee = true;
+                stepLevel.ObjectNeed(true);
             } else {
-                $scope.showAddEmployee = false;
+                stepLevel.ObjectNeed(false);
             }
+        };
+
+        $scope.employeeSelected = function () {
+            var check = $scope.checkIfEmployeeAlreadyExist($scope.selectedEmployee);
+            if (!check) {
+                if ($scope.employeeList.length === Number($scope.selectedObjectNeed.numberOfPersonalNeeded)) {
+                    stepLevel.employee(true, "You have added enough people needed for this schedule");
+                } else {
+                    $scope.employeeList.push($scope.selectedEmployee);
+                    stepLevel.employee(false, "");
+                }
+
+            } else {
+                stepLevel.employee(true, "The worker has already been added to the object need");
+            }
+            $scope.showEmployees = true;
+        };
+
+        $scope.checkIfEmployeeAlreadyExist = function (selectedEmployee) {
+            var ret = false;
+            for (var i = 0; i < $scope.employeeList.length; i++) {
+                var employee = $scope.employeeList[i];
+                if (employee.Id === selectedEmployee.Id) {
+                    ret = true;
+                }
+            }
+            return ret;
+        };
+
+        $scope.deleteEmployee = function (index) {
+            $scope.employeeList.splice(index, 1);
         };
     }])

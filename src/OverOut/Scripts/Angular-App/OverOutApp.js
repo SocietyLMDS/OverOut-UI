@@ -1,1 +1,1 @@
-﻿angular.module("OverOut", ["ServiceModule", "DirectiveModule"])
+﻿angular.module("OverOut", ["ServiceModule", "DirectiveModule", "ui.bootstrap"])

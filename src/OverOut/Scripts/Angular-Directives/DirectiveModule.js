@@ -13,8 +13,8 @@
         };
     }).directive("fileLoaded", ["services", "$rootScope", function (services, $rootScope) {
         return {
-            restrict: 'A',
-            template: '',
+            restrict: "A",
+            template: "",
             scope: true,
             link: function (scope, elem, attr) {
                 elem.bind("change", function () {
@@ -26,4 +26,4 @@
                 });
             }
         };
-    }]);
+    }])

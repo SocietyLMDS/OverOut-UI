@@ -292,9 +292,11 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-1.11.0.min.js" />
+    <Content Include="Scripts\jquery-1.11.1.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\QUnit\qunit-1.14.0.js" />
     <Content Include="Scripts\QUnit\sinon-1.9.1.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.11.0.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -357,6 +359,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Partials\_Profile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.11.1.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

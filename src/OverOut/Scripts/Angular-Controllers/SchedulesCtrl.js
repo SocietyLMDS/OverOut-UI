@@ -83,7 +83,7 @@
                 $scope.showEmployees = false;
                 $scope.showObjectSelection = flag;
             },
-            objectLevel : function() {
+            objectLevel: function () {
                 $scope.selectedObjectNeed = null;
                 $scope.showAddEmployee = false;
                 $scope.employeeList = [];
@@ -92,19 +92,19 @@
                 $scope.showEmployeeAddingError = false;
                 $scope.scheduleAddingErrorMessage = "";
                 $scope.showEmployees = false;
-                
+
             },
-            showDateAndNeed: function(whichToSetToTrue) {
+            showDateAndNeed: function (whichToSetToTrue) {
                 $scope.showObjectNeeds = (whichToSetToTrue === "showObjectNeeds") ? true : false;
                 $scope.showDateSelection = (whichToSetToTrue === "showDateSelection") ? true : false;;
             },
-            ObjectNeed: function(flag) {
+            ObjectNeed: function (flag) {
                 $scope.showAddEmployee = flag;
                 $scope.employeeList = [];
                 $scope.selectedEmployee = null;
                 $scope.showEmployees = false;
             },
-            employee: function(flag, message) {
+            employee: function (flag, message) {
                 $scope.showEmployeeAddingError = flag;
                 $scope.scheduleAddingErrorMessage = message;
                 $scope.selectedEmployee = null;
@@ -172,4 +172,45 @@
         $scope.deleteEmployee = function (index) {
             $scope.employeeList.splice(index, 1);
         };
+
+        $scope.$watch("dt", function (date) {
+            console.log(date);
+        });
+        
+        $scope.today = function () {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function (date, mode) {
+            //return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+            return false;
+        };
+
+        $scope.toggleMin = function () {
+            $scope.minDate = $scope.minDate ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.initDate = new Date('2016-15-20');
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
     }])

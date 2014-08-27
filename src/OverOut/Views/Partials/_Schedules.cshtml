@@ -49,7 +49,18 @@
                     <div ng-show="showDateSelection">
                         <div style="font-weight: bold">Step 3 Select Date</div>
                         <div style="height: 5px;"></div>
-                        <div>Date</div>
+                        <div style="width: 400px">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div style="height: 20px"></div>
                     <div ng-show="showAddEmployee">
@@ -106,7 +117,8 @@
                                         <td>{{employee.Lastname}}</td>
                                         <td>{{employee.JobDescription}}</td>
                                         <td>{{employee.PersonalNumber}}</td>
-                                        <td ng-click="deleteEmployee($index)" style="cursor: pointer;"><img src="../../Images/delete.png" alt="delete" /></td>
+                                        <td ng-click="deleteEmployee($index)" style="cursor: pointer;">
+                                            <img src="../../Images/delete.png" alt="delete" /></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -122,3 +134,5 @@
         </div>
     </div>
 </div>
+
+

@@ -147,3 +147,5 @@ th, td {
     width: 75px;
     text-align: left;
 }
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

@@ -141,7 +141,7 @@
                     return data.status;
                 });
             },
-            addEmployee: function(employeeJson) {
+            addEmployee: function (employeeJson) {
                 return $http.post("/Repository/AddEmployee", employeeJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
                 }, function (data) {
@@ -169,12 +169,19 @@
                     return data.status;
                 });
             },
-            uploadLogo : function(fd) {
+            uploadLogo: function (fd) {
                 return $http.post("/Repository/UploadLogo", fd, { headers: { 'Content-Type': undefined }, transformRequest: angular.identity }).then(function (data) {
                     return data.data;
-                }, function(data) {
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            addSchedule: function (scheduleJson) {
+                return $http.post("/Repository/AddSchedule", scheduleJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
                     return data.status;
                 });
             }
-          };
+        };
     }])

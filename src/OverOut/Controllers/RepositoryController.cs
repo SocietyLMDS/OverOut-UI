@@ -95,13 +95,13 @@ namespace OverOut.Controllers
             var dataBody = await CallWebApi.Post("POST", "api/customer/addcustomer", customer);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> ModifyCustomer([FromBody] CustomerModel customer)
         {
             var dataBody = await CallWebApi.Put("PUT", "api/customer/modifycustomer", customer);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> DeleteCustomer([FromBody] CustomerModel customer)
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/customer/deletecustomer", "/?id=" + customer.Id + "&companyId=" + customer.CompanyId);
@@ -113,37 +113,37 @@ namespace OverOut.Controllers
             var dataBoby = await CallWebApi.Post("POST", "api/customerobject/addcustomerobject", customerObject);
             return Content(dataBoby);
         }
- 
+
         public async Task<ContentResult> ModifyCustomerObject([FromBody] CustomerObjectModel customerObject)
         {
             var dataBody = await CallWebApi.Put("PUT", "api/customerobject/modifycustomerObject", customerObject);
             return Content(dataBody);
-        } 
+        }
 
         public async Task<ContentResult> DeleteCustomerObject([FromBody] CustomerObjectModel customerObject)
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/customerobject/deletecustomerobject", "/?id=" + customerObject.Id + "&companyId=" + customerObject.CompanyId + "&customerId=" + customerObject.CustomerId);
             return Content(dataBody);
-        } 
+        }
 
         public async Task<ContentResult> AddNeedToCustomerObject([FromBody] NeedModel need)
         {
             var dataBody = await CallWebApi.Post("POST", "api/customerobjectneed/addneedtocustomerobject", need);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> ModifyCustomerObjectNeed([FromBody] NeedModel need)
         {
             var dataBody = await CallWebApi.Put("PUT", "api/customerobjectneed/modifyneedoncustomerobject", need);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> DeleteCustomerObjectNeed([FromBody] NeedModel need)
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/customerobjectneed/deleteneedfromcustomerobject", "/?id=" + need.Id + "&companyId=" + need.CompanyId + "&customerId=" + need.CustomerId + "&customerObjectId=" + need.CustomerObjectId);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> AddEmployee([FromBody] EmployeeModel employee)
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
@@ -152,13 +152,13 @@ namespace OverOut.Controllers
             var dataBody = await CallWebApi.Post("POST", "api/employee/addemployee", employee);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> ModifyEmployee([FromBody] EmployeeModel employee)
         {
             var dataBody = await CallWebApi.Put("PUT", "api/employee/modifyemployee", employee);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> DeleteEmployee([FromBody] EmployeeModel employee)
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/employee/deleteemployee", "/?id=" + employee.Id + "&companyId=" + employee.CompanyId);
@@ -172,15 +172,15 @@ namespace OverOut.Controllers
             currentUser.UserType = getUser.UserType;
             currentUser.Username = getUser.Username;
             var dataBody = await CallWebApi.Post("POST", "api/security/changepassword", currentUser);
-            DigestAuthentication.SetupHash1(username,currentUser.NewPassword);
+            DigestAuthentication.SetupHash1(username, currentUser.NewPassword);
             return Content(dataBody);
         }
- 
+
         public async Task<ContentResult> ModifyCompany([FromBody] CompanyModel companyModel)
         {
             var dataBody = await CallWebApi.Put("PUT", "api/company/modifycompany", companyModel);
             return Content(dataBody);
-        } 
+        }
 
         public async Task<ContentResult> UploadLogo()
         {
@@ -191,6 +191,61 @@ namespace OverOut.Controllers
             var fileModel = new FileModel { FileName = fileName, Id = currentUser.Id, File = file };
             var dataBody = await CallWebApi.PostImageUpload("POST", "api/upload/uploadlogo", fileModel);
             return Content(dataBody);
+        }
+
+        public async Task<ContentResult> AddSchedule([FromBody] ScheduleModelUi schedule)
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            dynamic response;
+
+            switch (schedule.Type)
+            {
+                case "ScheduleByNeed":
+                    var str = await CallWebApi.Get("GET", "api/schedule/getschedulelimit", "");
+                    var monthsLength = str.Substring(1, str.Length - 2);
+                    var scheduleDates = FindOutScheduleDates.GetScheduleDatesList(int.Parse(monthsLength), schedule.Day);
+                    foreach (var scheduleDate in scheduleDates)
+                    {
+                        var startDate = new DateTime(scheduleDate.Year,scheduleDate.Month, scheduleDate.Day, schedule.StartDateAndTime.Hour,schedule.StartDateAndTime.Minute, schedule.StartDateAndTime.Second);
+                        var endDate = new DateTime(scheduleDate.Year,scheduleDate.Month, scheduleDate.Day, schedule.EndDateAndTime.Hour,schedule.EndDateAndTime.Minute, schedule.EndDateAndTime.Second);
+                        
+
+                        var newSchedule = new ScheduleModel
+                            {
+                 
+                                CompanyId = Guid.Parse(currentUser.Id),
+                                CustomerId = schedule.CustomerId,
+                                CustomerObjectId = schedule.CustomerObjectId,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                            };
+
+                        response = await CallWebApi.Post("POST", "api/schedule/addschedule", newSchedule);
+                        if (response != "Unsuceeded") continue;
+                        foreach (var employee in schedule.Employees)
+                        {
+                            var shiftModel = new ShiftModel
+                                {
+                                    ScheduleId = Guid.Parse(response), 
+                                    EmployeeId = employee.Id,
+                                    EmployeeFirstname = employee.Firstname,
+                                    EmployeeLastname = employee.Lastname,
+                                    StartTime = startDate,
+                                    EndTime = endDate,
+                                };
+
+                            response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                        }
+
+                        
+                    }
+                    break;
+                case "ScheduleByDate":
+                    break;
+            }
+
+            return Content("");
         }
     }
 }

@@ -146,6 +146,11 @@ table {
 th, td {
     width: 75px;
     text-align: left;
+    visibility: hi
+}
+
+.selectWidth {
+    width: 185px;
 }
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

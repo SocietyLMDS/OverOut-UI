@@ -26,7 +26,7 @@
                     <div>
                         <div style="font-weight: bold">Step 1 Select Customer</div>
                         <div style="height: 5px;"></div>
-                        <select ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
+                        <select class="selectWidth" ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
                             <option value="">Select customer</option>
                         </select>
                     </div>
@@ -34,7 +34,7 @@
                     <div ng-show="showObjectSelection">
                         <div style="font-weight: bold">Step 2 Select Object</div>
                         <div style="height: 5px;"></div>
-                        <select ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
+                        <select class="selectWidth" ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
                             <option value="">Select Object</option>
                         </select>
                     </div>
@@ -42,41 +42,71 @@
                     <div ng-show="showObjectNeeds">
                         <div style="font-weight: bold">Step 3 Select Object Need</div>
                         <div style="height: 5px;"></div>
-                        <select ng-change="currentCustomerObjectNeedSelected()" ng-model="selectedObjectNeed" ng-options="customerObjectNeed as customerObjectNeed.weekDay for customerObjectNeed in customerObjectNeeds">
+                        <select class="selectWidth" ng-change="currentCustomerObjectNeedSelected()" ng-model="selectedObjectNeed" ng-options="customerObjectNeed as customerObjectNeed.weekDay for customerObjectNeed in customerObjectNeeds">
                             <option value="">Select Object Need</option>
                         </select>
                     </div>
                     <div ng-show="showDateSelection">
-                        <div style="font-weight: bold">Step 3 Select Date</div>
-                        <div style="height: 5px;"></div>
-                        <div style="width: 400px">
-                            <div class="row">
-                                <div class="col-md-6">
+                        <div style="font-weight: bold">Step 3 Select Date and Time</div>
+                        <div style="height: 10px;"></div>
+                        <div id="startdateandtime">
+                            <div style="float: left;">
+                                <div style="font-weight: bold; font-size: 12px;">Start Date</div>
+                                <div style="height: 5px;"></div>
+                                <div style="width: 250px;">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <input type="text" class="form-control" readonly ng-click="startOpen($event)" datepicker-popup="{{format}}" ng-model="startDatePicker" is-open="starTimeOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button type="button" class="btn btn-default" ng-click="startOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </p>
                                 </div>
                             </div>
+                            <div style="width: 150px; float: left; margin-left: 30px;">
+                                <div style="font-weight: bold; font-size: 12px;">Start Time</div>
+                                <div style="position: relative; top: -28px;">
+                                    <timepicker ng-model="startTime" ng-change="startTimeChanged()" hour-step="hourStep" minute-step="minuteStep" show-meridian="ismeridian"></timepicker>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="enddateandtime" style="position: relative; top: -40px">
+                            <div style="float: left;">
+                                <div style="font-weight: bold; font-size: 12px;">End Date</div>
+                                <div style="height: 5px;"></div>
+                                <div style="width: 250px;">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" readonly ng-click="endOpen($event)" datepicker-popup="{{format}}" ng-model="endDatePicker" is-open="endTimeOpened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="endOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="width: 150px; float: left; margin-left: 30px;">
+                                <div style="font-weight: bold; font-size: 12px;">End Time</div>
+                                <div style="position: relative; top: -28px;">
+                                    <timepicker ng-model="endTime" ng-change="endTimeChanged()" hour-step="hourStep" minute-step="minuteStep" show-meridian="ismeridian"></timepicker>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div style="height: 20px"></div>
+                    <div style="height: {{space}}"></div>
                     <div ng-show="showAddEmployee">
-                        <div style="font-weight: bold">Step 4 Add Workers To Object Need</div>
-                        <div style="height: 10px;"></div>
-                        <div>
-                            <select ng-change="employeeSelected()" ng-model="selectedEmployee" ng-options="employee as employee.Firstname+' '+employee.Lastname for employee in companyEmployees">
-                                <option value="">Select Worker</option>
-                            </select>
+                        <div style="position:relative; left: {{position}}">
+                            <div style="font-weight: bold">Step 4 Add Employee</div>
+                            <div style="height: 10px;"></div>
+                            <div>
+                                <select class="selectWidth" ng-change="employeeSelected()" ng-model="selectedEmployee" ng-options="employee as employee.Firstname+' '+employee.Lastname for employee in companyEmployees">
+                                    <option value="">Select Employee</option>
+                                </select>
+                            </div>
                         </div>
                         <div style="height: 20px;"></div>
                         <div style="border-bottom: 1px solid #841d23"></div>
                         <div style="height: 10px;"></div>
-                        <div style="font-weight: bold">Schedule</div>
-                        <div style="height: 10px;"></div>
                         <div ng-show="showObjectNeeds">
+                            <div style="font-weight: bold">Schedule</div>
+                            <div style="height: 10px;"></div>
                             <div>
                                 <div style="float: left">Day:</div>
                                 <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.weekDay}}</div>
@@ -97,9 +127,9 @@
                                 <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.endTime}}</div>
                             </div>
                         </div>
-                        <div style="height: 30px;"></div>
+                        <div style="height: {{space2}}"></div>
                         <div ng-show="showEmployees">
-                            <div style="font-weight: bold">Workers</div>
+                            <div style="font-weight: bold">Employees</div>
                             <div style="height: 5px;"></div>
                             <table>
                                 <thead>

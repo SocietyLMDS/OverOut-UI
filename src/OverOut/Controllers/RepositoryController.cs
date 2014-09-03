@@ -197,7 +197,7 @@ namespace OverOut.Controllers
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            dynamic response;
+            dynamic response = "";
 
             switch (schedule.Type)
             {
@@ -207,13 +207,13 @@ namespace OverOut.Controllers
                     var scheduleDates = FindOutScheduleDates.GetScheduleDatesList(int.Parse(monthsLength), schedule.Day);
                     foreach (var scheduleDate in scheduleDates)
                     {
-                        var startDate = new DateTime(scheduleDate.Year,scheduleDate.Month, scheduleDate.Day, schedule.StartDateAndTime.Hour,schedule.StartDateAndTime.Minute, schedule.StartDateAndTime.Second);
-                        var endDate = new DateTime(scheduleDate.Year,scheduleDate.Month, scheduleDate.Day, schedule.EndDateAndTime.Hour,schedule.EndDateAndTime.Minute, schedule.EndDateAndTime.Second);
-                        
+                        var startDate = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, schedule.StartDateAndTime.Hour, schedule.StartDateAndTime.Minute, schedule.StartDateAndTime.Second);
+                        var endDate = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, schedule.EndDateAndTime.Hour, schedule.EndDateAndTime.Minute, schedule.EndDateAndTime.Second);
+
 
                         var newSchedule = new ScheduleModel
                             {
-                 
+
                                 CompanyId = Guid.Parse(currentUser.Id),
                                 CustomerId = schedule.CustomerId,
                                 CustomerObjectId = schedule.CustomerObjectId,
@@ -221,31 +221,67 @@ namespace OverOut.Controllers
                                 EndDate = endDate,
                             };
 
-                        response = await CallWebApi.Post("POST", "api/schedule/addschedule", newSchedule);
-                        if (response != "Unsuceeded") continue;
-                        foreach (var employee in schedule.Employees)
+                        var responseStr = await CallWebApi.Post("POST", "api/schedule/addschedule", newSchedule);
+                        response = responseStr.Substring(1, responseStr.Length - 2);
+
+                        if (response != "Unsuceeded")
                         {
-                            var shiftModel = new ShiftModel
+                            foreach (var employee in schedule.Employees)
+                            {
+                                var shiftModel = new ShiftModel
                                 {
-                                    ScheduleId = Guid.Parse(response), 
+                                    ScheduleId = Guid.Parse(response),
                                     EmployeeId = employee.Id,
                                     EmployeeFirstname = employee.Firstname,
                                     EmployeeLastname = employee.Lastname,
                                     StartTime = startDate,
                                     EndTime = endDate,
+                                    Status = "Assigned"
                                 };
 
-                            response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                                response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                            }
                         }
 
-                        
                     }
                     break;
                 case "ScheduleByDate":
+
+                    var newScheduleByDate = new ScheduleModel
+                            {
+
+                                CompanyId = Guid.Parse(currentUser.Id),
+                                CustomerId = schedule.CustomerId,
+                                CustomerObjectId = schedule.CustomerObjectId,
+                                StartDate = schedule.StartDateAndTime,
+                                EndDate = schedule.EndDateAndTime,
+                            };
+
+                    var responseStr2 = await CallWebApi.Post("POST", "api/schedule/addschedule", newScheduleByDate);
+                    response = responseStr2.Substring(1, responseStr2.Length - 2);
+
+                    if (response != "Unsuceeded")
+                    {
+                        foreach (var employee in schedule.Employees)
+                        {
+                            var shiftModel = new ShiftModel
+                            {
+                                ScheduleId = Guid.Parse(response),
+                                EmployeeId = employee.Id,
+                                EmployeeFirstname = employee.Firstname,
+                                EmployeeLastname = employee.Lastname,
+                                StartTime = schedule.StartDateAndTime,
+                                EndTime = schedule.EndDateAndTime,
+                                Status = "Assigned"
+                            };
+
+                            response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                        }
+                    }
                     break;
             }
 
-            return Content("");
+            return Content(response);
         }
     }
 }

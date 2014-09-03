@@ -31,6 +31,12 @@
             $scope.HideTimeUpAndDownArrow();
         });
 
+        $scope.getCompanySchedules2 = function () {
+            services.getCompanySchedules().then(function (data) {
+                $scope.companySchedules = data;
+            });
+        };
+
         $scope.getCompanySchedules = function () {
             services.getCompanySchedules().then(function (data) {
                 $scope.companySchedules = data;
@@ -84,10 +90,11 @@
             $scope.endTime = new Date($scope.startTime.getFullYear(), $scope.startTime.getMonth(), $scope.startTime.getDay(), $scope.startTime.getHours() + 1, $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
             $scope.space = "20px";
             $scope.position = "0px;";
+            $scope.selectedObjectNeed = null;
             $scope.space2 = "30px";
         };
 
-        $scope.ResetStartEndDateTime = function(parameters) {
+        $scope.ResetStartEndDateTime = function (parameters) {
             $scope.startDatePicker = null;
             $scope.endDatePicker = null;
             $scope.startTime = new Date();
@@ -96,6 +103,7 @@
 
         var stepLevel = {
             customerlevel: function (flag) {
+                $scope.selectedObjectNeed = null;
                 $scope.showObjectNeeds = false;
                 $scope.showDateSelection = false;
                 $scope.showAddEmployee = false;
@@ -223,7 +231,7 @@
 
             }
         });
-        
+
         $scope.$watch("endDatePicker", function () {
             if ($scope.startDatePicker !== null && $scope.endDatePicker !== null) {
                 stepLevel.showAddEmployee();
@@ -231,7 +239,7 @@
                 $scope.position = "-430px;";
                 $scope.space2 = "5px";
             }
-            
+
         });
 
         $scope.startOpen = function ($event) {
@@ -243,7 +251,7 @@
                 $scope.starTimeOpened = true;
             }
         };
-        
+
         $scope.endOpen = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
@@ -258,16 +266,18 @@
             $scope.startTime = date;
         };
 
-        $scope.endTimeChanged = function(date) {
+        $scope.endTimeChanged = function (date) {
             $scope.endTime = date;
         };
 
-        $scope.HideTimeUpAndDownArrow = function() {
+        $scope.HideTimeUpAndDownArrow = function () {
             $(".btn-link").css("visibility", "hidden");
         };
 
         $scope.saveSchedule = function () {
+
             var schedule = {};
+
             if ($scope.selectedObjectNeed !== null) {
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
@@ -275,12 +285,12 @@
                 var startTimeSplit = $scope.selectedObjectNeed.startTime.split(":");
                 schedule.startDateAndTime = new Date("", "", "", startTimeSplit[0], startTimeSplit[1], "");
                 var endTimeSplit = $scope.selectedObjectNeed.endTime.split(":");
-                schedule.endDateAndTime = new Date("","","", endTimeSplit[0],endTimeSplit[1], "");
+                schedule.endDateAndTime = new Date("", "", "", endTimeSplit[0], endTimeSplit[1], "");
                 schedule.employees = $scope.employeeList;
                 schedule.type = "ScheduleByNeed";
             } else {
                 $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
-                schedule.endDateAndTime = $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
                 schedule.startDateAndTime = $scope.startDatePicker;
@@ -288,9 +298,32 @@
                 schedule.employees = $scope.employeeList;
                 schedule.type = "ScheduleByDate";
             }
-            services.addSchedule(angular.toJson(schedule)).then(function (data) {
-                console.log(data);
-            });
+            var stepCheck;
+            if (schedule.type === "ScheduleByNeed") {
+                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedObjectNeed === null || $scope.employeeList.length <= 0) ? false : true;
+            } else {
+                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.employeeList.length <= 0) ? false : true;
+            }
+            if (!stepCheck) {
+                $scope.showEmployeeAddingError = true;
+                $scope.scheduleAddingErrorMessage = "You haven't complete all the neccessary steps";
+            } else {
+                services.addSchedule(angular.toJson(schedule)).then(function (data) {
+                    console.log(data);
+                    var response = data;
+                    if (response === "Succeeded") {
+                        $scope.hideScheduleModal();
+                        setTimeout($scope.getCompanySchedules2, 200);
+                    } else if (response == "UnSucceeded") {
+                        $scope.showEmployeeAddingError = true;
+                        $scope.scheduleAddingErrorMessage = "There was a problem creating a schedule, please try again";
+                    } else {
+                        $scope.showEmployeeAddingError = true;
+                        $scope.scheduleAddingErrorMessage = response;
+                    }
+                });
+            }
+
         };
 
     }])

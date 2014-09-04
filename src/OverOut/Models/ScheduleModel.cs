@@ -11,6 +11,9 @@ namespace OverOut.Models
         public Guid CompanyId { get; set; }
         public Guid CustomerId { get; set; }
         public Guid CustomerObjectId { get; set; }
+        public string CompanyName { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerObjectName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<ShiftModel> Schedules { get; set; }

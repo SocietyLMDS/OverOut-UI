@@ -198,6 +198,8 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             dynamic response = "";
+            bool checkIfResponseIsAGuid;
+            var scheduleId = Guid.Empty;
 
             switch (schedule.Type)
             {
@@ -217,29 +219,44 @@ namespace OverOut.Controllers
                                 CompanyId = Guid.Parse(currentUser.Id),
                                 CustomerId = schedule.CustomerId,
                                 CustomerObjectId = schedule.CustomerObjectId,
+                                CompanyName = currentUser.CompanyName,
+                                CustomerName = schedule.CustomerName,
+                                CustomerObjectName = schedule.CustomerObjectName,
                                 StartDate = startDate,
                                 EndDate = endDate,
                             };
 
                         var responseStr = await CallWebApi.Post("POST", "api/schedule/addschedule", newSchedule);
                         response = responseStr.Substring(1, responseStr.Length - 2);
+                        try
+                        {
+                            scheduleId = Guid.Parse(response);
+                            checkIfResponseIsAGuid = true;
+                        }
+                        catch (Exception e)
+                        {
+                            checkIfResponseIsAGuid = false;
 
-                        if (response != "Unsuceeded")
+                        }
+
+                        if (checkIfResponseIsAGuid)
                         {
                             foreach (var employee in schedule.Employees)
                             {
                                 var shiftModel = new ShiftModel
                                 {
-                                    ScheduleId = Guid.Parse(response),
+                                    ScheduleId = scheduleId,
                                     EmployeeId = employee.Id,
                                     EmployeeFirstname = employee.Firstname,
                                     EmployeeLastname = employee.Lastname,
+                                    EmployeeEmailAddress = employee.EmailAddress,
                                     StartTime = startDate,
                                     EndTime = endDate,
                                     Status = "Assigned"
                                 };
 
                                 response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                                response = response.Substring(1, response.Length - 2);
                             }
                         }
 
@@ -249,33 +266,48 @@ namespace OverOut.Controllers
 
                     var newScheduleByDate = new ScheduleModel
                             {
-
                                 CompanyId = Guid.Parse(currentUser.Id),
                                 CustomerId = schedule.CustomerId,
                                 CustomerObjectId = schedule.CustomerObjectId,
+                                CompanyName = currentUser.CompanyName,
+                                CustomerName = schedule.CustomerName,
+                                CustomerObjectName = schedule.CustomerObjectName,
                                 StartDate = schedule.StartDateAndTime,
                                 EndDate = schedule.EndDateAndTime,
                             };
 
                     var responseStr2 = await CallWebApi.Post("POST", "api/schedule/addschedule", newScheduleByDate);
                     response = responseStr2.Substring(1, responseStr2.Length - 2);
+    
+                    try
+                    {
+                        scheduleId = Guid.Parse(response);
+                        checkIfResponseIsAGuid = true;
+                    }
+                    catch (Exception e)
+                    {
+                        checkIfResponseIsAGuid = false;
+                        
+                    }
 
-                    if (response != "Unsuceeded")
+                    if (checkIfResponseIsAGuid)
                     {
                         foreach (var employee in schedule.Employees)
                         {
                             var shiftModel = new ShiftModel
                             {
-                                ScheduleId = Guid.Parse(response),
+                                ScheduleId = scheduleId,
                                 EmployeeId = employee.Id,
                                 EmployeeFirstname = employee.Firstname,
                                 EmployeeLastname = employee.Lastname,
+                                EmployeeEmailAddress = employee.EmailAddress,
                                 StartTime = schedule.StartDateAndTime,
                                 EndTime = schedule.EndDateAndTime,
                                 Status = "Assigned"
                             };
 
                             response = await CallWebApi.Post("POST", "api/shift/addshifttoschedule", shiftModel);
+                            response = response.Substring(1, response.Length - 2);
                         }
                     }
                     break;

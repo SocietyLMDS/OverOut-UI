@@ -31,14 +31,9 @@
             $scope.HideTimeUpAndDownArrow();
         });
 
-        $scope.getCompanySchedules2 = function () {
-            services.getCompanySchedules().then(function (data) {
-                $scope.companySchedules = data;
-            });
-        };
-
         $scope.getCompanySchedules = function () {
             services.getCompanySchedules().then(function (data) {
+                console.log(data);
                 $scope.companySchedules = data;
                 $scope.getCompanyCustomers();
             });
@@ -262,25 +257,17 @@
             }
         };
 
-        $scope.startTimeChanged = function (date) {
-            $scope.startTime = date;
-        };
-
-        $scope.endTimeChanged = function (date) {
-            $scope.endTime = date;
-        };
-
         $scope.HideTimeUpAndDownArrow = function () {
             $(".btn-link").css("visibility", "hidden");
         };
 
         $scope.saveSchedule = function () {
-
             var schedule = {};
-
             if ($scope.selectedObjectNeed !== null) {
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
+                schedule.customerName = $scope.selectedCustomer.name;
+                schedule.customerObjectName = $scope.selectedObject.name;
                 schedule.day = $scope.selectedObjectNeed.weekDay;
                 var startTimeSplit = $scope.selectedObjectNeed.startTime.split(":");
                 schedule.startDateAndTime = new Date("", "", "", startTimeSplit[0], startTimeSplit[1], "");
@@ -291,29 +278,37 @@
             } else {
                 $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
                 $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                schedule.customerName = $scope.selectedCustomer.name;
+                schedule.customerObjectName = $scope.selectedObject.name;
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
                 schedule.startDateAndTime = $scope.startDatePicker;
                 schedule.endDateAndTime = $scope.endDatePicker;
                 schedule.employees = $scope.employeeList;
                 schedule.type = "ScheduleByDate";
+                
             }
             var stepCheck;
             if (schedule.type === "ScheduleByNeed") {
-                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedObjectNeed === null || $scope.employeeList.length <= 0) ? false : true;
+                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedObjectNeed === null || $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded) ? false : true;
             } else {
                 stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.employeeList.length <= 0) ? false : true;
             }
             if (!stepCheck) {
-                $scope.showEmployeeAddingError = true;
-                $scope.scheduleAddingErrorMessage = "You haven't complete all the neccessary steps";
+                if ( $scope.selectedObjectNeed != null && $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded || $scope.employeeList.length <= 0) {
+                    $scope.showEmployeeAddingError = true;
+                    $scope.scheduleAddingErrorMessage = "You haven't selected enough people required for the schedule";
+                } else if ($scope.employeeList.length <= 0) {
+                    $scope.showEmployeeAddingError = true;
+                    $scope.scheduleAddingErrorMessage = "You haven't complete all the neccessary steps";
+                }
+                
             } else {
                 services.addSchedule(angular.toJson(schedule)).then(function (data) {
-                    console.log(data);
                     var response = data;
                     if (response === "Succeeded") {
                         $scope.hideScheduleModal();
-                        setTimeout($scope.getCompanySchedules2, 200);
+                        setTimeout($scope.getCompanySchedules, 200);
                     } else if (response == "UnSucceeded") {
                         $scope.showEmployeeAddingError = true;
                         $scope.scheduleAddingErrorMessage = "There was a problem creating a schedule, please try again";

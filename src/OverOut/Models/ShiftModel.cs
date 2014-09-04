@@ -12,6 +12,7 @@ namespace OverOut.Models
         public Guid EmployeeId { get; set; }
         public string EmployeeFirstname { get; set; }
         public string EmployeeLastname { get; set; }
+        public string EmployeeEmailAddress { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string TotalTime { get; set; }

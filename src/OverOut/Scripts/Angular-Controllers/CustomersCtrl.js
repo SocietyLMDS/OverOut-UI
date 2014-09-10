@@ -20,6 +20,22 @@
         $scope.customerObjectNeedAddingErrorMessage = "";
         $scope.customerObjectNeedAddOrEditMessage = "";
 
+        //datepicker and timepicker
+        //Date and time picket
+        $scope.startDatePicker = null;
+        $scope.endDatePicker = null;
+        $scope.minDate = new Date();
+        $scope.maxDate = "2015-06-22";
+        $scope.format = "dd-MMMM-yyyy";
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.hourStep = 1;
+        $scope.minuteStep = 1;
+        $scope.ismeridian = false;
+
         $scope.customerDetails = {
             id: "",
             companyId: "",
@@ -55,16 +71,18 @@
             customerObjectId: "",
             customerId: "",
             companyId: "",
-            weekDay: "",
             numberOfPersonalNeeded: "",
-            startTime: "",
-            endTime: ""
+            startDateTime: "",
+            endDateTime: ""
         };
 
-        $scope.$on("customers", function() {
+        $scope.$on("customers", function () {
+            $scope.ResetStartEndDateTime();
+            $scope.HideTimeUpAndDownArrow();
             $scope.getCompanyCustomers();
+
         });
-        
+
         $scope.getCompanyCustomers = function () {
             services.getCompanyCustomers().then(function (data) {
                 $scope.companyCustomers = data;
@@ -92,6 +110,7 @@
             $scope.clearInputTexts($scope.customerDetails);
             $scope.clearInputTexts($scope.customerObjectDetails);
             $scope.clearInputTexts($scope.customerObjectNeedDetails);
+            $scope.ResetStartEndDateTime();
         };
 
         $scope.clearInputTexts = function (object) {
@@ -274,11 +293,14 @@
                 customerObjectId: need.customerObjectId,
                 customerId: need.customerId,
                 companyId: need.companyId,
-                weekDay: need.weekDay,
-                numberOfPersonalNeeded: need.numberOfPersonalNeeded,
-                startTime: need.startTime,
-                endTime: need.endTime
+                numberOfPersonalNeeded: Number(need.numberOfPersonalNeeded)
             };
+            var test = new Date(need.startDateTime);
+            console.log(test.getFullYear());
+            $scope.startDatePicker = new Date(need.startDateTime);
+            $scope.endDatePicker = new Date(need.endDateTime); 
+            $scope.startTime = new Date(need.startDateTime);
+            $scope.endTime = new Date(need.endDateTime);
             $scope.showCustomerObjectNeedModalContent = true;
             $scope.showCustomerModal = true;
             $scope.customerObjectNeedAddOrEditMessage = "Modify Need";
@@ -293,39 +315,56 @@
         };
 
         $scope.addNeedToCustomerObject = function () {
-            $scope.customerObjectNeedDetails.customerObjectId = $scope.currentObject.id;
-            $scope.customerObjectNeedDetails.customerId = $scope.currentObject.customerId;
-            $scope.customerObjectNeedDetails.companyId = $scope.currentObject.companyId;
-            console.log($scope.customerObjectNeedDetails);
-            services.addNeedToCustomerObject(angular.toJson($scope.customerObjectNeedDetails)).then(function (data) {
-                var response = data.substring(1, data.length - 1);
-                if (response === "Succeeded") {
-                    $scope.hideCustomerModal();
-                    setTimeout($scope.getCompanyCustomers, 200);
-                } else if (response == "UnSucceeded") {
-                    $scope.showCustomerObjectNeedAddingError = true;
-                    $scope.customerObjectNeedAddingErrorMessage = "There was a problem adding need to the object, please try again";
-                } else {
-                    $scope.showCustomerObjectNeedAddingError = true;
-                    $scope.customerObjectNeedAddingErrorMessage = response;
-                }
-            });
+            if ($scope.startDatePicker === null || $scope.endDatePicker === null) {
+                $scope.showCustomerObjectNeedAddingError = true;
+                $scope.customerObjectNeedAddingErrorMessage = "You haven't chosen a start date or an end date";
+            } else {
+                $scope.customerObjectNeedDetails.customerObjectId = $scope.currentObject.id;
+                $scope.customerObjectNeedDetails.customerId = $scope.currentObject.customerId;
+                $scope.customerObjectNeedDetails.companyId = $scope.currentObject.companyId;
+                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
+                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                $scope.customerObjectNeedDetails.startDateTime = $scope.startDatePicker;
+                $scope.customerObjectNeedDetails.endDateTime = $scope.endDatePicker;
+                services.addNeedToCustomerObject(angular.toJson($scope.customerObjectNeedDetails)).then(function (data) {
+                    var response = data.substring(1, data.length - 1);
+                    if (response === "Succeeded") {
+                        $scope.hideCustomerModal();
+                        setTimeout($scope.getCompanyCustomers, 200);
+                    } else if (response == "UnSucceeded") {
+                        $scope.showCustomerObjectNeedAddingError = true;
+                        $scope.customerObjectNeedAddingErrorMessage = "There was a problem adding need to the object, please try again";
+                    } else {
+                        $scope.showCustomerObjectNeedAddingError = true;
+                        $scope.customerObjectNeedAddingErrorMessage = response;
+                    }
+                });
+            }
         };
 
         $scope.modifyCustomerObjectNeed = function () {
-            services.modifyCustomerObjectNeed(angular.toJson($scope.customerObjectNeedDetails)).then(function (data) {
-                var response = data.substring(1, data.length - 1);
-                if (response === "Succeeded") {
-                    $scope.hideCustomerModal();
-                    setTimeout($scope.getCompanyCustomers, 200);
-                } else if (response == "UnSucceeded") {
-                    $scope.showCustomerObjectNeedAddingError = true;
-                    $scope.customerObjectNeedAddingErrorMessage = "There was a problem modifying the need, please try again";
-                } else {
-                    $scope.showCustomerObjectNeedAddingError = true;
-                    $scope.customerObjectNeedAddingErrorMessage = response;
-                }
-            });
+            if ($scope.startDatePicker === null || $scope.endDatePicker === null) {
+                $scope.showCustomerObjectNeedAddingError = true;
+                $scope.customerObjectNeedAddingErrorMessage = "You haven't chosen a start date or an end date";
+            } else {
+                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
+                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                $scope.customerObjectNeedDetails.startDateTime = $scope.startDatePicker;
+                $scope.customerObjectNeedDetails.endDateTime = $scope.endDatePicker;
+                services.modifyCustomerObjectNeed(angular.toJson($scope.customerObjectNeedDetails)).then(function (data) {
+                    var response = data.substring(1, data.length - 1);
+                    if (response === "Succeeded") {
+                        $scope.hideCustomerModal();
+                        setTimeout($scope.getCompanyCustomers, 200);
+                    } else if (response == "UnSucceeded") {
+                        $scope.showCustomerObjectNeedAddingError = true;
+                        $scope.customerObjectNeedAddingErrorMessage = "There was a problem modifying the need, please try again";
+                    } else {
+                        $scope.showCustomerObjectNeedAddingError = true;
+                        $scope.customerObjectNeedAddingErrorMessage = response;
+                    }
+                });
+            }
         };
 
         $scope.deleteCustomerObjectNeed = function (need) {
@@ -340,5 +379,37 @@
                     }
                 });
             }
+        };
+
+        $scope.startOpen = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            if ($scope.starTimeOpened) {
+                $scope.starTimeOpened = false;
+            } else {
+                $scope.starTimeOpened = true;
+            }
+        };
+
+        $scope.endOpen = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            if ($scope.endTimeOpened) {
+                $scope.endTimeOpened = false;
+            } else {
+                $scope.endTimeOpened = true;
+            }
+        };
+
+        $scope.HideTimeUpAndDownArrow = function () {
+            $(".btn-link").css("visibility", "hidden");
+        };
+
+        $scope.ResetStartEndDateTime = function () {
+            $scope.startDatePicker = null;
+            $scope.endDatePicker = null;
+            var date = new Date();
+            $scope.startTime = new Date(date.getFullYear(), date.getMonth(), date.getDay(), date.getHours(), date.getMinutes() + 15, date.getSeconds());
+            $scope.endTime = new Date($scope.startTime.getFullYear(), $scope.startTime.getMonth(), $scope.startTime.getDay(), $scope.startTime.getHours() + 1, $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
         };
     }])

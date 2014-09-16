@@ -10,7 +10,7 @@
         $scope.selectedEmployee = null;
         $scope.employeeList = [];
 
-        //Date and time picket
+        //Date and time picker
         $scope.startDatePicker = null;
         $scope.endDatePicker = null;
         $scope.minDate = new Date();
@@ -20,10 +20,21 @@
             formatYear: 'yy',
             startingDay: 1
         };
-
         $scope.hourStep = 1;
         $scope.minuteStep = 1;
         $scope.ismeridian = false;
+        
+        $scope.radioBox = {
+            userChoice: null,
+            choices: [{
+                id: 1,
+                text: "Schedule from need",
+            }, {
+                id: 2,
+                text: "schedule from time picker",
+                
+            }]
+        };
 
         //event listener
         $scope.$on("schedules", function () {
@@ -34,9 +45,25 @@
         $scope.getCompanySchedules = function () {
             services.getCompanySchedules().then(function (data) {
                 console.log(data);
+                $scope.position(data);
                 $scope.companySchedules = data;
                 $scope.getCompanyCustomers();
             });
+        };
+        
+        $scope.position = function (data) {
+            $scope.employeesPositions = [];
+            var length = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (i == length) {
+                    $scope.employeesPositions.push("0px");
+                    length += 2;
+
+                } else {
+                    $scope.employeesPositions.push("15px");
+                }
+
+            }
         };
 
         $scope.getCompanyCustomers = function () {
@@ -101,6 +128,7 @@
                 $scope.selectedObjectNeed = null;
                 $scope.showObjectNeeds = false;
                 $scope.showDateSelection = false;
+                $scope.showChoicesRadioBox = false;
                 $scope.showAddEmployee = false;
                 $scope.employeeList = [];
                 $scope.selectedEmployee = null;
@@ -132,7 +160,7 @@
             },
             showDateAndNeed: function (whichToSetToTrue) {
                 $scope.showObjectNeeds = (whichToSetToTrue === "showObjectNeeds") ? true : false;
-                $scope.showDateSelection = (whichToSetToTrue === "showDateSelection") ? true : false;;
+                $scope.showDateSelection = (whichToSetToTrue === "showDateSelection") ? true : false;
             },
             ObjectNeed: function (flag) {
                 $scope.showAddEmployee = flag;
@@ -164,8 +192,9 @@
             if ($scope.selectedObject !== null) {
                 $scope.customerObjectNeeds = $scope.selectedObject.needs;
                 if ($scope.customerObjectNeeds.length > 0) {
-                    stepLevel.showDateAndNeed("showObjectNeeds");
+                    $scope.showChoicesRadioBox = true;
                 } else {
+                    $scope.radioBox.userChoice = "2";
                     stepLevel.showDateAndNeed("showDateSelection");
                 }
                 stepLevel.objectLevel();
@@ -237,6 +266,15 @@
 
         });
 
+        $scope.radioBoxSelected = function () {
+            if ($scope.radioBox.userChoice === "1") {
+                stepLevel.showDateAndNeed("showObjectNeeds");
+            } else if ($scope.radioBox.userChoice === "2") {
+                stepLevel.showDateAndNeed("showDateSelection");
+            }
+            stepLevel.objectLevel();
+        };
+
         $scope.startOpen = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
@@ -262,24 +300,24 @@
         };
 
         $scope.saveSchedule = function () {
+            console.log($scope.selectedObject);
             var schedule = {};
             if ($scope.selectedObjectNeed !== null) {
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
                 schedule.customerName = $scope.selectedCustomer.name;
                 schedule.customerObjectName = $scope.selectedObject.name;
-                schedule.day = $scope.selectedObjectNeed.weekDay;
-                var startTimeSplit = $scope.selectedObjectNeed.startTime.split(":");
-                schedule.startDateAndTime = new Date("", "", "", startTimeSplit[0], startTimeSplit[1], "");
-                var endTimeSplit = $scope.selectedObjectNeed.endTime.split(":");
-                schedule.endDateAndTime = new Date("", "", "", endTimeSplit[0], endTimeSplit[1], "");
+                schedule.customerObjectAddress = $scope.selectedObject.visitationAddress;
+                schedule.startDateAndTime = moment($scope.selectedObjectNeed.startDateTime).toDate();
+                schedule.endDateAndTime = moment($scope.selectedObjectNeed.endDateTime).toDate();
                 schedule.employees = $scope.employeeList;
                 schedule.type = "ScheduleByNeed";
             } else {
-                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
-                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), "00");
+                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), "00");
                 schedule.customerName = $scope.selectedCustomer.name;
                 schedule.customerObjectName = $scope.selectedObject.name;
+                schedule.customerObjectAddress = $scope.selectedObject.visitationAddress;
                 schedule.customerId = $scope.selectedCustomer.id;
                 schedule.customerObjectId = $scope.selectedObject.id;
                 schedule.startDateAndTime = $scope.startDatePicker;
@@ -290,9 +328,9 @@
             }
             var stepCheck;
             if (schedule.type === "ScheduleByNeed") {
-                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedObjectNeed === null || $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded) ? false : true;
+                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedObjectNeed === null || $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded || $scope.radioBox.userChoice === null) ? false : true;
             } else {
-                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.employeeList.length <= 0) ? false : true;
+                stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.employeeList.length <= 0 || $scope.radioBox.userChoice === null) ? false : true;
             }
             if (!stepCheck) {
                 if ( $scope.selectedObjectNeed != null && $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded || $scope.employeeList.length <= 0) {
@@ -302,7 +340,7 @@
                     $scope.showEmployeeAddingError = true;
                     $scope.scheduleAddingErrorMessage = "You haven't complete all the neccessary steps";
                 }
-                
+
             } else {
                 services.addSchedule(angular.toJson(schedule)).then(function (data) {
                     var response = data;
@@ -318,7 +356,21 @@
                     }
                 });
             }
+        };
+
+        $scope.showEditScheduleModal = function(schedule) {
 
         };
 
+        $scope.deleteSchedule = function(schedule) {
+
+        };
+
+        $scope.moments = function(date, dateOrTime) {
+            var currentDate = moment(date);
+            var ret = "";
+            if (dateOrTime === "date") ret = currentDate.format("dddd, MMMM Do YYYY");
+            if (dateOrTime === "time") ret = currentDate.format("HH:mm:ss");
+            return ret;
+        };
     }])

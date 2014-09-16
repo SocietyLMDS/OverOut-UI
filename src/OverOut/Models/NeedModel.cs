@@ -12,7 +12,7 @@ namespace OverOut.Models
         public Guid CustomerId { get; set; }
         public Guid CompanyId { get; set; }
         public string NumberOfPersonalNeeded { get; set; }
-        public string StartDateTime { get; set; }
-        public string EndDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
     }
 }

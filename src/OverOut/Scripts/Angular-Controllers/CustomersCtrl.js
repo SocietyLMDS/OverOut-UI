@@ -295,12 +295,11 @@
                 companyId: need.companyId,
                 numberOfPersonalNeeded: Number(need.numberOfPersonalNeeded)
             };
-            var test = new Date(need.startDateTime);
-            console.log(test.getFullYear());
-            $scope.startDatePicker = new Date(need.startDateTime);
-            $scope.endDatePicker = new Date(need.endDateTime); 
-            $scope.startTime = new Date(need.startDateTime);
-            $scope.endTime = new Date(need.endDateTime);
+            $scope.startDatePicker = moment(need.startDateTime).toDate();
+            $scope.endDatePicker = moment(need.endDateTime).toDate();
+            $scope.startTime = moment(need.startDateTime).toDate();
+            $scope.endTime = moment(need.endDateTime).toDate();
+            console.log($scope.startTime, $scope.endTime);
             $scope.showCustomerObjectNeedModalContent = true;
             $scope.showCustomerModal = true;
             $scope.customerObjectNeedAddOrEditMessage = "Modify Need";
@@ -347,8 +346,8 @@
                 $scope.showCustomerObjectNeedAddingError = true;
                 $scope.customerObjectNeedAddingErrorMessage = "You haven't chosen a start date or an end date";
             } else {
-                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), $scope.startTime.getSeconds());
-                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), $scope.endTime.getSeconds());
+                $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(),"00");
+                $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), "00");
                 $scope.customerObjectNeedDetails.startDateTime = $scope.startDatePicker;
                 $scope.customerObjectNeedDetails.endDateTime = $scope.endDatePicker;
                 services.modifyCustomerObjectNeed(angular.toJson($scope.customerObjectNeedDetails)).then(function (data) {

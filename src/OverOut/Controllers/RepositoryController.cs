@@ -206,13 +206,9 @@ namespace OverOut.Controllers
                 case "ScheduleByNeed":
                     var str = await CallWebApi.Get("GET", "api/schedule/getschedulelimit", "");
                     var monthsLength = str.Substring(1, str.Length - 2);
-                    var scheduleDates = FindOutScheduleDates.GetScheduleDatesList(int.Parse(monthsLength), schedule.Day);
+                    var scheduleDates = FindOutScheduleDates.GetScheduleDatesList(int.Parse(monthsLength), schedule.StartDateAndTime, schedule.EndDateAndTime);
                     foreach (var scheduleDate in scheduleDates)
                     {
-                        var startDate = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, schedule.StartDateAndTime.Hour, schedule.StartDateAndTime.Minute, schedule.StartDateAndTime.Second);
-                        var endDate = new DateTime(scheduleDate.Year, scheduleDate.Month, scheduleDate.Day, schedule.EndDateAndTime.Hour, schedule.EndDateAndTime.Minute, schedule.EndDateAndTime.Second);
-
-
                         var newSchedule = new ScheduleModel
                             {
 
@@ -222,8 +218,9 @@ namespace OverOut.Controllers
                                 CompanyName = currentUser.CompanyName,
                                 CustomerName = schedule.CustomerName,
                                 CustomerObjectName = schedule.CustomerObjectName,
-                                StartDate = startDate,
-                                EndDate = endDate,
+                                CustomerObjectAddress = schedule.CustomerObjectAddress,
+                                StartDate = scheduleDate.StartDateTime,
+                                EndDate = scheduleDate.EndDateTime,
                             };
 
                         var responseStr = await CallWebApi.Post("POST", "api/schedule/addschedule", newSchedule);
@@ -245,13 +242,14 @@ namespace OverOut.Controllers
                             {
                                 var shiftModel = new ShiftModel
                                 {
+                                    CompanyId = Guid.Parse(currentUser.Id),
                                     ScheduleId = scheduleId,
                                     EmployeeId = employee.Id,
                                     EmployeeFirstname = employee.Firstname,
                                     EmployeeLastname = employee.Lastname,
                                     EmployeeEmailAddress = employee.EmailAddress,
-                                    StartTime = startDate,
-                                    EndTime = endDate,
+                                    StartTime = scheduleDate.StartDateTime,
+                                    EndTime = scheduleDate.EndDateTime,
                                     Status = "Assigned"
                                 };
 
@@ -272,13 +270,14 @@ namespace OverOut.Controllers
                                 CompanyName = currentUser.CompanyName,
                                 CustomerName = schedule.CustomerName,
                                 CustomerObjectName = schedule.CustomerObjectName,
+                                CustomerObjectAddress = schedule.CustomerObjectAddress,
                                 StartDate = schedule.StartDateAndTime,
                                 EndDate = schedule.EndDateAndTime,
                             };
 
                     var responseStr2 = await CallWebApi.Post("POST", "api/schedule/addschedule", newScheduleByDate);
                     response = responseStr2.Substring(1, responseStr2.Length - 2);
-    
+
                     try
                     {
                         scheduleId = Guid.Parse(response);
@@ -287,7 +286,7 @@ namespace OverOut.Controllers
                     catch (Exception e)
                     {
                         checkIfResponseIsAGuid = false;
-                        
+
                     }
 
                     if (checkIfResponseIsAGuid)
@@ -296,6 +295,7 @@ namespace OverOut.Controllers
                         {
                             var shiftModel = new ShiftModel
                             {
+                                CompanyId = Guid.Parse(currentUser.Id),
                                 ScheduleId = scheduleId,
                                 EmployeeId = employee.Id,
                                 EmployeeFirstname = employee.Firstname,

@@ -11,6 +11,7 @@ namespace OverOut.Models
         public Guid CustomerObjectId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerObjectName { get; set; }
+        public Address CustomerObjectAddress { get; set; }
         public string Day { get; set; }
         public DateTime StartDateAndTime { get; set; }
         public DateTime EndDateAndTime { get; set; }

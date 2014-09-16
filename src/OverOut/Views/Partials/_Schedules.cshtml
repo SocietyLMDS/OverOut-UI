@@ -2,8 +2,62 @@
     <div ng-click="showCreateModal()" style="text-align: center; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 130px; color: white; font-weight: bold; cursor: pointer">Create Schedule</div>
     <br />
     <div ng-show="companySchedules.length == 0">There is currently no schedules</div>
-    <div ng-show="companySchedules.length > 0">schedule</div>
+    <div ng-show="companySchedules.length > 0">
+        <div ng-repeat="schedule in companySchedules">
+            <div ng-style="$index > 0 && {'margin-left':employeesPositions[$index]}"  style="margin-top: 20px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px; width: 440px; height: 382px; float: left;">
+                <div>
+                    <div style="float: left">
+                        <img src="../../Images/info.png" alt="info.png" />
+                    </div>
+                    <div style="color: #841d23; font-weight: bold; width: 170px; float: left; margin-top: 3px; margin-left: 3px;">Schedule info</div>
+                    <div style="height: 40px"></div>
+                    <div><span style="font-weight: bold;">Customer:</span> {{schedule.customerName}}</div>
+                    <div><span style="font-weight: bold;">Object:</span> {{schedule.customerObjectName}}</div>
+                    <div><span style="font-weight: bold;">Start Date:</span> {{moments(schedule.startDate, 'date')}}</div>
+                    <div><span style="font-weight: bold;">Start Time</span> {{moments(schedule.startDate, 'time')}}</div>
+                    <div><span style="font-weight: bold;">End Date</span> {{moments(schedule.endDate, 'date')}}</div>
+                    <div><span style="font-weight: bold;">End Time</span> {{moments(schedule.endDate, 'time')}}</div>
+                    <div style="height: 15px;"></div>
+                    <div>
+                        <div style="color: #841d23; font-weight: bold;">Employees assigned to the schedule</div>
+                        <div style="height: 5px;"></div>
+                        <div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Firstname</th>
+                                        <th>Surname</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="scheduleShift in schedule.schedules ">
+                                        <td>{{scheduleShift.employeeFirstname}}</td>
+                                        <td>{{scheduleShift.employeeLastname}}</td>
+                                        <td>{{scheduleShift.employeeEmailAddress}}</td>
+                                        <td>{{scheduleShift.status}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="height: 20px;"></div>
+                    <div ng-click="showEditScheduleModal(schedule)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold;">
+                        <img src="../../Images/edit.png" alt="edit" />
+                        <span style="margin-right: 5px;">Edit</span>
+                    </div>
+                    <div ng-click="deleteSchedule(schedule)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold; margin-right: 10px;">
+                        <img src="../../Images/delete.png" alt="edit" />
+                        <span style="margin-right: 5px;">Delete</span>
+                    </div>
+                </div>
+                <br class="clear" />
+            </div>
+        </div>
+        <br class="clear" />
 
+    </div>
     <!-- Modal -->
     <div ng-show="showScheduleModal" class="modalcontainer ng-hide">
         <div class="modalbg" ng-click="hideScheduleModal()"></div>
@@ -37,12 +91,17 @@
                         <select class="selectWidth" ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
                             <option value="">Select Object</option>
                         </select>
+                        <div style="height: 15px;"></div>
+                        <div ng-show="showChoicesRadioBox" data-ng-repeat="choice in radioBox.choices">
+                             <input type="radio" ng-change="radioBoxSelected()" name="response" value="{{choice.id}}" ng-model="radioBox.userChoice"/>
+                            {{choice.text}}
+                        </div>
                     </div>
                     <div style="height: 20px"></div>
                     <div ng-show="showObjectNeeds">
                         <div style="font-weight: bold">Step 3 Select Object Need</div>
                         <div style="height: 5px;"></div>
-                        <select class="selectWidth" ng-change="currentCustomerObjectNeedSelected()" ng-model="selectedObjectNeed" ng-options="customerObjectNeed as customerObjectNeed.weekDay for customerObjectNeed in customerObjectNeeds">
+                        <select class="selectWidth" ng-change="currentCustomerObjectNeedSelected()" ng-model="selectedObjectNeed" ng-options="customerObjectNeed as customerObjectNeed.startDateTimeCombined for customerObjectNeed in customerObjectNeeds">
                             <option value="">Select Object Need</option>
                         </select>
                     </div>
@@ -92,7 +151,7 @@
                     </div>
                     <div style="height: {{space}}"></div>
                     <div ng-show="showAddEmployee">
-                        <div style="position:relative; left: {{position}}">
+                        <div style="position: relative; left: {{position}}">
                             <div style="font-weight: bold">Step 4 Add Employee</div>
                             <div style="height: 10px;"></div>
                             <div>
@@ -106,25 +165,20 @@
                         <div style="height: 10px;"></div>
                         <div ng-show="showObjectNeeds">
                             <div style="font-weight: bold">Schedule</div>
-                            <div style="height: 10px;"></div>
-                            <div>
-                                <div style="float: left">Day:</div>
-                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.weekDay}}</div>
-                            </div>
-                            <br />
+                            <div style="height: 5px;"></div>
                             <div>
                                 <div style="float: left">People Needed:</div>
                                 <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.numberOfPersonalNeeded}}</div>
                             </div>
                             <br />
                             <div>
-                                <div style="float: left">Start Time</div>
-                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.startTime}}</div>
+                                <div style="float: left">Start Date and Time:</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.startDateTimeCombined}}</div>
                             </div>
                             <br />
                             <div>
-                                <div style="float: left">End Time</div>
-                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.endTime}}</div>
+                                <div style="float: left">End Date and Time:</div>
+                                <div style="float: left; margin-left: 10px;">{{selectedObjectNeed.endDateTimeCombined}}</div>
                             </div>
                         </div>
                         <div style="height: {{space2}}"></div>

@@ -351,10 +351,10 @@ namespace OverOut.Controllers
                    
                     var shiftModel = new ShiftModel
                     {
-                        Id = employee.Id,
+                        Id = employee.ShiftId,
                         CompanyId = Guid.Parse(currentUser.Id),
                         ScheduleId = schedule.Id,
-                        EmployeeId = employee.EmployeeId,
+                        EmployeeId = employee.Id,
                         Firstname = employee.Firstname,
                         Lastname = employee.Lastname,
                         EmailAddress = employee.EmailAddress,
@@ -362,6 +362,7 @@ namespace OverOut.Controllers
                         JobDescription = employee.JobDescription,
                         StartTime = schedule.StartDateAndTime,
                         EndTime = schedule.EndDateAndTime,
+                        Removed = employee.Removed,
                         Status = "Assigned"
                     };
 

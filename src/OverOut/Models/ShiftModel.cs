@@ -19,6 +19,7 @@ namespace OverOut.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string TotalTime { get; set; }
+        public bool Removed { get; set; }
         public string Status { get; set; }
     }
 }

@@ -60,7 +60,7 @@
                     length += 2;
 
                 } else {
-                    $scope.employeesPositions.push("15px");
+                    $scope.employeesPositions.push("7px");
                 }
 
             }
@@ -232,6 +232,8 @@
                     $scope.employeeList.push($scope.selectedEmployee);
                     stepLevel.employee(false, "");
                 }
+            } else if (check == "do nothing") {
+                
             } else {
                 stepLevel.employee(true, "The worker has already been added to the object need");
             }
@@ -242,24 +244,26 @@
             var ret = false;
             for (var i = 0; i < $scope.employeeList.length; i++) {
                 var employee = $scope.employeeList[i];
-                if ($scope.scheduleAddOrEditMessage === "Create Schedule") {
-
-                    if (employee.id === selectedEmployee.id) {
+                if (employee.id === selectedEmployee.id) {
+                    if (employee.removed === true) {
+                        employee.removed = false;
+                        ret = "do nothing";
+                    } else {
                         ret = true;
                     }
-                } else if ($scope.scheduleAddOrEditMessage === "Edit Schedule") {
-
-                    if (employee.employeeId === selectedEmployee.id) {
-                        ret = true;
-                    }
+                    
                 }
-                
             }
             return ret;
         };
 
         $scope.deleteEmployee = function (index) {
-            $scope.employeeList.splice(index, 1);
+            
+            if ($scope.employeeList[index].shiftId === "00000000-0000-0000-0000-000000000000") {
+                $scope.employeeList.splice(index,1);
+            } else {
+                $scope.employeeList[index].removed = true;
+            }
         };
 
         $scope.$watch("startDatePicker", function () {
@@ -337,13 +341,19 @@
             $scope.showAddEmployee = true;
             $scope.showEmployees = true;
             $scope.currentSchedule = schedule;
-            console.log(schedule);
         };
 
         $scope.returnNewArray = function (array) {
             var newArray = [];
             for (var i = 0; i < array.length; i++) {
-                newArray.push(array[i]);
+                var schedule = array[i];
+                for (var j = 0; j < $scope.companyEmployees.length; j++) {
+                    if (schedule.employeeId === $scope.companyEmployees[j].id) {
+                        $scope.companyEmployees[j].shiftId = schedule.id;
+                        $scope.companyEmployees[j].removed = false;
+                        newArray.push($scope.companyEmployees[j]);
+                    }
+                }
             }
             return newArray;
         };
@@ -428,7 +438,7 @@
             schedule.startDateAndTime = $scope.startDatePicker;
             schedule.endDateAndTime = $scope.endDatePicker;
             schedule.employees = $scope.employeeList;
-            console.log(schedule);
+            console.log($scope.employeeList);
             services.ModifySchedule(schedule).then(function (data) {
                 var response = data;
                 if (response === "Succeeded") {

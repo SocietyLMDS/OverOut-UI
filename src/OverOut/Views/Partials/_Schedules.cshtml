@@ -4,7 +4,7 @@
     <div ng-show="companySchedules.length == 0">There is currently no schedules</div>
     <div ng-show="companySchedules.length > 0">
         <div ng-repeat="schedule in companySchedules">
-            <div ng-style="$index > 0 && {'margin-left':employeesPositions[$index]}"  style="margin-top: 20px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px; width: 440px; height: 382px; float: left;">
+            <div ng-style="$index > 0 && {'margin-left':employeesPositions[$index]}"  style="margin-top: 20px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px; width: 445px; height: 425px; float: left;">
                 <div>
                     <div style="float: left">
                         <img src="../../Images/info.png" alt="info.png" />
@@ -42,7 +42,7 @@
                             </table>
                         </div>
                     </div>
-                    <div style="height: 20px;"></div>
+                    <div style="height: 5px;"></div>
                     <div ng-click="showModifyModal(schedule)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold;">
                         <img src="../../Images/edit.png" alt="edit" />
                         <span style="margin-right: 5px;">Edit</span>
@@ -203,7 +203,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="employee in employeeList">
+                                    <tr ng-repeat="employee in employeeList" ng-show="!employee.removed">
                                         <td>{{employee.firstname}}</td>
                                         <td>{{employee.lastname}}</td>
                                         <td>{{employee.jobDescription}}</td>

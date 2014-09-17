@@ -144,11 +144,6 @@ table {
   width: 100%;
 }
 
-th, td {
-    width: 90px;
-    text-align: left;
-}
-
 .selectWidth {
     width: 185px;
 }

@@ -211,7 +211,6 @@ namespace OverOut.Controllers
                     {
                         var newSchedule = new ScheduleModel
                             {
-
                                 CompanyId = Guid.Parse(currentUser.Id),
                                 CustomerId = schedule.CustomerId,
                                 CustomerObjectId = schedule.CustomerObjectId,
@@ -245,9 +244,11 @@ namespace OverOut.Controllers
                                     CompanyId = Guid.Parse(currentUser.Id),
                                     ScheduleId = scheduleId,
                                     EmployeeId = employee.Id,
-                                    EmployeeFirstname = employee.Firstname,
-                                    EmployeeLastname = employee.Lastname,
-                                    EmployeeEmailAddress = employee.EmailAddress,
+                                    Firstname = employee.Firstname,
+                                    Lastname = employee.Lastname,
+                                    EmailAddress = employee.EmailAddress,
+                                    PersonalNumber =  employee.PersonalNumber,
+                                    JobDescription = employee.JobDescription,
                                     StartTime = scheduleDate.StartDateTime,
                                     EndTime = scheduleDate.EndDateTime,
                                     Status = "Assigned"
@@ -298,9 +299,11 @@ namespace OverOut.Controllers
                                 CompanyId = Guid.Parse(currentUser.Id),
                                 ScheduleId = scheduleId,
                                 EmployeeId = employee.Id,
-                                EmployeeFirstname = employee.Firstname,
-                                EmployeeLastname = employee.Lastname,
-                                EmployeeEmailAddress = employee.EmailAddress,
+                                Firstname = employee.Firstname,
+                                Lastname = employee.Lastname,
+                                EmailAddress = employee.EmailAddress,
+                                PersonalNumber = employee.PersonalNumber,
+                                JobDescription = employee.JobDescription,
                                 StartTime = schedule.StartDateAndTime,
                                 EndTime = schedule.EndDateAndTime,
                                 Status = "Assigned"
@@ -315,5 +318,65 @@ namespace OverOut.Controllers
 
             return Content(response);
         }
+
+        public async Task<ContentResult> ModifySchedule([FromBody] ScheduleModelUi schedule)
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            dynamic response;
+            bool checkIfResponseIsAGuid;
+            var scheduleId = Guid.Empty;
+
+            var newScheduleByDate = new ScheduleModel
+            {
+                Id = schedule.Id,
+                CompanyId = Guid.Parse(currentUser.Id),
+                CustomerId = schedule.CustomerId,
+                CustomerObjectId = schedule.CustomerObjectId,
+                CompanyName = currentUser.CompanyName,
+                CustomerName = schedule.CustomerName,
+                CustomerObjectName = schedule.CustomerObjectName,
+                CustomerObjectAddress = schedule.CustomerObjectAddress,
+                StartDate = schedule.StartDateAndTime,
+                EndDate = schedule.EndDateAndTime,
+            };
+
+            var responseStr2 = await CallWebApi.Put("PUT", "api/schedule/modifyschedule", newScheduleByDate);
+            response = responseStr2.Substring(1, responseStr2.Length - 2);
+
+            if (response == "Succeeded")
+            {
+                foreach (var employee in schedule.Employees)
+                { 
+                   
+                    var shiftModel = new ShiftModel
+                    {
+                        Id = employee.Id,
+                        CompanyId = Guid.Parse(currentUser.Id),
+                        ScheduleId = schedule.Id,
+                        EmployeeId = employee.EmployeeId,
+                        Firstname = employee.Firstname,
+                        Lastname = employee.Lastname,
+                        EmailAddress = employee.EmailAddress,
+                        PersonalNumber = employee.PersonalNumber,
+                        JobDescription = employee.JobDescription,
+                        StartTime = schedule.StartDateAndTime,
+                        EndTime = schedule.EndDateAndTime,
+                        Status = "Assigned"
+                    };
+
+                    response = await CallWebApi.Put("PUT", "api/shift/modifyshiftonschedule", shiftModel);
+                    response = response.Substring(1, response.Length - 2);
+                }
+            }
+
+            return Content(response);
+        } 
+
+        public async Task<ContentResult> DeleteSchedule([FromBody] ScheduleModel schedule)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/schedule/deleteschedule", "/?id=" + schedule.Id + "&companyId=" + schedule.CompanyId);
+            return Content(dataBody);
+        } 
     }
 }

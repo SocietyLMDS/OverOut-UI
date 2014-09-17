@@ -22,7 +22,7 @@
                         <div style="color: #841d23; font-weight: bold;">Employees assigned to the schedule</div>
                         <div style="height: 5px;"></div>
                         <div>
-                            <table>
+                            <table class="table table-condensed">
                                 <thead>
                                     <tr>
                                         <th>Firstname</th>
@@ -33,9 +33,9 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="scheduleShift in schedule.schedules ">
-                                        <td>{{scheduleShift.employeeFirstname}}</td>
-                                        <td>{{scheduleShift.employeeLastname}}</td>
-                                        <td>{{scheduleShift.employeeEmailAddress}}</td>
+                                        <td>{{scheduleShift.firstname}}</td>
+                                        <td>{{scheduleShift.lastname}}</td>
+                                        <td>{{scheduleShift.emailAddress}}</td>
                                         <td>{{scheduleShift.status}}</td>
                                     </tr>
                                 </tbody>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div style="height: 20px;"></div>
-                    <div ng-click="showEditScheduleModal(schedule)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold;">
+                    <div ng-click="showModifyModal(schedule)" style="cursor: pointer; font-size: 12px; float: right; color: #841d23; font-weight: bold;">
                         <img src="../../Images/edit.png" alt="edit" />
                         <span style="margin-right: 5px;">Edit</span>
                     </div>
@@ -77,7 +77,7 @@
             <div style="height: 10px;"></div>
             <div style="background-color: #f3eeee; height: 595px; padding: 10px;">
                 <div>
-                    <div>
+                    <div ng-show="showCustomerSelection">
                         <div style="font-weight: bold">Step 1 Select Customer</div>
                         <div style="height: 5px;"></div>
                         <select class="selectWidth" ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
@@ -93,9 +93,16 @@
                         </select>
                         <div style="height: 15px;"></div>
                         <div ng-show="showChoicesRadioBox" data-ng-repeat="choice in radioBox.choices">
-                             <input type="radio" ng-change="radioBoxSelected()" name="response" value="{{choice.id}}" ng-model="radioBox.userChoice"/>
+                            <input type="radio" ng-change="radioBoxSelected()" name="response" value="{{choice.id}}" ng-model="radioBox.userChoice"/>
                             {{choice.text}}
                         </div>
+                    </div>
+                    <div ng-show="ShowCustomerName">
+                        <div><span style="font-weight: bold;">Customer:</span> {{selectedCustomer}}</div>
+                    </div>
+                    <div style="height: 5px"></div>
+                    <div ng-show="showObjectName">
+                        <div><span style="font-weight: bold;">Object:</span> {{selectedObject}}</div>
                     </div>
                     <div style="height: 20px"></div>
                     <div ng-show="showObjectNeeds">
@@ -155,7 +162,7 @@
                             <div style="font-weight: bold">Step 4 Add Employee</div>
                             <div style="height: 10px;"></div>
                             <div>
-                                <select class="selectWidth" ng-change="employeeSelected()" ng-model="selectedEmployee" ng-options="employee as employee.Firstname+' '+employee.Lastname for employee in companyEmployees">
+                                <select class="selectWidth" ng-change="employeeSelected()" ng-model="selectedEmployee" ng-options="employee as employee.firstname+' '+employee.lastname for employee in companyEmployees">
                                     <option value="">Select Employee</option>
                                 </select>
                             </div>
@@ -185,22 +192,23 @@
                         <div ng-show="showEmployees">
                             <div style="font-weight: bold">Employees</div>
                             <div style="height: 5px;"></div>
-                            <table>
+                            <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th>Fistname</th>
+                                        <th>Fisttname</th>
                                         <th>Lastname</th>
                                         <th>Job Description</th>
                                         <th>Personal Number</th>
-                                        <th></th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="employee in employeeList">
-                                        <td>{{employee.Firstname}}</td>
-                                        <td>{{employee.Lastname}}</td>
-                                        <td>{{employee.JobDescription}}</td>
-                                        <td>{{employee.PersonalNumber}}</td>
+                                        <td>{{employee.firstname}}</td>
+                                        <td>{{employee.lastname}}</td>
+                                        <td>{{employee.jobDescription}}</td>
+                                        <td>{{employee.personalNumber}}</td>
+                                        <td>{{employee.status}}</td>
                                         <td ng-click="deleteEmployee($index)" style="cursor: pointer;">
                                             <img src="../../Images/delete.png" alt="delete" /></td>
                                     </tr>
@@ -213,7 +221,7 @@
             <div style="height: 20px;"></div>
             <div style="float: right">
                 <div ng-click="hideScheduleModal()" style="float: left; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Cancel</div>
-                <div ng-click="saveSchedule()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
+                <div ng-click="CreateModifySchedule()" style="float: left; margin-left: 5px; background-color: #a36064; border: 1px solid #841d23; height: 30px; padding: 5px; width: 112px; color: white; font-weight: bold; cursor: pointer; text-align: center">Save</div>
             </div>
         </div>
     </div>

@@ -23,7 +23,7 @@
         $scope.hourStep = 1;
         $scope.minuteStep = 1;
         $scope.ismeridian = false;
-        
+
         $scope.radioBox = {
             userChoice: null,
             choices: [{
@@ -32,7 +32,7 @@
             }, {
                 id: 2,
                 text: "schedule from time picker",
-                
+
             }]
         };
 
@@ -44,14 +44,14 @@
 
         $scope.getCompanySchedules = function () {
             services.getCompanySchedules().then(function (data) {
-                console.log(data);
-                $scope.position(data);
+                console.log(data.length);
+                $scope.Getposition(data);
                 $scope.companySchedules = data;
                 $scope.getCompanyCustomers();
             });
         };
-        
-        $scope.position = function (data) {
+
+        $scope.Getposition = function (data) {
             $scope.employeesPositions = [];
             var length = 0;
             for (var i = 0; i < data.length; i++) {
@@ -75,22 +75,26 @@
 
         $scope.getCompanyEmployess = function () {
             services.getCompanyEmployees().then(function (data) {
-                $scope.companyEmployees = data;
+                $scope.companyEmployees = $scope.convertKeysToCamelCase(data);
             });
         };
+        
+        $scope.convertKeysToCamelCase = function (obj) {
+            if (!obj || typeof obj !== "object") return null;
 
-        $scope.showCreateModal = function () {
-            $scope.showScheduleModal = true;
-            $scope.showStep1 = true;
-            $scope.scheduleAddOrEditMessage = "Create Schedule";
-        };
+            if (obj instanceof Array) {
+                return $.map(obj, function (value) {
+                    return $scope.convertKeysToCamelCase(value);
+                });
+            }
 
-        $scope.CreateSchedule = function () {
-            console.log("schedules");
-        };
+            var newObj = {};
+            $.each(obj, function (key, value) {
+                key = key.charAt(0).toLowerCase() + key.slice(1);
+                newObj[key] = value;
+            });
 
-        $scope.ModifySchedule = function () {
-            console.log("schedules");
+            return newObj;
         };
 
         $scope.hideScheduleModal = function () {
@@ -114,9 +118,12 @@
             $scope.position = "0px;";
             $scope.selectedObjectNeed = null;
             $scope.space2 = "30px";
+            $scope.showCustomerSelection = false;
+            $scope.ShowCustomerName = false;
+            $scope.showObjectName = false;
         };
 
-        $scope.ResetStartEndDateTime = function (parameters) {
+        $scope.ResetStartEndDateTime = function () {
             $scope.startDatePicker = null;
             $scope.endDatePicker = null;
             $scope.startTime = new Date();
@@ -235,9 +242,18 @@
             var ret = false;
             for (var i = 0; i < $scope.employeeList.length; i++) {
                 var employee = $scope.employeeList[i];
-                if (employee.Id === selectedEmployee.Id) {
-                    ret = true;
+                if ($scope.scheduleAddOrEditMessage === "Create Schedule") {
+
+                    if (employee.id === selectedEmployee.id) {
+                        ret = true;
+                    }
+                } else if ($scope.scheduleAddOrEditMessage === "Edit Schedule") {
+
+                    if (employee.employeeId === selectedEmployee.id) {
+                        ret = true;
+                    }
                 }
+                
             }
             return ret;
         };
@@ -298,8 +314,49 @@
         $scope.HideTimeUpAndDownArrow = function () {
             $(".btn-link").css("visibility", "hidden");
         };
+        
+        $scope.showCreateModal = function () {
+            $scope.showScheduleModal = true;
+            $scope.showCustomerSelection = true;
+            $scope.scheduleAddOrEditMessage = "Create Schedule";
+        };
 
-        $scope.saveSchedule = function () {
+        $scope.showModifyModal = function (schedule) {
+            $scope.showScheduleModal = true;
+            $scope.scheduleAddOrEditMessage = "Edit Schedule";
+            $scope.selectedCustomer = schedule.customerName;
+            $scope.ShowCustomerName = true;
+            $scope.selectedObject = schedule.customerObjectName;
+            $scope.showObjectName = true;
+            $scope.startDatePicker = moment(schedule.startDate).toDate();
+            $scope.endDatePicker = moment(schedule.endDate).toDate();
+            $scope.startTime = moment(schedule.startDate).toDate();
+            $scope.endTime = moment(schedule.endDate).toDate();
+            $scope.employeeList = $scope.returnNewArray(schedule.schedules);
+            $scope.showDateSelection = true;
+            $scope.showAddEmployee = true;
+            $scope.showEmployees = true;
+            $scope.currentSchedule = schedule;
+            console.log(schedule);
+        };
+
+        $scope.returnNewArray = function (array) {
+            var newArray = [];
+            for (var i = 0; i < array.length; i++) {
+                newArray.push(array[i]);
+            }
+            return newArray;
+        };
+
+        $scope.CreateModifySchedule = function () {
+            if ($scope.scheduleAddOrEditMessage == "Create Schedule") {
+                $scope.createSchedule();
+            } else if ($scope.scheduleAddOrEditMessage == "Edit Schedule") {
+                $scope.ModifySchedule();
+            }
+        };
+
+        $scope.createSchedule = function () {
             console.log($scope.selectedObject);
             var schedule = {};
             if ($scope.selectedObjectNeed !== null) {
@@ -324,7 +381,7 @@
                 schedule.endDateAndTime = $scope.endDatePicker;
                 schedule.employees = $scope.employeeList;
                 schedule.type = "ScheduleByDate";
-                
+
             }
             var stepCheck;
             if (schedule.type === "ScheduleByNeed") {
@@ -333,7 +390,7 @@
                 stepCheck = ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.employeeList.length <= 0 || $scope.radioBox.userChoice === null) ? false : true;
             }
             if (!stepCheck) {
-                if ( $scope.selectedObjectNeed != null && $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded || $scope.employeeList.length <= 0) {
+                if ($scope.selectedObjectNeed != null && $scope.employeeList.length != $scope.selectedObjectNeed.numberOfPersonalNeeded || $scope.employeeList.length <= 0) {
                     $scope.showEmployeeAddingError = true;
                     $scope.scheduleAddingErrorMessage = "You haven't selected enough people required for the schedule";
                 } else if ($scope.employeeList.length <= 0) {
@@ -357,16 +414,57 @@
                 });
             }
         };
-
-        $scope.showEditScheduleModal = function(schedule) {
-
+        
+        $scope.ModifySchedule = function () {
+            var schedule = {};
+            $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), "00");
+            $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), "00");
+            schedule.id = $scope.currentSchedule.id;
+            schedule.customerName = $scope.currentSchedule.customerName;
+            schedule.customerObjectName = $scope.currentSchedule.customerObjectName;
+            schedule.customerObjectAddress = $scope.currentSchedule.customerObjectAddress;
+            schedule.customerId = $scope.currentSchedule.customerId;
+            schedule.customerObjectId = $scope.currentSchedule.customerObjectId;
+            schedule.startDateAndTime = $scope.startDatePicker;
+            schedule.endDateAndTime = $scope.endDatePicker;
+            schedule.employees = $scope.employeeList;
+            console.log(schedule);
+            services.ModifySchedule(schedule).then(function (data) {
+                var response = data;
+                if (response === "Succeeded") {
+                    $scope.hideScheduleModal();
+                    $scope.getCompanySchedules();
+                } else if (response == "UnSucceeded") {
+                    $scope.showEmployeeAddingError = true;
+                    $scope.scheduleAddingErrorMessage = "There was a problem modifying the schedule, please try again";
+                } else {
+                    $scope.showEmployeeAddingError = true;
+                    $scope.scheduleAddingErrorMessage = response;
+                }
+            });
         };
 
-        $scope.deleteSchedule = function(schedule) {
-
+        $scope.deleteSchedule = function (schedule) {
+            var confirms = confirm("Are you sure you want to delete this schedule");
+            if (confirms) {
+                services.deleteSchedule(schedule).then(function (data) {
+                    var response = data.substring(1, data.length - 1);
+                    console.log(response);
+                    if (response === "Succeeded") {
+                        $scope.hideScheduleModal();
+                        $scope.getCompanySchedules();
+                    } else if (response == "UnSucceeded") {
+                        $scope.showEmployeeAddingError = true;
+                        $scope.scheduleAddingErrorMessage = "There was a problem creating a schedule, please try again";
+                    } else {
+                        $scope.showEmployeeAddingError = true;
+                        $scope.scheduleAddingErrorMessage = response;
+                    }
+                });
+            }
         };
 
-        $scope.moments = function(date, dateOrTime) {
+        $scope.moments = function (date, dateOrTime) {
             var currentDate = moment(date);
             var ret = "";
             if (dateOrTime === "date") ret = currentDate.format("dddd, MMMM Do YYYY");

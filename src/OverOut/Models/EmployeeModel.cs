@@ -23,5 +23,6 @@ namespace OverOut.Models
         public string SecurityLicenseLink { get; set; }
         public double HourlyRate { get; set; }
         public string Status { get; set; }
+        public Guid EmployeeId { get; set; }
     }
 }

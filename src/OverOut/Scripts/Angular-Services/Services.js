@@ -182,6 +182,20 @@
                 }, function (data) {
                     return data.status;
                 });
+            },
+            deleteSchedule: function (scheduleJson) {
+                return $http.post("/Repository/DeleteSchedule", scheduleJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            ModifySchedule: function (scheduleJson) {
+                return $http.post("/Repository/ModifySchedule", scheduleJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
             }
         };
     }])

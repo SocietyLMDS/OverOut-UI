@@ -7,6 +7,7 @@ namespace OverOut.Models
 {
     public class ScheduleModelUi
     {
+        public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public Guid CustomerObjectId { get; set; }
         public string CustomerName { get; set; }

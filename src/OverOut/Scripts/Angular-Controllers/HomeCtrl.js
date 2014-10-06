@@ -12,6 +12,11 @@
                         { menuName: "Schedules", show: false },
                         { menuName: "Reports", show: false },
                         { menuName: "Profile", show: false }];
+
+        $scope.employeeMenus = [{ menuName: "Schedules", show: false },
+                                { menuName: 'Reports', show: false },
+                                { menuName:  'Profile', show: false}  ];
+
         $scope.search = { item: "" };
 
         $scope.changePasswordDetails = {
@@ -32,6 +37,7 @@
                     
                 } else if ($scope.currentUser.UserType == "Employee") {
                     $scope.showEmployeeSection = true;
+                    $timeout($scope.getCurrentEmployee, 200);
                 }
             });
         };
@@ -50,8 +56,22 @@
            });
         };
 
+        $scope.getCurrentEmployee = function() {
+            services.getCurrentEmployee().then(function (data) {
+                if (data === 500 || data === 401) {
+                    services.logout().then(function (dataurl) {
+                        window.location.href = dataurl;
+                    });
+                } else {
+                    $scope.currentEmployee = data;
+                    $scope.LoggedInAs = "Logged in as " + $scope.currentEmployee.Firstname + " " + $scope.currentEmployee.Lastname;
+                    $scope.loadEmployeeSection("Schedules");
+                }
+            });
+        };
+
         $scope.loadSection = function (menu) {
-            $scope.hideAndShowSection(menu);
+            $scope.hideAndShowSection(menu, $scope.menus);
             switch (menu) {
                 case "Customers":
                     $scope.$broadcast("customers");
@@ -72,14 +92,31 @@
             }
             
         };
+        
+        $scope.loadEmployeeSection = function (menu) {
+            $scope.hideAndShowSection(menu, $scope.employeeMenus);
+            switch (menu) {
+                case "Schedules":
+                    $scope.$broadcast("employeeSchedules");
+                    break;
+                case "Reports":
+                    $scope.$broadcast("employeeReports");
+                    break;
+                case "Profile":
+                    $scope.$broadcast("EmployeeProfiles");
+                    break;
+                default:
+            }
 
-        $scope.hideAndShowSection = function (menu) {
-            for (var i = 0; i < $scope.menus.length; i++) {
-                var currentMenu = $scope.menus[i].menuName;
+        };
+
+        $scope.hideAndShowSection = function (menu, menuList) {
+            for (var i = 0; i < menuList.length; i++) {
+                var currentMenu = menuList[i].menuName;
                 if (currentMenu.indexOf(menu) != -1) {
-                    $scope.menus[i].show = true;
+                    menuList[i].show = true;
                 } else {
-                    $scope.menus[i].show = false;
+                    menuList[i].show = false;
                 }
             }
         };
@@ -133,7 +170,6 @@
                 }
             });
         };
-        
 
         $scope.setupWatch = function () {
             $scope.$watch('search.item', function (item) {
@@ -147,6 +183,4 @@
             }
             $scope.userLoggedInPressed = false;
         };
-        
-
-    }])
+}])

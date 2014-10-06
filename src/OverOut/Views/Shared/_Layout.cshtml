@@ -16,10 +16,9 @@
         <script src="@Url.Content("~/Scripts/Angular-Services/Services.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/Angular-Directives/DirectiveModule.js")" type="text/javascript"></script>
         <script src="@Url.Content("~/Scripts/Angular-App/OverOutApp.js")" type="text/javascript"></script>
-        <script src="@Url.Content("~/Scripts/Angular-Controllers/Main.js")" type="text/javascript"></script>
     </head>
     <body >
-        <div ng-controller="Main">@RenderBody()</div>
+        <div>@RenderBody()</div>
         @RenderSection("scripts", required: false)
     </body>
 </html>

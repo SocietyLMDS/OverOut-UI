@@ -362,7 +362,7 @@
             if ($scope.scheduleAddOrEditMessage == "Create Schedule") {
                 $scope.createSchedule();
             } else if ($scope.scheduleAddOrEditMessage == "Edit Schedule") {
-                $scope.ModifySchedule();
+                $scope.modifySchedule();
             }
         };
 
@@ -425,7 +425,7 @@
             }
         };
         
-        $scope.ModifySchedule = function () {
+        $scope.modifySchedule = function () {
             var schedule = {};
             $scope.startDatePicker.setHours($scope.startTime.getHours(), $scope.startTime.getMinutes(), "00");
             $scope.endDatePicker.setHours($scope.endTime.getHours(), $scope.endTime.getMinutes(), "00");
@@ -439,7 +439,7 @@
             schedule.endDateAndTime = $scope.endDatePicker;
             schedule.employees = $scope.employeeList;
             console.log($scope.employeeList);
-            services.ModifySchedule(schedule).then(function (data) {
+            services.modifySchedule(schedule).then(function (data) {
                 var response = data;
                 if (response === "Succeeded") {
                     $scope.hideScheduleModal();

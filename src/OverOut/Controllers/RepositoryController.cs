@@ -51,6 +51,15 @@ namespace OverOut.Controllers
             return Content(JsonConvert.SerializeObject(company));
         }
 
+        public async Task<ContentResult> GetCurrentEmployee()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/employee/getemployeebyid", "/?id=" + currentUser.Id+"&companyId="+currentUser.CompanyId);
+            var company = JsonConvert.DeserializeObject<EmployeeModel>(dataBody);
+            return Content(JsonConvert.SerializeObject(company));
+        }
+
         public async Task<ContentResult> GetCompanyEmployees()
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
@@ -59,6 +68,15 @@ namespace OverOut.Controllers
             var employee = JsonConvert.DeserializeObject<List<EmployeeModel>>(dataBody);
             return Content(JsonConvert.SerializeObject(employee));
         }
+
+        public async Task<ContentResult> GetEmployeeSchedules()
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/employee/getallemployee", "/?id=" + currentUser.Id);
+            var employee = JsonConvert.DeserializeObject<List<EmployeeModel>>(dataBody);
+            return Content(JsonConvert.SerializeObject(employee));
+        } 
 
         public async Task<ContentResult> GetCompanyCustomers()
         {

@@ -190,12 +190,27 @@
                     return data.status;
                 });
             },
-            ModifySchedule: function (scheduleJson) {
+            modifySchedule: function (scheduleJson) {
                 return $http.post("/Repository/ModifySchedule", scheduleJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;
                 });
-            }
+            },
+            getCurrentEmployee: function () {
+                return $http.get("/Repository/GetCurrentEmployee").then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            getEmployeeSchedules: function () {
+                return $http.get("/Repository/GetEmployeeSchedules").then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            
         };
     }])

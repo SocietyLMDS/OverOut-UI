@@ -282,6 +282,9 @@
     <Content Include="Images\overout.png" />
     <Content Include="Scripts\Angular-App\OverOutApp.js" />
     <Content Include="Scripts\Angular-Controllers\CustomersCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\EmployeeProfileCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\EmployeeReportsCtrl.js" />
+    <Content Include="Scripts\Angular-Controllers\EmployeeSchedulesCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\EmployeesCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\ForgotPasswordCtrl.js" />
     <Content Include="Scripts\Angular-Controllers\HomeCtrl.js" />
@@ -373,6 +376,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_EmployeeSchedules.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_EmployeeProfile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Partials\_EmployeeReports.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

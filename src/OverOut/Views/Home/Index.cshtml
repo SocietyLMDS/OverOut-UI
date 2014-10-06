@@ -6,6 +6,9 @@
     @Scripts.Render("~/Scripts/Angular-Controllers/SchedulesCtrl.js")
     @Scripts.Render("~/Scripts/Angular-Controllers/ReportsCtrl.js")
     @Scripts.Render("~/Scripts/Angular-Controllers/ProfileCtrl.js")
+    @Scripts.Render("~/Scripts/Angular-Controllers/EmployeeProfileCtrl.js")
+    @Scripts.Render("~/Scripts/Angular-Controllers/EmployeeSchedulesCtrl.js")
+    @Scripts.Render("~/Scripts/Angular-Controllers/EmployeeReportsCtrl.js")
 }
 
 <div ng-click="HideUserLoggedIn()" class="homecontainer" ng-controller="HomeCtrl" ng-init="initiate()">
@@ -70,7 +73,29 @@
     </div>
     <!-- Employee Section-->
     <div ng-show="showEmployeeSection">
-        Employee
+          <div style="background-color: #a36064; height: 40px; width: 100%; padding: 5px">
+            <div ng-repeat="menu in employeeMenus">
+                <div ng-click="loadEmployeeSection(menu.menuName)" ng-style="menu.show ? {'background-color':'#841d23', 'color':'#ffffff'} : {'background-color':'#ffffff', 'color':'#000000'}" style="cursor: pointer; float: left; margin-left: 5px; height: 30px; width: 130px; text-align: center; background-color: white; font-weight: bold">
+                    <span style="position: relative; top: 5px;">{{menu.menuName}}</span>
+                </div>
+            </div>
+            <div style="float: right; margin-right: 5px; margin-top: 2px;">
+                <input type="text" ng-model="search.item" placeholder="Search" />
+            </div>
+        </div>
+        <br />
+        <!--Customers-->
+        <div ng-show="employeeMenus[0].show">
+            @Html.Partial("~/Views/Partials/_EmployeeSchedules.cshtml")
+        </div>
+        <!--Employees-->
+        <div ng-show="employeeMenus[1].show">
+            @Html.Partial("~/Views/Partials/_EmployeeReports.cshtml")
+        </div>
+        <!--Schedules-->
+        <div ng-show="employeeMenus[2].show">
+            @Html.Partial("~/Views/Partials/_employeeProfile.cshtml")
+        </div>
     </div>
         <!-- Modal -->
      <div ng-show="showChangePasswordModal" class="modalcontainer ng-hide">

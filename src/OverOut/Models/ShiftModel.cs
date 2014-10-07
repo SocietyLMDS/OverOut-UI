@@ -19,6 +19,9 @@ namespace OverOut.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string TotalTime { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerObjectName { get; set; }
+        public Address CustomerObjectAddress { get; set; }
         public bool Removed { get; set; }
         public string Status { get; set; }
     }

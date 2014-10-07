@@ -69,13 +69,13 @@ namespace OverOut.Controllers
             return Content(JsonConvert.SerializeObject(employee));
         }
 
-        public async Task<ContentResult> GetEmployeeSchedules()
+        public async Task<ContentResult> GetEmployeeShifts()
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            var dataBody = await CallWebApi.Get("GET", "api/employee/getallemployee", "/?id=" + currentUser.Id);
-            var employee = JsonConvert.DeserializeObject<List<EmployeeModel>>(dataBody);
-            return Content(JsonConvert.SerializeObject(employee));
+            var dataBody = await CallWebApi.Get("GET", "api/shift/getallemployeeshifts", "/?id=" + currentUser.Id + "&companyId=" + currentUser.CompanyId);
+            var employeeShifts = JsonConvert.DeserializeObject<List<ShiftModel>>(dataBody);
+            return Content(JsonConvert.SerializeObject(employeeShifts));
         } 
 
         public async Task<ContentResult> GetCompanyCustomers()
@@ -269,6 +269,9 @@ namespace OverOut.Controllers
                                     JobDescription = employee.JobDescription,
                                     StartTime = scheduleDate.StartDateTime,
                                     EndTime = scheduleDate.EndDateTime,
+                                    CustomerName = schedule.CustomerName,
+                                    CustomerObjectName = schedule.CustomerObjectName,
+                                    CustomerObjectAddress = schedule.CustomerObjectAddress,
                                     Status = "Assigned"
                                 };
 
@@ -324,6 +327,9 @@ namespace OverOut.Controllers
                                 JobDescription = employee.JobDescription,
                                 StartTime = schedule.StartDateAndTime,
                                 EndTime = schedule.EndDateAndTime,
+                                CustomerName = schedule.CustomerName,
+                                CustomerObjectName    = schedule.CustomerObjectName,
+                                CustomerObjectAddress = schedule.CustomerObjectAddress,
                                 Status = "Assigned"
                             };
 

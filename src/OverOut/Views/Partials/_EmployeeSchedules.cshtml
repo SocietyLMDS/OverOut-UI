@@ -1,6 +1,24 @@
 ﻿<div ng-controller="EmployeeSchedulesCtrl">
-    <div ng-show="employeeSchedules.length <= 0">There is currently no schedule assigned to you</div>
-    <div ng-show="employeeSchedules.length > 0">
-        
+    <div ng-show="employeeShifts.length <= 0">There is currently no schedule assigned to you</div>
+    <div ng-show="employeeShifts.length > 0">
+        <div ng-repeat="schedule in employeeShifts">
+            <div style="margin-top: 20px; background-color: #f3eeee; padding: 10px; border: 1px solid #841d23; box-shadow: 1px 1px 1px; width: 350px; height: 300px; float: left;">
+                <div><span class="glyphicon glyphicon-calendar"></span> <span style="font-weight: bold">Schedule Info</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Location Name:</span > <span style="font-size: 12px;">{{schedule.CustomerObjectName}}</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Address:</span > <span style="font-size: 12px;">{{schedule.CustomerObjectAddress.Street}}</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Postcode:</span > <span style="font-size: 12px;">{{schedule.CustomerObjectAddress.Postcode}}</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Start Time:</span > <span style="font-size: 12px;">{{schedule.StartTime}}</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">End Time:</span > <span style="font-size: 12px;">{{schedule.EndTime}}</span></div>
+                <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Total Time:</span > <span style="font-size: 12px;">{{schedule.TotalTime}}</span></div>
+                 <div style="height: 10px;"></div>
+                <div><span style="font-weight: bold; font-size: 12px;">Status:</span > <span style="font-size: 12px;">{{schedule.Status}}</span></div>
+            </div>
+        </div>
     </div>
 </div>

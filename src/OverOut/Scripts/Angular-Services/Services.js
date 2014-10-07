@@ -204,8 +204,8 @@
                     return data.status;
                 });
             },
-            getEmployeeSchedules: function () {
-                return $http.get("/Repository/GetEmployeeSchedules").then(function (data) {
+            getEmployeeShifts: function () {
+                return $http.get("/Repository/GetEmployeeShifts").then(function (data) {
                     return data.data;
                 }, function (data) {
                     return data.status;

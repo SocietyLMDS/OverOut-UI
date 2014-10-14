@@ -44,7 +44,6 @@
 
         $scope.getCompanySchedules = function () {
             services.getCompanySchedules().then(function (data) {
-                console.log(data.length);
                 $scope.Getposition(data);
                 $scope.companySchedules = data;
                 $scope.getCompanyCustomers();

@@ -402,6 +402,12 @@ namespace OverOut.Controllers
         {
             var dataBody = await CallWebApi.Delete("DELETE", "api/schedule/deleteschedule", "/?id=" + schedule.Id + "&companyId=" + schedule.CompanyId);
             return Content(dataBody);
-        } 
+        }
+
+        public async Task<ContentResult> SetEmployeeShiftStatus([FromBody] ShiftModel shif)
+        {
+            var dataBody = await CallWebApi.Post("POST", "api/shift/setemployeeshiftstatus", shif);
+            return Content(dataBody);
+        }
     }
 }

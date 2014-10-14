@@ -211,6 +211,12 @@
                     return data.status;
                 });
             },
-            
+            setEmployeeShiftStatus: function (shiftJson) {
+                return $http.post("/Repository/SetEmployeeShiftStatus", shiftJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },      
         };
     }])

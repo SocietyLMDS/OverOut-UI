@@ -207,6 +207,9 @@
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\MultipleSchedule.cs" />
     <Compile Include="Models\NeedModel.cs" />
+    <Compile Include="Models\Omh.cs" />
+    <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\Reports.cs" />
     <Compile Include="Models\ScheduleModel.cs" />
     <Compile Include="Models\ScheduleModelUI.cs" />
     <Compile Include="Models\Section.cs" />

@@ -106,12 +106,9 @@ C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Microsoft.Web.Inf
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Microsoft.Web.WebPages.OAuth.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Newtonsoft.Json.dll
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Net.Http.Formatting.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Spatial.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Helpers.dll
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Http.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Http.OData.dll
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Http.WebHost.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Mvc.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Optimization.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Razor.dll
@@ -126,10 +123,7 @@ C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Mono.Math.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\ImageResizer.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\EntityFramework.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Newtonsoft.Json.xml
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Net.Http.Formatting.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Helpers.xml
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Http.xml
-C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Http.WebHost.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Mvc.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.Razor.xml
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\System.Web.WebPages.xml

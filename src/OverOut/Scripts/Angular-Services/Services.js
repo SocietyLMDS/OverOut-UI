@@ -217,6 +217,35 @@
                 }, function (data) {
                     return data.status;
                 });
-            },      
+            },
+            getAllEmployeeReports: function () {
+                return $http.get("/Repository/GetAllEmployeeReports").then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            addReport: function (reportJson) {
+                return $http.post("/Repository/AddReport", reportJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            modifyReport: function (reportJson) {
+                return $http.post("/Repository/ModifyReport", reportJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+            deleteReport: function (reportJson) {
+                return $http.post("/Repository/deleteReport", reportJson, { headers: { "Content-Type": "application/json" } }).then(function (data) {
+                    return data.data;
+                }, function (data) {
+                    return data.status;
+                });
+            },
+
         };
     }])

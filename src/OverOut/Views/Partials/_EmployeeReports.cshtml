@@ -1,3 +1,72 @@
 ﻿<div ng-controller="EmployeeReportsCtrl">
-    <h3>Employee Reports</h3>
+    <div ng-click="showCreateReportModal()" class="btn btn-primary">Create Report</div>
+    <div style="height: 10px;"></div>
+    <div ng-show="employeeReports.length <= 0">there's currently no reports</div>
+    <div ng-show="employeeReports.length > 0">there's reports</div>
+
+    <!--Modal Section -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Create Report</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div><label>1 choose customer</label> </div>
+                        <select class="selectWidth" ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
+                            <option value="">Select customer</option>
+                        </select>
+                    </div>
+                    <div style="height: 20px;"></div>
+                    <div ng-show="showObject">
+                        <div><label>2 choose object</label> </div>
+                        <select class="selectWidth" ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
+                            <option value="">Select Object</option>
+                        </select>
+                    </div>
+                    <div style="height: 20px;"></div>
+                    <div ng-show="showReports">
+                        <div><label>3 choose report type</label> </div>
+                        <select class="selectWidth" ng-change="currentReportSelected()" ng-model="selectedReport" ng-options="reportname as reportname.name for reportname in reportNames">
+                            <option value="">Select Report</option>
+                        </select>
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <div ng-show="fbsShow">
+                        AVV:
+                        <input type="checkbox" ng-model="avvValue">
+                        <br />
+                        AVL:
+                        <input type="checkbox" ng-model="avlValue">
+                        <br />
+                        OMH:
+                        <input type="checkbox" ng-model="omhValue">
+                    </div>
+                    <div ng-show="pl13Show">
+                        AVV:
+                        <input type="checkbox" ng-model="avvValue">
+                        <br />
+                        AVL:
+                        <input type="checkbox" ng-model="avlValue">
+                        <br />
+                        OMH:
+                        <input type="checkbox" ng-model="omhValue">
+                    </div>
+                    <div ng-show="gripShow">
+                        Protection Visitation:
+                        <input type="checkbox" ng-model="pvValue">
+                        <br />
+                        Jail:
+                        <input type="checkbox" ng-model="jailValue">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,9 +1,9 @@
-﻿angular.module('OverOut')
-    .controller('EmployeeSchedulesCtrl', ['$scope', 'services', function ($scope, services) {
+﻿angular.module("OverOut")
+    .controller("EmployeeSchedulesCtrl", ["$scope", "services", function ($scope, services) {
         
         $scope.employeeStatuses = ["Confirm", "Sick", "Unavailable"];
 
-        $scope.$on('employeeSchedules', function () {
+        $scope.$on("employeeSchedules", function () {
             $scope.getEmployeeShifts();
         });
 
@@ -28,7 +28,7 @@
                 for (var j = 0; j < $scope.employeeStatuses.length; j++) {
 
                     var userChoice = null;
-                    if (currentSchedule.Status === "Confirm") userChoice = 1;
+                    if (currentSchedule.Status === "Confirmed") userChoice = 1;
                     if (currentSchedule.Status === "Sick") userChoice = 2;
                     if (currentSchedule.Status === "Unavailable") userChoice = 3;
                     var radioBox = { id: j + 1, text: $scope.employeeStatuses[j] };
@@ -37,6 +37,7 @@
                 }
 
             }
+           
             return data;
         };
 

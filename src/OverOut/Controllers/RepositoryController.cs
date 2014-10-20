@@ -82,7 +82,8 @@ namespace OverOut.Controllers
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            var dataBody = await CallWebApi.Get("GET", "api/customer/getallcustomer", "/?id=" + currentUser.Id);
+            var id = (currentUser.UserType == "Company") ? currentUser.Id : currentUser.CompanyId;
+            var dataBody = await CallWebApi.Get("GET", "api/customer/getallcustomer", "/?id=" + id);
             var customers = JsonConvert.DeserializeObject(dataBody);
             return Content(JsonConvert.SerializeObject(customers));
         }
@@ -409,5 +410,30 @@ namespace OverOut.Controllers
             var dataBody = await CallWebApi.Post("POST", "api/shift/setemployeeshiftstatus", shif);
             return Content(dataBody);
         }
+
+        public async Task<ContentResult> GetAllEmployeeReports()
+        {   var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            var dataBody = await CallWebApi.Get("GET", "api/report/getallreportsbyemployee","/?id="+currentUser.Id+"&companyid="+currentUser.CompanyId);
+            return Content(dataBody);
+        }
+
+        public async Task<ContentResult> AddReport([FromBody] Reports report)
+        {
+            var dataBody = await CallWebApi.Post("POST", "api/report/addreport", report);
+            return Content(dataBody);
+        }
+
+        public async Task<ContentResult> ModifyReport([FromBody] Reports report)
+        {
+            var dataBody = await CallWebApi.Put("PUT", "api/report/modifyreport", report);
+            return Content(dataBody);
+        }
+
+        public async Task<ContentResult> DeleteReport([FromBody] Reports report)
+        {
+            var dataBody = await CallWebApi.Delete("DELETE", "api/report/deletereport", "/?id" + report.Id+"&companyid="+report.CompanyId);
+            return Content(dataBody);
+        } 
     }
 }

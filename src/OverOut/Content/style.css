@@ -149,3 +149,12 @@ table {
 }
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  color: #ffffff;
+  background-color: #a36064;
+  border-color: #841d23;
+}

@@ -14,57 +14,71 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <div><label>1 choose customer</label> </div>
+                        <div>
+                            <label>1 choose customer</label>
+                        </div>
                         <select class="selectWidth" ng-change="currentCustomerSelected()" ng-model="selectedCustomer" ng-options="companycustomer as companycustomer.name for companycustomer in companyCustomers">
                             <option value="">Select customer</option>
                         </select>
                     </div>
                     <div style="height: 20px;"></div>
                     <div ng-show="showObject">
-                        <div><label>2 choose object</label> </div>
+                        <div>
+                            <label>2 choose object</label>
+                        </div>
                         <select class="selectWidth" ng-change="currentCustomerObjectSelected()" ng-model="selectedObject" ng-options="customerObject as customerObject.name for customerObject in customerObjects">
                             <option value="">Select Object</option>
                         </select>
                     </div>
                     <div style="height: 20px;"></div>
                     <div ng-show="showReports">
-                        <div><label>3 choose report type</label> </div>
+                        <div>
+                            <label>3 choose report type</label>
+                        </div>
                         <select class="selectWidth" ng-change="currentReportSelected()" ng-model="selectedReport" ng-options="reportname as reportname.name for reportname in reportNames">
                             <option value="">Select Report</option>
                         </select>
                     </div>
                     <div style="height: 10px;"></div>
                     <div ng-show="fbsShow">
-                        AVV:
-                        <input type="checkbox" ng-model="avvValue">
-                        <br />
-                        AVL:
-                        <input type="checkbox" ng-model="avlValue">
-                        <br />
-                        OMH:
-                        <input type="checkbox" ng-model="omhValue">
+                        <div data-ng-repeat="option in pl13FbsOptions.choices">
+                            <input type="radio" value="{{option.id}}" ng-model="pl13FbsOptions.optionChosen" ng-change="pl13FbsOptionsSelected()" />
+                            {{option.text}}
+                            <br />
+                        </div>
                     </div>
                     <div ng-show="pl13Show">
-                        AVV:
-                        <input type="checkbox" ng-model="avvValue">
-                        <br />
-                        AVL:
-                        <input type="checkbox" ng-model="avlValue">
-                        <br />
-                        OMH:
-                        <input type="checkbox" ng-model="omhValue">
+                        <div data-ng-repeat="option in pl13FbsOptions.choices">
+                            <input type="radio" value="{{option.id}}" ng-model="pl13FbsOptions.optionChosen" ng-change="pl13FbsOptionsSelected()" />
+                            {{option.text}}
+                            <br />
+                        </div>
+
                     </div>
-                    <div ng-show="gripShow">
-                        Protection Visitation:
-                        <input type="checkbox" ng-model="pvValue">
+                    <div ng-style="{'margin-left':gripMarginLeft}" ng-show="gripShow">
+                        <div data-ng-repeat="option in gripOptions.choices">
+                            <input type="radio" value="{{option.id}}" ng-model="gripOptions.optionChosen" ng-change="gripOptionsOptionsSelected()" />
+                            {{option.text}}
+                            <br />
+                        </div>
                         <br />
-                        Jail:
-                        <input type="checkbox" ng-model="jailValue">
+                        <div ng-show="gripOptions.optionChosen == 1">
+                            <div>Reason</div>
+                            <div>
+                                <textarea rows="4" cols="50" ng-model="reasonText" ></textarea>
+                            </div>
+                        </div>
+                        <div ng-show="gripOptions.optionChosen == 2">
+                            <div>Protocol</div>
+                            <div>
+                                <textarea rows="4" cols="50" ng-model="protocolText" ></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" ng-click="saveReport()" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>

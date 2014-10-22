@@ -78,6 +78,8 @@
             $scope.selectedCustomer = null;
             $scope.reasonText = "";
             $scope.protocolText = "";
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
         };
 
         $scope.currentCustomerSelected = function () {
@@ -92,6 +94,8 @@
             $scope.gripShow = false;
             $scope.reasonText = "";
             $scope.protocolText = "";
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
         };
 
         $scope.currentCustomerObjectSelected = function () {
@@ -104,6 +108,8 @@
             $scope.gripShow = false;
             $scope.reasonText = "";
             $scope.protocolText = "";
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
         };
 
         $scope.currentReportSelected = function () {
@@ -112,6 +118,8 @@
             $scope.protocolText = "";
             $scope.pl13FbsOptions.optionChosen = null;
             $scope.gripOptions.optionChosen = null;
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
 
             if ($scope.selectedReport === null) {
                 $scope.fbsShow = false;
@@ -142,6 +150,8 @@
         };
 
         $scope.pl13FbsOptionsSelected = function () {
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
             $scope.pl13FbsOptionsReportName = $scope.pl13FbsOptions.choices[$scope.pl13FbsOptions.optionChosen - 1].text;
             $scope.gripOptionReportName = "";
             $scope.gripOptions.optionChosen = null;
@@ -155,6 +165,8 @@
         };
 
         $scope.gripOptionsOptionsSelected = function () {
+            $scope.showErrorMessage = false;
+            $scope.errorMessage = "";
             $scope.gripOptionReportName = $scope.gripOptions.choices[$scope.gripOptions.optionChosen - 1].text;
             $scope.pl13FbsOptionsReportName = "";
             $scope.reasonText = "";
@@ -163,31 +175,68 @@
 
         $scope.saveReport = function () {
 
-            var reportModelObject = {};
-            if ($scope.fbsShow || $scope.pl13Show) {
-                if ($scope.pl13FbsOptionsReportName === "AVV") {
-                    reportModelObject.avv = true;
-                } else if ($scope.pl13FbsOptionsReportName === "AVL") {
-                    reportModelObject.avl = true;
-                } else {
+            var validation = $scope.checkValidationRules();
+            if (validation.passed == true) {
+                var reportModelObject = {};
+                if ($scope.fbsShow || $scope.pl13Show) {
+                    if ($scope.pl13FbsOptionsReportName === "AVV") {
+                        reportModelObject.avv = true;
+                    } else if ($scope.pl13FbsOptionsReportName === "AVL") {
+                        reportModelObject.avl = true;
+                    } else {
 
+                        $scope.setGripOptions(reportModelObject);
+                    }
+
+                } else {
                     $scope.setGripOptions(reportModelObject);
                 }
 
+                var report = {
+                    customerId: $scope.selectedCustomer.id,
+                    customerObjectId: $scope.selectedObject.id,
+                    customerName: $scope.selectedCustomer.name,
+                    customerObjectName: $scope.selectedObject.name,
+                    reportName: $scope.selectedReport.name,
+                    ReportModel: reportModelObject
+                };
+
+                services.addReport(angular.toJson(report)).then(function (data) {
+                    var response = data.substring(1, data.length - 1);
+                    if (response === "Succeeded") {
+                        $("#myModal").modal("hide");
+                        $scope.clearValues();
+                        $scope.getAllEmployeeReport();
+                    } else if (response === "UnSucceeded") {
+                        $scope.showErrorMessage = true;
+                        $scope.errorMessage = "Something went wrong when creating the report, please try aggain";
+                    } else {
+                        $scope.showErrorMessage = true;
+                        $scope.errorMessage = response;
+                    }
+                });
             } else {
-                $scope.setGripOptions(reportModelObject);
+                $scope.showErrorMessage = true;
+                $scope.errorMessage = validation.message;
             }
 
-            var report = {
-                customerId: $scope.selectedCustomer.id,
-                customerObjectId: $scope.selectedObject.id,
-                customerName: $scope.selectedCustomer.name,
-                customerObjectName: $scope.selectedObject.name,
-                reportName: $scope.selectedReport.name,
-                ReportModel: reportModelObject
+        };
+
+        $scope.checkValidationRules = function () {
+
+            var validationObj = {
+                passed: true,
+                message: ""
             };
 
-            console.log(report);
+            if ($scope.selectedCustomer === null || $scope.selectedObject === null || $scope.selectedReport === null) {
+
+                validationObj.passed = false;
+                validationObj.message = "You've havent select all the details";
+
+            }
+
+            return validationObj;
         };
 
         $scope.setGripOptions = function (reportModelObject) {

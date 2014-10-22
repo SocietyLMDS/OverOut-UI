@@ -419,7 +419,13 @@ namespace OverOut.Controllers
         }
 
         public async Task<ContentResult> AddReport([FromBody] Reports report)
-        {
+        {   
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+            var currentUser = DigestAuthentication.Users[username];
+            report.EmployeeId = Guid.Parse(currentUser.Id) ;
+            report.EmployeeFirstname = currentUser.Firstname;
+            report.EmployeeLastname = currentUser.Lastname;
+            report.CompanyId = Guid.Parse(currentUser.CompanyId);
             var dataBody = await CallWebApi.Post("POST", "api/report/addreport", report);
             return Content(dataBody);
         }

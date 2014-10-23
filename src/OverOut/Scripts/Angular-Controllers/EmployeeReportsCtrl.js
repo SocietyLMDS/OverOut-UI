@@ -1,5 +1,5 @@
 ﻿angular.module("OverOut")
-    .controller("EmployeeReportsCtrl", ["$scope", "services", function ($scope, services) {
+    .controller("EmployeeReportsCtrl", ["$scope", "services", "$sce","$timeout", function ($scope, services, $sce, $timeout) {
 
         $scope.reportNames = [{ name: "FBS" }, { name: "PL13" }, { name: "GRIP" }];
         $scope.pl13FbsOptions = {
@@ -51,6 +51,7 @@
         $scope.getAllEmployeeReport = function () {
             services.getAllEmployeeReports().then(function (data) {
                 $scope.employeeReports = data;
+                console.log(data);
                 $scope.getCompanyCustomers();
             });
         };
@@ -206,7 +207,7 @@
                     if (response === "Succeeded") {
                         $("#myModal").modal("hide");
                         $scope.clearValues();
-                        $scope.getAllEmployeeReport();
+                        $timeout($scope.getAllEmployeeReport, 2000);
                     } else if (response === "UnSucceeded") {
                         $scope.showErrorMessage = true;
                         $scope.errorMessage = "Something went wrong when creating the report, please try aggain";
@@ -252,6 +253,30 @@
                     protocol: $scope.protocolText
                 };
             }
+        };
+
+        $scope.convertDate = function (date) {
+            var currentDate = moment(date);
+            var ret = currentDate.format("MMMM Do YYYY, HH:mm:ss");
+            return ret;
+        };
+
+        $scope.setReportValue = function (reportDetails) {
+            var reportStr = "";
+            if (reportDetails.avl === false && reportDetails.omh == null) {
+                reportStr = "Type: AVV";
+            }else if (reportDetails.avv === false && reportDetails.omh == null) {
+                reportStr = "Type: AVL";
+            }else if (reportDetails.avl === false && reportDetails.avv == false) {
+                if (reportDetails.omh.fangsel === true) {
+                    reportStr = "Type: Jail</br>Protocol: " + reportDetails.omh.protocol;
+                } else if (reportDetails.omh.skyddsVisitation === true) {
+                    reportStr = "Type: Protection Visitation</br>Reason: " + reportDetails.omh.anledning;
+                }
+            }
+
+            
+            return $sce.trustAsHtml(reportStr);
         };
 
     }])

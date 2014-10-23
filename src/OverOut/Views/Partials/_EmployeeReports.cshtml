@@ -1,9 +1,26 @@
 ﻿<div ng-controller="EmployeeReportsCtrl">
     <div ng-click="showCreateReportModal()" class="btn btn-primary">Create Report</div>
-    <div style="height: 10px;"></div>
+    <div style="height: 30px;"></div>
     <div ng-show="employeeReports.length <= 0">there's currently no reports</div>
-    <div ng-show="employeeReports.length > 0">there's reports</div>
-
+    <div ng-show="employeeReports.length > 0">
+        <div ng-repeat="report in employeeReports">
+            <div class="panel panel-danger pull-left"  style="width: 300px; margin-left: 20px;">
+                <div class="panel-heading">
+                    Report Info <span class="glyphicon glyphicon-folder-open"></span>
+                </div>
+                <div class="panel-body">
+                    <div><strong>Customer:</strong> {{report.customerName}}</div>
+                    <div><strong>Object:</strong> {{report.customerObjectName}}</div>
+                    <div><strong>Report Date:</strong> {{convertDate(report.reportDate)}}</div>
+                    <div><strong>Report Name:</strong> {{report.reportName}}</div>
+                    <div>
+                        <strong>Report Type:</strong>
+                        <div ng-bind-html="setReportValue(report.reportModel)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--Modal Section -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

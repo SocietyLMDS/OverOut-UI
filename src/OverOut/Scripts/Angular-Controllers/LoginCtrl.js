@@ -35,6 +35,8 @@
 
             services.login($scope.loginModel.username, $scope.loginModel.password).then(function (data) {
 
+                console.log(data);
+
                 if (data === 401 || data === 500) {
 
                     $scope.showLoginFailedMessage = true;

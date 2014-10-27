@@ -33,7 +33,6 @@ namespace OverOut.Auth
             Password = password;
             await SetupValues();
             GenerateCNonce();
-            SetupHash1(username, password);
         }
 
         public static void UsersLoggedIn(CurrentUser user)
@@ -96,9 +95,21 @@ namespace OverOut.Auth
             return hash.ToString();
         }
 
-        public static void SetupHash1(string username, string password)
+        public static void SetupHash1()
         {
-            Hash1 = ConvertStringToMd5Hash(string.Format("{0}:{1}:{2}", username, Realm, password));
+            try
+            {
+                var usernameFromCookie = FormsAuthentication.Decrypt(HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+                var currentUser = Users[usernameFromCookie];
+                Username = currentUser.Username;
+                Password = currentUser.Password;
+                Hash1 = ConvertStringToMd5Hash(string.Format("{0}:{1}:{2}", Username, Realm, Password));
+            }
+            catch (Exception)
+            {
+                Hash1 = ConvertStringToMd5Hash(string.Format("{0}:{1}:{2}", Username, Realm, Password));
+            }
+
         }
 
         public static string GetHash2(string method, string uri)

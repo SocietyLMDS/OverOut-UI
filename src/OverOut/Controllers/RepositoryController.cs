@@ -191,7 +191,7 @@ namespace OverOut.Controllers
             currentUser.UserType = getUser.UserType;
             currentUser.Username = getUser.Username;
             var dataBody = await CallWebApi.Post("POST", "api/security/changepassword", currentUser);
-            DigestAuthentication.SetupHash1(username, currentUser.NewPassword);
+            DigestAuthentication.SetupHash1();
             return Content(dataBody);
         }
 

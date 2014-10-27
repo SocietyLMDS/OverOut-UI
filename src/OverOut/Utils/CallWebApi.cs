@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Security;
 using OverOut.Auth;
 using OverOut.Models;
 using System.Drawing;
@@ -19,6 +20,7 @@ namespace OverOut.Utils
     {
         public static async Task<string> Get(string method, string uri, string parameters)
         {
+            DigestAuthentication.SetupHash1();
             var hash2 = DigestAuthentication.GetHash2(method, uri);
             var response = DigestAuthentication.GetResponse(hash2);
             var client = new HttpClient();
@@ -33,6 +35,7 @@ namespace OverOut.Utils
 
         public static async Task<string> Post(string method, string uri, dynamic parameters)
         {
+            DigestAuthentication.SetupHash1();
             var hash2 = DigestAuthentication.GetHash2(method, uri);
             var response = DigestAuthentication.GetResponse(hash2);
             var client = new HttpClient();
@@ -57,6 +60,7 @@ namespace OverOut.Utils
 
         public static async Task<string> Put(string method, string uri, dynamic parameters)
         {
+            DigestAuthentication.SetupHash1();
             var hash2 = DigestAuthentication.GetHash2(method, uri);
             var response = DigestAuthentication.GetResponse(hash2);
             var client = new HttpClient();
@@ -71,6 +75,7 @@ namespace OverOut.Utils
 
         public static async Task<string> Delete(string method, string uri, string parameters)
         {
+            DigestAuthentication.SetupHash1();
             var hash2 = DigestAuthentication.GetHash2(method, uri);
             var response = DigestAuthentication.GetResponse(hash2);
             var client = new HttpClient();
@@ -95,6 +100,7 @@ namespace OverOut.Utils
             requestContent.Add(imageContent, fileModel.FileName.Split('.')[0].Replace(" ", ""), fileModel.FileName.Replace(" ", ""));
             requestContent.Add(new StringContent(fileModel.FileName.Replace(" ","")), "filename");
             requestContent.Add(new StringContent(fileModel.Id), "id");
+            DigestAuthentication.SetupHash1();
             var hash2 = DigestAuthentication.GetHash2(method, uri);
             var response = DigestAuthentication.GetResponse(hash2);
             var client = new HttpClient();

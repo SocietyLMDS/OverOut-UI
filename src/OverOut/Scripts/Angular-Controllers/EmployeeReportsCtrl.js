@@ -51,7 +51,6 @@
         $scope.getAllEmployeeReport = function () {
             services.getAllEmployeeReports().then(function (data) {
                 $scope.employeeReports = data;
-                console.log(data);
                 $scope.getCompanyCustomers();
             });
         };

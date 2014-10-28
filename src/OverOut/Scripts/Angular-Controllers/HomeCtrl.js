@@ -46,7 +46,7 @@
             services.getCurrentCompany().then(function(data) {
                 if (data === 500 || data === 401) {
                     services.logout().then(function (dataurl) {
-                        window.location.href = "/login/index";
+                        window.location.href = dataurl;
                     });
                 } else {
                     $scope.currentCompany = data;
@@ -60,7 +60,7 @@
             services.getCurrentEmployee().then(function (data) {
                 if (data === 500 || data === 401) {
                     services.logout().then(function (dataurl) {
-                        window.location.href = "/login/index";
+                        window.location.href = dataurl;
                     });
                 } else {
                     $scope.currentEmployee = data;

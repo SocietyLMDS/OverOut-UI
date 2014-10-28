@@ -174,3 +174,17 @@ C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\zh-Hant\System.Sp
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\obj\Debug\OverOut.csprojResolveAssemblyReference.cache
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\obj\Debug\OverOut.dll
 C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\obj\Debug\OverOut.pdb
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\arrowDown.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\big_camera.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\companyLogo.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\customer.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\delete.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\edit.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\info.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\logo.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\need.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\needs.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\objects.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\overout.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\schedule.png
+C:\Users\localuser\Documents\GitHub\OverOut-UI\src\OverOut\bin\Images\smalldelete.png

@@ -35,6 +35,7 @@
         };
 
         $scope.SetupCompanyProfile = function (data) {
+            var logolink = (data.LogoLink === null) ? data.LogoLink : data.LogoLink + '?decache=' + Math.random();
             $scope.companyDetails = {
                 id: data.Id,
                 name: data.Name,
@@ -49,8 +50,8 @@
                 managerFirstname: data.ManagerFirstname,
                 managerLastname: data.ManagerLastname,
                 managerPersonalNumber: data.ManagerPersonalNumber,
-                logoLink: data.LogoLink+ '?decache=' + Math.random()
-            };
+                logoLink: logolink
+        };
         };
 
         $scope.saveCompany = function () {

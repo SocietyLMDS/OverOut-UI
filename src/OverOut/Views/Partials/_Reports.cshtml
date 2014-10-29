@@ -1,4 +1,23 @@
 ﻿<div ng-controller="ReportsCtrl">
     <div ng-show="companyReports.length == 0">There is currently no reports</div>
-    <div ng-show="companyReports.length > 0">schedule</div>
+    <div ng-show="companyReports.length > 0">
+        <div ng-repeat="report in companyReports">
+            <div class="panel panel-danger pull-left"  style="width: 300px; margin-left: 20px;">
+                <div class="panel-heading">
+                    Report Info <span class="glyphicon glyphicon-folder-open"></span>
+                </div>
+                <div class="panel-body">
+                    <div><strong>Customer:</strong> {{report.customerName}}</div>
+                    <div><strong>Object:</strong> {{report.customerObjectName}}</div>
+                    <div><strong>Reported By:</strong> {{report.employeeFirstname}} {{report.employeeLastname}}</div>
+                    <div><strong>Report Date:</strong> {{convertDate(report.reportDate)}}</div>
+                    <div><strong>Report Name:</strong> {{report.reportName}}</div>
+                    <div>
+                        <strong>Report Type:</strong>
+                        <div ng-bind-html="setReportValue(report.reportModel)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

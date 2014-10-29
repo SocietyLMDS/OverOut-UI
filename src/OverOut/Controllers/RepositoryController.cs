@@ -47,15 +47,18 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/company/getcompanybyid", "/?id=" + currentUser.Id);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var company = JsonConvert.DeserializeObject<CompanyModel>(dataBody);
             return Content(JsonConvert.SerializeObject(company));
+
         }
 
         public async Task<ContentResult> GetCurrentEmployee()
         {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            var dataBody = await CallWebApi.Get("GET", "api/employee/getemployeebyid", "/?id=" + currentUser.Id+"&companyId="+currentUser.CompanyId);
+            var dataBody = await CallWebApi.Get("GET", "api/employee/getemployeebyid", "/?id=" + currentUser.Id + "&companyId=" + currentUser.CompanyId);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var company = JsonConvert.DeserializeObject<EmployeeModel>(dataBody);
             return Content(JsonConvert.SerializeObject(company));
         }
@@ -65,6 +68,7 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/employee/getallemployee", "/?id=" + currentUser.Id);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var employee = JsonConvert.DeserializeObject<List<EmployeeModel>>(dataBody);
             return Content(JsonConvert.SerializeObject(employee));
         }
@@ -74,9 +78,10 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/shift/getallemployeeshifts", "/?id=" + currentUser.Id + "&companyId=" + currentUser.CompanyId);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var employeeShifts = JsonConvert.DeserializeObject<List<ShiftModel>>(dataBody);
             return Content(JsonConvert.SerializeObject(employeeShifts));
-        } 
+        }
 
         public async Task<ContentResult> GetCompanyCustomers()
         {
@@ -84,6 +89,7 @@ namespace OverOut.Controllers
             var currentUser = DigestAuthentication.Users[username];
             var id = (currentUser.UserType == "Company") ? currentUser.Id : currentUser.CompanyId;
             var dataBody = await CallWebApi.Get("GET", "api/customer/getallcustomer", "/?id=" + id);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var customers = JsonConvert.DeserializeObject(dataBody);
             return Content(JsonConvert.SerializeObject(customers));
         }
@@ -93,6 +99,7 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/report/getallreports", "/?id=" + currentUser.Id);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var reports = JsonConvert.DeserializeObject(dataBody);
             return Content(JsonConvert.SerializeObject(reports));
         }
@@ -102,6 +109,7 @@ namespace OverOut.Controllers
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
             var dataBody = await CallWebApi.Get("GET", "api/schedule/getallschedules", "/?id=" + currentUser.Id);
+            if (dataBody.Contains("401")) return Content(dataBody);
             var schedules = JsonConvert.DeserializeObject(dataBody);
             return Content(JsonConvert.SerializeObject(schedules));
         }
@@ -266,7 +274,7 @@ namespace OverOut.Controllers
                                     Firstname = employee.Firstname,
                                     Lastname = employee.Lastname,
                                     EmailAddress = employee.EmailAddress,
-                                    PersonalNumber =  employee.PersonalNumber,
+                                    PersonalNumber = employee.PersonalNumber,
                                     JobDescription = employee.JobDescription,
                                     StartTime = scheduleDate.StartDateTime,
                                     EndTime = scheduleDate.EndDateTime,
@@ -329,7 +337,7 @@ namespace OverOut.Controllers
                                 StartTime = schedule.StartDateAndTime,
                                 EndTime = schedule.EndDateAndTime,
                                 CustomerName = schedule.CustomerName,
-                                CustomerObjectName    = schedule.CustomerObjectName,
+                                CustomerObjectName = schedule.CustomerObjectName,
                                 CustomerObjectAddress = schedule.CustomerObjectAddress,
                                 Status = "Assigned"
                             };
@@ -372,8 +380,8 @@ namespace OverOut.Controllers
             if (response == "Succeeded")
             {
                 foreach (var employee in schedule.Employees)
-                { 
-                   
+                {
+
                     var shiftModel = new ShiftModel
                     {
                         Id = employee.ShiftId,
@@ -397,7 +405,7 @@ namespace OverOut.Controllers
             }
 
             return Content(response);
-        } 
+        }
 
         public async Task<ContentResult> DeleteSchedule([FromBody] ScheduleModel schedule)
         {
@@ -412,17 +420,18 @@ namespace OverOut.Controllers
         }
 
         public async Task<ContentResult> GetAllEmployeeReports()
-        {   var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
+        {
+            var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            var dataBody = await CallWebApi.Get("GET", "api/report/getallreportsbyemployee","/?id="+currentUser.Id+"&companyid="+currentUser.CompanyId);
+            var dataBody = await CallWebApi.Get("GET", "api/report/getallreportsbyemployee", "/?id=" + currentUser.Id + "&companyid=" + currentUser.CompanyId);
             return Content(dataBody);
         }
 
         public async Task<ContentResult> AddReport([FromBody] Reports report)
-        {   
+        {
             var username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
             var currentUser = DigestAuthentication.Users[username];
-            report.EmployeeId = Guid.Parse(currentUser.Id) ;
+            report.EmployeeId = Guid.Parse(currentUser.Id);
             report.EmployeeFirstname = currentUser.Firstname;
             report.EmployeeLastname = currentUser.Lastname;
             report.CompanyId = Guid.Parse(currentUser.CompanyId);
@@ -438,8 +447,8 @@ namespace OverOut.Controllers
 
         public async Task<ContentResult> DeleteReport([FromBody] Reports report)
         {
-            var dataBody = await CallWebApi.Delete("DELETE", "api/report/deletereport", "/?id" + report.Id+"&companyid="+report.CompanyId);
+            var dataBody = await CallWebApi.Delete("DELETE", "api/report/deletereport", "/?id" + report.Id + "&companyid=" + report.CompanyId);
             return Content(dataBody);
-        } 
+        }
     }
 }

@@ -1,3 +1,21 @@
 ﻿<div ng-controller="EmployeeProfileCtrl">
-    <h3>Employee Profile</h3>
+    <div class="panel panel-danger" style="width: 100%;">
+        <div class="panel-heading">
+            Employee Info <span class="glyphicon glyphicon-folder-open"></span>
+        </div>
+        <div class="panel-body">
+            <div><strong>Firstname:</strong> {{currentEmployee.Firstname}}</div>
+            <div><strong>Lastname:</strong> {{currentEmployee.Lastname}}</div>
+            <div><strong>Personal Number:</strong> {{currentEmployee.PersonalNumber}}</div>
+            <div><strong>Nationality:</strong> {{currentEmployee.Nationality}}</div>
+            <div><strong>Job Description:</strong> {{currentEmployee.JobDescription}}</div>
+            <div><strong>Employment Number:</strong> {{currentEmployee.EmploymentNumber}}</div>
+            <div><strong>Bank Account Number:</strong> {{currentEmployee.BankAccount}}</div>
+            <div><strong>Address:</strong> {{currentEmployee.Address.Street}}</div>
+            <div><strong>Postcode:</strong> {{currentEmployee.Address.Postcode}}</div>
+            <div><strong>Email:</strong> {{currentEmployee.EmailAddress}}</div>
+            <div><strong>Phone Number:</strong> {{currentEmployee.PhoneNumber}}</div>
+            <div><strong>Mobile Number:</strong> {{currentEmployee.MobileNumber}}</div>
+        </div>
+    </div>
 </div>

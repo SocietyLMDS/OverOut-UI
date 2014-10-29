@@ -1,5 +1,5 @@
 ﻿angular.module("OverOut")
-    .controller("EmployeeSchedulesCtrl", ["$scope", "services", function ($scope, services) {
+    .controller("EmployeeSchedulesCtrl", ["$scope", "services", "$rootScope", function ($scope, services, $rootScope) {
         
         $scope.employeeStatuses = ["Confirm", "Sick", "Unavailable"];
 
@@ -10,7 +10,6 @@
         $scope.getEmployeeShifts = function () {
             services.getEmployeeShifts().then(function (data) {
                 $scope.employeeShifts = $scope.convertTime(data);
-                console.log($scope.employeeShifts);
             });
         };
 

@@ -46,11 +46,8 @@
             services.setEmployeeShiftStatus(angular.toJson(currentSchedule)).then(function (data) {
                 var response = data.substring(1, data.length - 1);
                 if (response == "Succeeded") {
-                    console.log("Succeeded");
                 } else if (response == "UnSucceeded") {
-                    console.log("Unsucceeded");
                 } else {
-                    console.log(response);
                 }
             });
         };
